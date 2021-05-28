@@ -1,5 +1,8 @@
 import 'package:chat/models/usuario.dart';
+import 'package:chat/services/auth_services.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsuariosPage extends StatefulWidget {
@@ -20,22 +23,28 @@ class _UsuariosPageState extends State<UsuariosPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final usuario = authService.usuario;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Nombre de usuario',
+          usuario.nombre,
           style: TextStyle(color: Colors.black87),
         ),
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.exit_to_app, color: Colors.black87),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, 'login');
+            AuthService.deleteToken();
+          },
         ),
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 10),
-            child: Icon(Icons.check_circle, color: Colors.blue[400]),
+            child: Icon(Icons.check_circle, color: Colors.green[400]),
             //child: Icon(Icons.offline_bolt, color: Colors.blue[400]),
           )
         ],
@@ -43,7 +52,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
       body: SmartRefresher(
         controller: _refreshController,
         enablePullDown: true,
-        //onRefresh: _cargarUsuarios(),
+        onRefresh: _cargarUsuarios,
         header: WaterDropHeader(
           complete: Icon(Icons.check, color: Colors.blue[400]),
           waterDropColor: Colors.blue[400],
@@ -80,9 +89,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
     );
   }
 
-  /*_cargarUsuarios() async {
+  _cargarUsuarios() async {
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
-  }*/
+  }
 }
