@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ChatMessagge extends StatelessWidget {
+class ChatMessage extends StatelessWidget {
   final String texto;
   final String uid;
 
   final AnimationController animationController;
 
-  const ChatMessagge(
+  const ChatMessage(
       {Key key,
       @required this.texto,
       @required this.uid,

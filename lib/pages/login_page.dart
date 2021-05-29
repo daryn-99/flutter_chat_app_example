@@ -1,4 +1,5 @@
 import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/sockets_service.dart';
 import 'package:chat/widgets/boton_azul.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Logo(titulo: 'Messenger'),
+                  Logo(titulo: 'Login'),
                   _Form(),
                   Labels(
                     ruta: 'register',
@@ -52,6 +53,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 40),
@@ -81,6 +83,7 @@ class __FormState extends State<_Form> {
                         emailCtrl.text.trim(), passCtrl.text.trim());
 
                     if (loginOk) {
+                      socketService.connect();
                       Navigator.restorablePushReplacementNamed(
                           context, 'usuarios');
                     } else {

@@ -80,8 +80,7 @@ class AuthService with ChangeNotifier {
   Future<bool> isLoggedIn() async {
     final token = await _storage.read(key: 'token');
 
-    final uri = Uri.parse('${Environment.apiUrl}/login/renew');
-    final resp = await http.get(uri,
+    final resp = await http.get(Uri.parse('${Environment.apiUrl}/login/renew'),
         headers: {'Content-Type': 'application/json', 'x-token': token});
 
     print(resp.body);
