@@ -1,7 +1,7 @@
 import 'package:chat/models/usuario.dart';
-import 'package:chat/pages/select_contact_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
+import 'package:chat/services/contactos_service.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:chat/services/usuarios_service.dart';
 
@@ -9,13 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class UsuariosPage extends StatefulWidget {
+class ContactPage extends StatefulWidget {
   @override
-  _UsuariosPageState createState() => _UsuariosPageState();
+  _ContactPageState createState() => _ContactPageState();
 }
 
-class _UsuariosPageState extends State<UsuariosPage> {
-  final usuarioService = new UsuariosService();
+class _ContactPageState extends State<ContactPage> {
+  final contactoService = new ContactosService();
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -41,13 +41,6 @@ class _UsuariosPageState extends State<UsuariosPage> {
     final usuario = authService.usuario;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (builder) => SelectContact()))
-        },
-        child: Icon(Icons.chat),
-      ),
       appBar: AppBar(
         title: Text(
           usuario.nombre,
@@ -55,22 +48,6 @@ class _UsuariosPageState extends State<UsuariosPage> {
         ),
         elevation: 1,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.exit_to_app, color: Colors.black87),
-          onPressed: () {
-            socketService.disconnect();
-            Navigator.pushReplacementNamed(context, 'login');
-            AuthService.deleteToken();
-          },
-        ),
-        actions: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: (socketService.serverStatus == ServerStatus.Online)
-                ? Icon(Icons.check_circle, color: Colors.blue[400])
-                : Icon(Icons.offline_bolt, color: Colors.red),
-          )
-        ],
       ),
       body: SmartRefresher(
         controller: _refreshController,
@@ -97,20 +74,10 @@ class _UsuariosPageState extends State<UsuariosPage> {
   ListTile _usuarioListTile(Usuario usuario) {
     return ListTile(
       title: Text(usuario.nombre),
-      subtitle: Text(
-          usuario.email), //TODO:aqui debo de montrar el ultimo mensaje enviado
+      subtitle: Text(usuario.email),
       leading: CircleAvatar(
         child: Text(usuario.nombre.substring(0, 2)),
         backgroundColor: Colors.blue[100],
-      ),
-      trailing: Container(
-        //child: Text('8:16'),
-        //TODO: CODIGO PARA MOSTRAR EL USUARIO EN LINEA
-        width: 10,
-        height: 10,
-        decoration: BoxDecoration(
-            color: usuario.online ? Colors.lightGreen : Colors.red,
-            borderRadius: BorderRadius.circular(100)),
       ),
       onTap: () {
         final chatService = Provider.of<ChatService>(context, listen: false);
@@ -121,7 +88,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
   }
 
   _cargarUsuarios() async {
-    this.usuarios = await usuarioService.getUsuarios();
+    this.usuarios = await contactoService.getUsuarios();
 
     setState(() {});
     //await Future.delayed(Duration(milliseconds: 1000));

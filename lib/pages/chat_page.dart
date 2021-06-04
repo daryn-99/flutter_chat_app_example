@@ -158,13 +158,35 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     margin: EdgeInsets.symmetric(horizontal: 4.0),
                     child: IconTheme(
                       data: IconThemeData(color: Colors.blue[400]),
-                      child: IconButton(
-                        highlightColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        icon: Icon(Icons.send),
-                        onPressed: _estaEscribiendo
-                            ? () => _handleSubmit(_textController.text.trim())
-                            : null,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () => {
+                              showModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (builder) => bottonAttach())
+                            },
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            icon: Icon(Icons.attach_file_rounded),
+                          ),
+                          IconButton(
+                            onPressed: () => {},
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            icon: Icon(Icons.photo_camera_rounded),
+                          ),
+                          IconButton(
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            icon: Icon(Icons.send),
+                            onPressed: _estaEscribiendo
+                                ? () =>
+                                    _handleSubmit(_textController.text.trim())
+                                : null,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -172,6 +194,71 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         ],
       ),
     ));
+  }
+
+  bottonAttach() {
+    return Container(
+      height: 268,
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        margin: EdgeInsets.all(18),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  iconCreation(
+                      Icons.insert_drive_file, Colors.amber, "Documento"),
+                  SizedBox(width: 40),
+                  iconCreation(Icons.camera_alt, Colors.purple, "Cámara"),
+                  SizedBox(width: 40),
+                  iconCreation(Icons.photo_rounded, Colors.teal, "Galería"),
+                ],
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  iconCreation(Icons.audiotrack_outlined, Colors.pink, "Audio"),
+                  SizedBox(width: 40),
+                  iconCreation(Icons.location_on, Colors.green, "Ubicación"),
+                  SizedBox(width: 40),
+                  iconCreation(Icons.person, Colors.blue, "Contacto"),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget iconCreation(IconData icon, Color color, String text) {
+    return InkWell(
+      onTap: () {},
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: color,
+            child: Icon(
+              icon,
+              size: 25,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(text,
+              style: TextStyle(
+                fontSize: 12,
+              ))
+        ],
+      ),
+    );
   }
 
   _handleSubmit(String texto) {
@@ -196,7 +283,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     this.socketService.emit('mensaje-personal', {
       'de': this.authService.usuario.uid,
       'para': this.chatService.usuarioPara.uid,
-      'mensaje': texto
+      'mensaje': texto,
     });
   }
 

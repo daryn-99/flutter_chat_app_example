@@ -18,7 +18,7 @@ class RegisterPage extends StatelessWidget {
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Container(
-              height: MediaQuery.of(context).size.height * 1,
+              height: MediaQuery.of(context).size.height + 150,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -48,6 +48,8 @@ class _Form extends StatefulWidget {
 
 class __FormState extends State<_Form> {
   final nameCtrl = TextEditingController();
+  final apellidoCtrl = TextEditingController();
+  final numerotelCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
 
@@ -57,7 +59,7 @@ class __FormState extends State<_Form> {
     final socketService = Provider.of<SocketService>(context);
 
     return Container(
-      margin: EdgeInsets.only(top: 40),
+      margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: <Widget>[
@@ -66,6 +68,18 @@ class __FormState extends State<_Form> {
             placeholder: 'Nombre',
             keyboardType: TextInputType.text,
             textController: nameCtrl,
+          ),
+          CustomInput(
+            icon: Icons.account_circle,
+            placeholder: 'Apellido',
+            keyboardType: TextInputType.text,
+            textController: apellidoCtrl,
+          ),
+          CustomInput(
+            icon: Icons.phone,
+            placeholder: 'Numero de celular',
+            keyboardType: TextInputType.phone,
+            textController: numerotelCtrl,
           ),
           CustomInput(
             icon: Icons.mail_outline,
@@ -85,10 +99,14 @@ class __FormState extends State<_Form> {
                 ? null
                 : () async {
                     print(nameCtrl.text);
+                    print(apellidoCtrl.text);
+                    print(numerotelCtrl.text);
                     print(emailCtrl.text);
                     print(passCtrl.text);
                     final registroOk = await authService.register(
                         nameCtrl.text.trim(),
+                        apellidoCtrl.text.trim(),
+                        numerotelCtrl.text.trim(),
                         emailCtrl.text.trim(),
                         passCtrl.text.trim());
 
@@ -96,7 +114,8 @@ class __FormState extends State<_Form> {
                       socketService.connect();
                       Navigator.pushReplacementNamed(context, 'usuarios');
                     } else {
-                      mostrarAlerta(context, 'Registro incorrecto', registroOk);
+                      mostrarAlerta(
+                          context, 'Registro incorrecto', 'Rellenar campos');
                     }
                   },
           )
