@@ -1,3 +1,4 @@
+import 'package:chat/models/mensajes_response.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/select_contact_page.dart';
 import 'package:chat/services/auth_services.dart';
@@ -38,6 +39,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final socketService = Provider.of<SocketService>(context);
+
     final usuario = authService.usuario;
 
     return Scaffold(
@@ -56,11 +58,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.exit_to_app, color: Colors.black87),
+          icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
           onPressed: () {
-            socketService.disconnect();
-            Navigator.pushReplacementNamed(context, 'login');
-            AuthService.deleteToken();
+            Navigator.pushReplacementNamed(context, 'home');
           },
         ),
         actions: <Widget>[

@@ -112,7 +112,7 @@ class __FormState extends State<_Form> {
 
                     if (registroOk == true) {
                       socketService.connect();
-                      Navigator.pushReplacementNamed(context, 'usuarios');
+                      Navigator.pushReplacementNamed(context, 'home');
                     } else {
                       mostrarAlerta(
                           context, 'Registro incorrecto', 'Rellenar campos');

@@ -1,3 +1,5 @@
+import 'package:chat/pages/home_page.dart';
+import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/pages/select_contact_page.dart';
 import 'package:flutter/material.dart';
 
@@ -14,4 +16,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'register': (_) => RegisterPage(),
   'loading': (_) => LoadingPage(),
   'select_contact': (_) => SelectContact(),
+  'home': (_) => HomePage(),
+  'nav_screen': (_) => NavScreen(),
 };

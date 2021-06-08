@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:chat/models/mensajes_response.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -17,6 +18,9 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final _textController = new TextEditingController();
   final _focusNode = new FocusNode();
+
+  PickedFile _imageFile;
+  final ImagePicker _picker = ImagePicker();
 
   ChatService chatService;
   SocketService socketService;
@@ -161,18 +165,17 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                       child: Row(
                         children: [
                           IconButton(
-                            onPressed: () => {
-                              showModalBottomSheet(
-                                  backgroundColor: Colors.transparent,
-                                  context: context,
-                                  builder: (builder) => bottonAttach())
+                            onPressed: () {
+                              takePhoto(ImageSource.gallery);
                             },
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
                             icon: Icon(Icons.attach_file_rounded),
                           ),
                           IconButton(
-                            onPressed: () => {},
+                            onPressed: () {
+                              takePhoto(ImageSource.camera);
+                            },
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
                             icon: Icon(Icons.photo_camera_rounded),
@@ -196,6 +199,16 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     ));
   }
 
+  void takePhoto(ImageSource source) async {
+    final pickedFile = await _picker.getImage(
+      source: source,
+    );
+    setState(() {
+      _imageFile = pickedFile;
+    });
+  }
+
+/*
   bottonAttach() {
     return Container(
       height: 268,
@@ -236,7 +249,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       ),
     );
   }
-
+*/
   Widget iconCreation(IconData icon, Color color, String text) {
     return InkWell(
       onTap: () {},

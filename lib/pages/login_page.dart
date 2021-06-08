@@ -84,8 +84,7 @@ class __FormState extends State<_Form> {
 
                     if (loginOk) {
                       socketService.connect();
-                      Navigator.restorablePushReplacementNamed(
-                          context, 'usuarios');
+                      Navigator.restorablePushReplacementNamed(context, 'home');
                     } else {
                       mostrarAlerta(context, 'Login incorrecto',
                           'Verificar credenciales');

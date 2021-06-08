@@ -1,4 +1,3 @@
-import 'package:chat/CustomUI/contact_card.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
@@ -32,6 +31,7 @@ class _SelectContactState extends State<SelectContact> {
     final authService = Provider.of<AuthService>(context);
     final socketService = Provider.of<SocketService>(context);
     final usuario = authService.usuario;
+    final cantidad = usuarios.length;
 
     return Container(
         child: Scaffold(
@@ -44,7 +44,7 @@ class _SelectContactState extends State<SelectContact> {
               'Selecciona un contacto',
               style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
             ),
-            Text('160 contactos', style: TextStyle(fontSize: 13)),
+            Text(cantidad.toString(), style: TextStyle(fontSize: 18)),
           ],
         ),
         actions: [

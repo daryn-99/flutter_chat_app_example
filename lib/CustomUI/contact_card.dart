@@ -2,8 +2,6 @@ import 'package:chat/models/usuario.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
 import 'package:chat/services/contactos_service.dart';
-import 'package:chat/services/sockets_service.dart';
-import 'package:chat/services/usuarios_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +35,6 @@ class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-    final socketService = Provider.of<SocketService>(context);
     final usuario = authService.usuario;
 
     return Scaffold(

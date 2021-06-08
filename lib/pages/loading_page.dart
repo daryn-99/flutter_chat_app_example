@@ -1,9 +1,12 @@
 import 'package:chat/pages/login_page.dart';
+import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/pages/usuarios_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'home_page.dart';
 
 class LoadingPage extends StatelessWidget {
   @override
@@ -31,7 +34,7 @@ class LoadingPage extends StatelessWidget {
       Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-              pageBuilder: (_, __, ___) => UsuariosPage(),
+              pageBuilder: (_, __, ___) => NavScreen(),
               transitionDuration: Duration(milliseconds: 0)));
     } else {
       Navigator.pushReplacement(
