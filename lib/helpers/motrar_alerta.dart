@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 mostrarAlerta(BuildContext context, String titulo, String subtitulo) {
   if (Platform.isIOS) {
+    //TODO:Cambiar para validar si es IOS o Android, no mostrar ambos
     return showDialog(
         context: context,
         builder: (_) => AlertDialog(

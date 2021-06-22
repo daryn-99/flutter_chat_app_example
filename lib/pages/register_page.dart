@@ -1,7 +1,10 @@
 import 'package:chat/helpers/motrar_alerta.dart';
+import 'package:chat/models/usuario.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:chat/widgets/boton_azul.dart';
+import 'package:chat/widgets/custom_date.dart';
+import 'package:chat/widgets/default_img.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/labels.dart';
@@ -18,7 +21,7 @@ class RegisterPage extends StatelessWidget {
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Container(
-              height: MediaQuery.of(context).size.height + 150,
+              height: MediaQuery.of(context).size.height + 350,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -28,10 +31,6 @@ class RegisterPage extends StatelessWidget {
                     ruta: 'login',
                     titulo: '¿Ya tienes una cuenta?',
                     subTitulo: 'Ingresa ahora!',
-                  ),
-                  Text(
-                    'Términos y condiciones de uso',
-                    style: TextStyle(fontWeight: FontWeight.w200),
                   )
                 ],
               ),
@@ -47,9 +46,13 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
+  final usernameCtrl = TextEditingController();
   final nameCtrl = TextEditingController();
   final apellidoCtrl = TextEditingController();
   final numerotelCtrl = TextEditingController();
+  final birthCtrl = TextEditingController();
+  final cargoCtrl = TextEditingController();
+  final areaCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
 
@@ -63,6 +66,12 @@ class __FormState extends State<_Form> {
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: <Widget>[
+          CustomInput(
+            icon: Icons.person_pin_rounded,
+            placeholder: 'Nombre de usuario',
+            keyboardType: TextInputType.text,
+            textController: usernameCtrl,
+          ),
           CustomInput(
             icon: Icons.perm_identity,
             placeholder: 'Nombre',
@@ -81,6 +90,24 @@ class __FormState extends State<_Form> {
             keyboardType: TextInputType.phone,
             textController: numerotelCtrl,
           ),
+          DateInput(
+            icon: Icons.cake,
+            placeholder: 'Fecha de nacimiento',
+            keyboardType: TextInputType.text,
+            textController: birthCtrl,
+          ),
+          CustomInput(
+            icon: Icons.engineering,
+            placeholder: 'Cargo en la empresa',
+            keyboardType: TextInputType.text,
+            textController: cargoCtrl,
+          ),
+          CustomInput(
+            icon: Icons.place,
+            placeholder: 'Area de su cargo',
+            keyboardType: TextInputType.text,
+            textController: areaCtrl,
+          ),
           CustomInput(
             icon: Icons.mail_outline,
             placeholder: 'Correo',
@@ -98,21 +125,29 @@ class __FormState extends State<_Form> {
             onPressed: authService.autenticando
                 ? null
                 : () async {
+                    print(usernameCtrl.text);
                     print(nameCtrl.text);
                     print(apellidoCtrl.text);
                     print(numerotelCtrl.text);
+                    print(birthCtrl.text);
+                    print(cargoCtrl.text);
+                    print(areaCtrl.text);
                     print(emailCtrl.text);
                     print(passCtrl.text);
                     final registroOk = await authService.register(
+                        usernameCtrl.text.trim(),
                         nameCtrl.text.trim(),
                         apellidoCtrl.text.trim(),
                         numerotelCtrl.text.trim(),
+                        birthCtrl.text.trim(),
+                        cargoCtrl.text.trim(),
+                        areaCtrl.text.trim(),
                         emailCtrl.text.trim(),
                         passCtrl.text.trim());
-
                     if (registroOk == true) {
                       socketService.connect();
-                      Navigator.pushReplacementNamed(context, 'home');
+                      mostrarAlerta(context, 'Usuario ingresado exitosamente',
+                          'Bienvenido'); //TODO:Mostrar alerta de usuario ingresado
                     } else {
                       mostrarAlerta(
                           context, 'Registro incorrecto', 'Rellenar campos');

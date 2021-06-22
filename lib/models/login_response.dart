@@ -10,6 +10,7 @@ LoginResponse loginResponseFromJson(String str) =>
     LoginResponse.fromJson(json.decode(str));
 
 String loginResponseToJson(LoginResponse data) => json.encode(data.toJson());
+//TODO:HACER UN REGISTRO RESPONSE PORQUE NO NECESITO EL TOKEN
 
 class LoginResponse {
   LoginResponse({

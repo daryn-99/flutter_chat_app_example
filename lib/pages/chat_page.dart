@@ -166,7 +166,10 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                         children: [
                           IconButton(
                             onPressed: () {
-                              takePhoto(ImageSource.gallery);
+                              showModalBottomSheet(
+                                context: context,
+                                builder: ((builder) => bottomSheet()),
+                              );
                             },
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
@@ -201,11 +204,46 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   void takePhoto(ImageSource source) async {
     final pickedFile = await _picker.getImage(
-      source: source,
+      source: ImageSource.camera,
     );
     setState(() {
       _imageFile = pickedFile;
     });
+  }
+
+  Widget bottomSheet() {
+    return Container(
+      height: 100.0,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: <Widget>[
+          Text(
+            "Elige una archivo",
+            style: TextStyle(fontSize: 20.0),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: <Widget>[
+              TextButton.icon(
+                icon: Icon(Icons.attach_file_rounded),
+                onPressed: () {},
+                label: Text("Adjuntar"),
+              ),
+              TextButton.icon(
+                icon: Icon(Icons.add_photo_alternate_outlined),
+                onPressed: () {
+                  takePhoto(ImageSource.gallery);
+                },
+                label: Text("Galería"),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 
 /*

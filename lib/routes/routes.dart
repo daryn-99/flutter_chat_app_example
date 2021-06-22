@@ -1,5 +1,7 @@
 import 'package:chat/pages/home_page.dart';
 import 'package:chat/pages/nav_screen.dart';
+import 'package:chat/pages/profile_page.dart';
+import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/select_contact_page.dart';
 import 'package:flutter/material.dart';
 
@@ -18,4 +20,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'select_contact': (_) => SelectContact(),
   'home': (_) => HomePage(),
   'nav_screen': (_) => NavScreen(),
+  'profile': (_) => ProfilePage(),
+  'profiletwo': (_) => ProfiletwoPage()
 };

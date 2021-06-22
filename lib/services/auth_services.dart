@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chat/global/environments.dart';
 import 'package:chat/models/login_response.dart';
+import 'package:chat/models/register_response.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -54,14 +55,26 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future register(String nombre, String apellido, String numerotel,
-      String email, String password) async {
+  Future register(
+      String username,
+      String nombre,
+      String apellido,
+      String numerotel,
+      String birth,
+      String cargo,
+      String area,
+      String email,
+      String password) async {
     this.autenticando = true;
 
     final data = {
+      'username': username,
       'nombre': nombre,
       'apellido': apellido,
       'numerotel': numerotel,
+      'birth': birth,
+      'cargo': cargo,
+      'area': area,
       'email': email,
       'password': password
     };
@@ -72,10 +85,8 @@ class AuthService with ChangeNotifier {
 
     this.autenticando = false;
     if (resp.statusCode == 200) {
-      final loginResponse = loginResponseFromJson(resp.body);
-      this.usuario = loginResponse.usuario;
-
-      await this._guardarToken(loginResponse.token);
+      final registerResponse = registerResponseFromJson(resp.body);
+      this.usuario = registerResponse.usuario;
 
       return true;
     } else {

@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
             brightness: Brightness.light,
             backgroundColor: Colors.white,
             title: Text(
-              'RECO',
+              'RECOMMUNICATION',
               style: const TextStyle(
                 color: Palette.colorBlue,
                 fontSize: 20.0,

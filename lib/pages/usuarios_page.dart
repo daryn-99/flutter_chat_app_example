@@ -60,7 +60,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
         leading: IconButton(
           icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, 'home');
+            Navigator.pushReplacementNamed(context, 'nav_screen');
           },
         ),
         actions: <Widget>[

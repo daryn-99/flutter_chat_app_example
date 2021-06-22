@@ -137,7 +137,7 @@ class _PostStats extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const Icon(
-                Icons.thumb_up,
+                Icons.lightbulb_outline_sharp,
                 size: 10.0,
                 color: Colors.white,
               ),
@@ -171,12 +171,12 @@ class _PostStats extends StatelessWidget {
           children: [
             _PostButton(
               icon: Icon(
-                MdiIcons.thumbUpOutline,
+                Icons.lightbulb_outline_sharp,
                 color: Colors.grey[600],
                 size: 20.0,
               ),
-              label: 'Like',
-              onTap: () => print('Like'),
+              label: 'Wat',
+              onTap: () => print('Wat'),
             ),
             _PostButton(
               icon: Icon(
