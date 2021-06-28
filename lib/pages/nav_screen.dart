@@ -2,9 +2,9 @@ import 'package:chat/data/data.dart';
 import 'package:chat/pages/groups_page.dart';
 import 'package:chat/pages/menu_page.dart';
 import 'package:chat/pages/notification_page.dart';
-import 'package:chat/pages/profile_page.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/register_page.dart';
+import 'package:chat/pages/usuarios_page.dart';
 import 'package:chat/widgets/custom_app_bar.dart';
 import 'package:chat/widgets/custom_tab_bar.dart';
 import 'package:chat/widgets/responsive.dart';
@@ -21,15 +21,15 @@ class NavScreen extends StatefulWidget {
 class _NavScreenState extends State<NavScreen> {
   final List<Widget> _screens = [
     HomePage(),
-    RegisterPage(), //aqui iran las pantallas de la barra desplegable
-    GroupsPage(),
+    UsuariosPage(), //aqui iran las pantallas de la barra desplegable
+    RegisterPage(),
     ProfiletwoPage(),
     NotificationPage(),
     MenuPage(),
   ];
   final List<IconData> _icons = const [
     Icons.home,
-    Icons.fiber_new_rounded, //videos cargados
+    MdiIcons.facebookMessenger, //videos cargados
     MdiIcons.accountGroupOutline, //grupos de trabajo
     MdiIcons.accountCircleOutline, //cuenta
     MdiIcons.bellOutline, //notificaciones

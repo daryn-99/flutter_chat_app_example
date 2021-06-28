@@ -1,3 +1,4 @@
+import 'package:chat/config/palette.dart';
 import 'package:chat/models/mensajes_response.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/select_contact_page.dart';
@@ -44,6 +45,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Palette.scaffold,
         onPressed: () => {
           Navigator.push(
               context, MaterialPageRoute(builder: (builder) => SelectContact()))
@@ -67,7 +69,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
           Container(
             margin: EdgeInsets.only(right: 10),
             child: (socketService.serverStatus == ServerStatus.Online)
-                ? Icon(Icons.check_circle, color: Colors.blue[400])
+                ? Icon(Icons.check_circle, color: Palette.colorBlue)
                 : Icon(Icons.offline_bolt, color: Colors.red),
           )
         ],
@@ -78,7 +80,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
         onRefresh: _cargarUsuarios,
         header: WaterDropHeader(
           complete: Icon(Icons.check, color: Colors.blue[400]),
-          waterDropColor: Colors.blue[400],
+          waterDropColor: Palette.colorBlue,
         ),
         child: _listViewUsuarios(),
       ),

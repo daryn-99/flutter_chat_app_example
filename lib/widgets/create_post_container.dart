@@ -1,9 +1,20 @@
+import 'package:chat/services/auth_services.dart';
 import 'package:chat/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 
-class CreatePostContainer extends StatelessWidget {
+class CreatePostContainer extends StatefulWidget {
+  @override
+  _CreatePostContainerState createState() => _CreatePostContainerState();
+}
+
+class _CreatePostContainerState extends State<CreatePostContainer> {
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
+    final usuario = authService.usuario;
     return Container(
         padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 0.0),
         color: Colors.white,
@@ -18,7 +29,7 @@ class CreatePostContainer extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration.collapsed(
-                      hintText: '¿Qué esta pasando?',
+                      hintText: '¿Qué esta pasando en Reco?',
                     ),
                   ),
                 )
@@ -33,26 +44,21 @@ class CreatePostContainer extends StatelessWidget {
                   TextButton.icon(
                     onPressed: () => print('Adjuntos'),
                     icon: const Icon(
-                      Icons.insert_drive_file_sharp,
-                      color: Colors.blue,
+                      MdiIcons.fileDocument,
+                      color: Colors.orange,
                     ),
-                    label: Text('Adjuntos'),
+                    label: Text('Adjuntos',
+                        style: TextStyle(color: Colors.black54)),
                   ),
                   const VerticalDivider(width: 8.0),
                   TextButton.icon(
                     onPressed: () => print('Foto'),
                     icon: const Icon(Icons.add_photo_alternate_rounded,
                         color: Colors.green),
-                    label: Text('Foto'),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  TextButton.icon(
-                    onPressed: () => print('Videos'),
-                    icon: const Icon(
-                      Icons.video_collection,
-                      color: Colors.orange,
+                    label: Text(
+                      'Foto',
+                      style: TextStyle(color: Colors.black54),
                     ),
-                    label: Text('Video'),
                   ),
                 ],
               ),

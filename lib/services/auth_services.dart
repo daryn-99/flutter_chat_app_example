@@ -78,10 +78,12 @@ class AuthService with ChangeNotifier {
       'email': email,
       'password': password
     };
+    final token = await _storage.read(key: 'token');
 
     final uri = Uri.parse('${Environment.apiUrl}/login/new');
     final resp = await http.post(uri,
-        body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
+        body: jsonEncode(data),
+        headers: {'Content-Type': 'application/json', 'x-token': token});
 
     this.autenticando = false;
     if (resp.statusCode == 200) {

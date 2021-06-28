@@ -107,10 +107,6 @@ class _PostHeader extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          icon: const Icon(Icons.more_horiz),
-          onPressed: () => print('More'),
-        ),
       ],
     );
   }
@@ -133,7 +129,7 @@ class _PostStats extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
-                color: Palette.colorBlue,
+                color: Palette.colorYellow,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -157,13 +153,6 @@ class _PostStats extends StatelessWidget {
                 color: Colors.grey[600],
               ),
             ),
-            const SizedBox(width: 8.0),
-            Text(
-              '${post.shares} Shares',
-              style: TextStyle(
-                color: Colors.grey[600],
-              ),
-            )
           ],
         ),
         const Divider(),
@@ -172,30 +161,21 @@ class _PostStats extends StatelessWidget {
             _PostButton(
               icon: Icon(
                 Icons.lightbulb_outline_sharp,
-                color: Colors.grey[600],
-                size: 20.0,
+                color: Palette.colorYellow,
+                size: 25.0,
               ),
-              label: 'Wat',
-              onTap: () => print('Wat'),
+              label: 'Charge',
+              onTap: () => print('Watt'),
             ),
             _PostButton(
               icon: Icon(
-                MdiIcons.commentOutline,
-                color: Colors.grey[600],
-                size: 20.0,
-              ),
-              label: 'Comment',
-              onTap: () => print('Comment'),
-            ),
-            _PostButton(
-              icon: Icon(
-                MdiIcons.shareOutline,
+                MdiIcons.commentPlusOutline,
                 color: Colors.grey[600],
                 size: 25.0,
               ),
-              label: 'Share',
-              onTap: () => print('Share'),
-            )
+              label: 'Comentar',
+              onTap: () => print('Comment'),
+            ),
           ],
         ),
       ],

@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
             brightness: Brightness.light,
             backgroundColor: Colors.white,
             title: Text(
-              'RECOMMUNICATION',
+              'RECO',
               style: const TextStyle(
                 color: Palette.colorBlue,
                 fontSize: 20.0,
@@ -39,13 +39,6 @@ class HomePage extends StatelessWidget {
                   icon: MdiIcons.inbox,
                   iconSize: 30.0,
                   onPressed: () => print('Ideas Inbox')),
-              CircleButton(
-                icon: MdiIcons.facebookMessenger,
-                iconSize: 30.0,
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, 'usuarios');
-                },
-              ),
             ],
           ),
           //Container para publicar
