@@ -73,7 +73,7 @@ class _DefaultImgState extends State<DefaultImg> {
               TextButton.icon(
                 icon: Icon(Icons.add_photo_alternate_outlined),
                 onPressed: () {
-                  takePhoto(ImageSource.gallery);
+                  importimg(ImageSource.gallery);
                 },
                 label: Text("Adjuntar de galería"),
               )
@@ -87,6 +87,15 @@ class _DefaultImgState extends State<DefaultImg> {
   void takePhoto(ImageSource source) async {
     final pickedFile = await _picker.getImage(
       source: ImageSource.camera,
+    );
+    setState(() {
+      _imageFile = pickedFile;
+    });
+  }
+
+  void importimg(ImageSource source) async {
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.gallery,
     );
     setState(() {
       _imageFile = pickedFile;

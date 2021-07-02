@@ -2,7 +2,6 @@ import 'package:chat/models/usuario.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/widgets/default_img.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfiletwoPage extends StatefulWidget {
@@ -11,8 +10,6 @@ class ProfiletwoPage extends StatefulWidget {
 }
 
 class _ProfiletwoPageState extends State<ProfiletwoPage> {
-  PickedFile _imageFile;
-  final ImagePicker _picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
@@ -27,10 +24,8 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
           delegate: SliverChildListDelegate([
             SizedBox(height: 10.0),
             _posterTitulo(context, usuario),
-            _descripcion(usuario),
-            _descripcion(usuario),
-            _descripcion(usuario),
-            _descripcion(usuario)
+            SizedBox(height: 10.0),
+            _botonAdd(),
           ]),
         )
       ],
@@ -67,7 +62,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         children: <Widget>[
-          DefaultImg(titulo: 'Profile'),
+          DefaultImg(titulo: 'Profile'), //TODO: Quitar el icon de la camara
           SizedBox(width: 20.0),
           Flexible(
             child: Column(
@@ -93,59 +88,17 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
     );
   }
 
-  Widget _descripcion(Usuario usuario) {
+  Widget _botonAdd() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-      child: Text(
-        'ontrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        textAlign: TextAlign.justify,
-      ),
-    );
-  }
-
-  Widget bottomSheet() {
-    return Container(
-      height: 100.0,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Column(
-        children: <Widget>[
-          Text(
-            "Escoger foto de perfil",
-            style: TextStyle(fontSize: 20.0),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: <Widget>[
-              TextButton.icon(
-                icon: Icon(Icons.photo_camera_rounded),
-                onPressed: () {
-                  takePhoto(ImageSource.camera);
-                },
-                label: Text("Tomar fotografía"),
-              ),
-              TextButton.icon(
-                icon: Icon(Icons.add_photo_alternate_outlined),
-                onPressed: () {
-                  takePhoto(ImageSource.gallery);
-                },
-                label: Text("Adjuntar de galería"),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  void takePhoto(ImageSource source) async {
-    final pickedFile = await _picker.getImage(
-      source: ImageSource.camera,
-    );
-    setState(() {
-      _imageFile = pickedFile;
-    });
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        margin: EdgeInsets.only(left: 100),
+        width: 70,
+        height: 30,
+        child: ElevatedButton(
+            child: Text("Editar descripción",
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'editing_profile');
+            }));
   }
 }

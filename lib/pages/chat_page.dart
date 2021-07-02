@@ -211,6 +211,15 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     });
   }
 
+  void importimg(ImageSource source) async {
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      _imageFile = pickedFile;
+    });
+  }
+
   Widget bottomSheet() {
     return Container(
       height: 100.0,
@@ -235,7 +244,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               TextButton.icon(
                 icon: Icon(Icons.add_photo_alternate_outlined),
                 onPressed: () {
-                  takePhoto(ImageSource.gallery);
+                  importimg(ImageSource.gallery);
                 },
                 label: Text("Galería"),
               )

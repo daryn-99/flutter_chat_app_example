@@ -24,10 +24,10 @@ class LoginPage extends StatelessWidget {
                 children: <Widget>[
                   Logo(titulo: 'Login'),
                   _Form(),
-                  Text(
-                    'Términos y condiciones de uso',
-                    style: TextStyle(fontWeight: FontWeight.w200),
-                  )
+                  // Text(
+                  //   'Términos y condiciones de uso',
+                  //   style: TextStyle(fontWeight: FontWeight.w200),
+                  // ) TODO:
                 ],
               ),
             ),

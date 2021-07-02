@@ -23,7 +23,8 @@ class _CreatePostContainerState extends State<CreatePostContainer> {
             Row(
               children: [
                 ProfileAvatar(
-                  imageUrl: 'http://www.dant.dk/doge/img/app_icon.png',
+                  imageUrl:
+                      'https://scontent.fsap1-1.fna.fbcdn.net/v/t1.6435-9/189418878_3817325464982636_394025055086716610_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=973b4a&_nc_ohc=10n0tHGIHHwAX8WGdWe&_nc_ht=scontent.fsap1-1.fna&oh=11d4d3b42412b7c2f0364cba04357566&oe=60E2C629',
                 ),
                 const SizedBox(width: 8.0),
                 Expanded(

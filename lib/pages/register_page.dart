@@ -147,7 +147,7 @@ class __FormState extends State<_Form> {
                     if (registroOk == true) {
                       socketService.connect();
                       mostrarAlerta(context, 'Usuario ingresado exitosamente',
-                          'Bienvenido'); //TODO:Mostrar alerta de usuario ingresado
+                          'Bienvenido');
                     } else {
                       mostrarAlerta(
                           context, 'Registro incorrecto', 'Rellenar campos');
