@@ -11,7 +11,7 @@ final List<User> onlineUsers = [
   User(
     name: 'Luis Padilla',
     imageUrl:
-        'https://scontent.fsap1-1.fna.fbcdn.net/v/t1.6435-9/87086754_2612398355475359_7572949571110699008_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=973b4a&_nc_ohc=bIq8YnhugRIAX-gZdfr&_nc_ht=scontent.fsap1-1.fna&oh=8e2572add2f5c781484fa9a687231ad4&oe=60E1621C',
+        'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1331&q=80',
   ),
   User(
     name: 'Mireya Aguilera',
@@ -121,7 +121,7 @@ final List<Post> posts = [
   Post(
     user: onlineUsers[5],
     caption:
-        'Please enjoy this placeholder text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        'The construction of the new solar project located at the south side of the island is progressing successfully with the installation of the first solar panels. Executives of RECO along with the team of engineers of Elite toured the solar project. We are proud to continue working with the integration of new renewable energy projects for the island of Roatán.',
     timeAgo: '3hr',
     imageUrl: null,
     likes: 12,
@@ -159,8 +159,7 @@ final List<Post> posts = [
     caption:
         'En Reco actualizamos nuestras plataformas de pago para que nuestros clientes cuenten con opciones accesibles para gestionar el pago de sus facturas de energia eléctrica por medio de los diferentes servicios y plataformas electrónicas, conoce cada una de ellas.',
     timeAgo: '1d',
-    imageUrl:
-        'https://scontent.fsap1-2.fna.fbcdn.net/v/t1.6435-9/198733143_3874359489279233_9209978753542441681_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=973b4a&_nc_ohc=_u25LcDTV5MAX-EVyge&_nc_ht=scontent.fsap1-2.fna&oh=fb9106d7f6308672ad9d6b4cc394a48d&oe=60E17C5A',
+    imageUrl: null,
     likes: 23,
     comments: 21,
   )

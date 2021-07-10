@@ -15,7 +15,7 @@ class ProfileEditingPage extends StatefulWidget {
 }
 
 class _ProfileEditingPageState extends State<ProfileEditingPage> {
-  final aboutCtrl = TextEditingController();
+  TextEditingController aboutCtrl = TextEditingController();
 
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -56,7 +56,7 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
       elevation: 1,
       leading: IconButton(
           onPressed: () => {
-                Navigator.popAndPushNamed(context, 'profiletwo'),
+                Navigator.popAndPushNamed(context, 'nav_screen'),
               },
           icon: Icon(Icons.not_interested_rounded, color: Colors.black),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
@@ -82,8 +82,11 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
   }
 
   Widget _crearAbout() {
-    return TextField();
-    //TODO: Enviar lo escrito al boton de guardar
+    return TextField(
+      controller: aboutCtrl,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(labelText: 'Escribe tu descripción'),
+    );
   }
 
   Widget bottomSheet() {

@@ -27,8 +27,7 @@ class Rooms extends StatelessWidget {
             child: CircleAvatar(
               radius: 20.0,
               backgroundColor: Colors.grey[200],
-              backgroundImage: NetworkImage(
-                  'https://th.bing.com/th/id/R4b1bb228bf826befdb5e9d530b8738fa?rik=S8WWdffVARYPsg&pid=ImgRaw'),
+              backgroundImage: NetworkImage(''),
             ),
           );
         },

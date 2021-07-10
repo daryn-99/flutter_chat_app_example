@@ -1,3 +1,4 @@
+import 'package:chat/pages/add_post.dart';
 import 'package:chat/pages/home_page.dart';
 import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/pages/profile_editing.dart';
@@ -21,5 +22,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'home': (_) => HomePage(),
   'nav_screen': (_) => NavScreen(),
   'profiletwo': (_) => ProfiletwoPage(),
-  'editing_profile': (_) => ProfileEditingPage()
+  'editing_profile': (_) => ProfileEditingPage(),
+  'add_post': (_) => AddBlog()
 };

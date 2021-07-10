@@ -100,14 +100,14 @@ class _UsuariosPageState extends State<UsuariosPage> {
     return ListTile(
       title: Text(usuario.nombre),
       subtitle: Text(
-          usuario.email), //TODO:aqui debo de montrar el ultimo mensaje enviado
+          usuario.email), //TODO:aqui debo de mostrar el ultimo mensaje enviado
       leading: CircleAvatar(
         child: Text(usuario.nombre.substring(0, 2)),
         backgroundColor: Colors.blue[100],
       ),
       trailing: Container(
         //child: Text('8:16'),
-        //TODO: CODIGO PARA MOSTRAR EL USUARIO EN LINEA
+        // CODIGO PARA MOSTRAR EL USUARIO EN LINEA
         width: 10,
         height: 10,
         decoration: BoxDecoration(

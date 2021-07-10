@@ -77,7 +77,7 @@ class CustomAppBar extends StatelessWidget {
                   onPressed: () => print('Messenger'),
                 ),
                 CircleButton(
-                    icon: MdiIcons.inbox,
+                    icon: MdiIcons.bell,
                     iconSize: 30.0,
                     onPressed: () => print('Ideas Inbox'))
               ],

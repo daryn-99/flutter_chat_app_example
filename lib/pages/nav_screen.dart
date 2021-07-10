@@ -24,7 +24,7 @@ class _NavScreenState extends State<NavScreen> {
     UsuariosPage(), //aqui iran las pantallas de la barra desplegable
     RegisterPage(),
     ProfiletwoPage(),
-    NotificationPage(),
+    //NotificationPage(),
     MenuPage(),
   ];
   final List<IconData> _icons = const [
@@ -32,7 +32,7 @@ class _NavScreenState extends State<NavScreen> {
     MdiIcons.facebookMessenger, //videos cargados
     MdiIcons.accountGroupOutline, //grupos de trabajo
     MdiIcons.accountCircleOutline, //cuenta
-    MdiIcons.bellOutline, //notificaciones
+    //MdiIcons.bellOutline, //notificaciones
     Icons.menu,
   ];
   int _selectedIndex = 0;

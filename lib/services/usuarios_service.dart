@@ -9,10 +9,7 @@ class UsuariosService {
   Future<List<Usuario>> getUsuarios() async {
     try {
       final resp = await http.get(Uri.parse('${Environment.apiUrl}/usuarios'),
-          headers: {
-            'Content-Type': 'application/json',
-            'x-token': await AuthService.getToken()
-          });
+          headers: {'Content-Type': 'application/json'});
 
       final usuariosResponse = usuariosResponseFromJson(resp.body);
 

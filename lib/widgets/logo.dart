@@ -1,3 +1,4 @@
+import 'package:chat/config/palette.dart';
 import 'package:flutter/material.dart';
 
 class Logo extends StatelessWidget {
@@ -16,7 +17,12 @@ class Logo extends StatelessWidget {
             Image(image: AssetImage('assets/Reco-Logo.png')),
             SizedBox(height: 20),
             Text(this.titulo,
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30))
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 50,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: -1.2,
+                    color: Colors.blue[900]))
           ],
         ),
       ),

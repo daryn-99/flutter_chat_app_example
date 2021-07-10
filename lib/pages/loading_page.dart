@@ -34,13 +34,13 @@ class LoadingPage extends StatelessWidget {
 
     if (autenticado) {
       socketService.connect();
-      Navigator.pushReplacement(
+      Navigator.push(
           context,
           PageRouteBuilder(
               pageBuilder: (_, __, ___) => NavScreen(),
               transitionDuration: Duration(milliseconds: 0)));
     } else {
-      Navigator.pushReplacement(
+      Navigator.push(
           context,
           PageRouteBuilder(
               pageBuilder: (_, __, ___) => LoginPage(),

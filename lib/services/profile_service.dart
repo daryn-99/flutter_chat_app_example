@@ -16,7 +16,7 @@ class ProfileService with ChangeNotifier {
       'Content-Type': 'application/json',
     });
 
-    print(resp.body);
+    //print(resp.body);
     if (resp.statusCode == 200) {
       final profileResponse = profileResponseFromJson(resp.body);
       this.profile = profileResponse.profile;
