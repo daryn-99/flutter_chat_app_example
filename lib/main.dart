@@ -1,5 +1,7 @@
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
+import 'package:chat/services/post_service.dart';
+import 'package:chat/services/profile_get.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +20,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => SocketService()),
         ChangeNotifierProvider(create: (_) => ChatService()),
-        ChangeNotifierProvider(create: (_) => ProfileService())
+        ChangeNotifierProvider(create: (_) => ProfileService()),
+        ChangeNotifierProvider(create: (_) => ProfilegetService()),
+        ChangeNotifierProvider(create: (_) => PostService())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

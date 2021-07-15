@@ -7,6 +7,7 @@ import 'package:chat/models/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:logger/logger.dart';
 
 class AuthService with ChangeNotifier {
   Usuario usuario;
@@ -18,6 +19,29 @@ class AuthService with ChangeNotifier {
   set autenticando(bool valor) {
     this._autenticando = valor;
     notifyListeners();
+  }
+
+  final baseurl = Environment.socketUrl;
+
+  var log = Logger();
+  Future get(String url) async {
+    final token = await _storage.read(key: 'token');
+
+    url = formater(url);
+    final uri = Uri.parse('$url');
+    final response = await http.get(uri,
+        headers: {'Content-Type': 'application/json', 'x-token': token});
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log.i(response.body);
+
+      return json.decode(response.body);
+    }
+    log.i(response.body);
+    log.i(response.statusCode);
+  }
+
+  String formater(String url) {
+    return baseurl + url;
   }
 
   // Getters del token de forma estatica
