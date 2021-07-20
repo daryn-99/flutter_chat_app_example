@@ -1,5 +1,7 @@
+import 'package:chat/models/getprofile_response.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
+import 'package:chat/services/post_get.dart';
 import 'package:chat/services/post_service.dart';
 import 'package:chat/services/profile_get.dart';
 import 'package:chat/services/sockets_service.dart';
@@ -22,7 +24,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ChatService()),
         ChangeNotifierProvider(create: (_) => ProfileService()),
         ChangeNotifierProvider(create: (_) => ProfilegetService()),
-        ChangeNotifierProvider(create: (_) => PostService())
+        ChangeNotifierProvider(create: (_) => GetProfileResponse()),
+        ChangeNotifierProvider(create: (_) => PostService()),
+        ChangeNotifierProvider(create: (_) => PostgetService())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

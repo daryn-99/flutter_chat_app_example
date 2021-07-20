@@ -1,3 +1,4 @@
+import 'package:chat/config/palette.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
@@ -52,7 +53,7 @@ class _ContactPageState extends State<ContactPage> {
         onRefresh: _cargarUsuarios,
         header: WaterDropHeader(
           complete: Icon(Icons.check, color: Colors.blue[400]),
-          waterDropColor: Colors.blue[400],
+          waterDropColor: Palette.colorBlue,
         ),
         child: _listViewUsuarios(),
       ),

@@ -9,12 +9,11 @@ import 'auth_services.dart';
 class ProfilegetService with ChangeNotifier {
   Future<Profile> getProfiles() async {
     try {
-      final resp = await http.get(
-          Uri.parse('${Environment.apiUrl}/profile/checkprofiles'),
-          headers: {
-            'Content-Type': 'application/json',
-            'x-token': await AuthService.getToken()
-          });
+      final resp = await http
+          .get(Uri.parse('${Environment.apiUrl}/profile/get'), headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken()
+      });
 
       final profileResponse = getprofileResponseFromJson(resp.body);
 

@@ -18,20 +18,34 @@ class ProfiletwoPage extends StatefulWidget {
 
 class _ProfiletwoPageState extends State<ProfiletwoPage> {
   bool circular = true;
+  AuthService networkHandler = AuthService();
+  ProfilegetService getService = ProfilegetService();
+  Profile profile;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
 
-    fetchData();
-  }
+  //   fetchData();
+  // }
 
-  void fetchData() async {}
+  // void fetchData() async {
+  //   final resp = await networkHandler.get('/profile/get');
+  //   setState(() {
+  //     profile = Profile.fromJson(resp['data']);
+  //     circular = false;
+  //   });
+
+  //   // headers: {
+  //   //   'Content-Type': 'application/json',
+  //   //   'x-token': await AuthService.getToken()
+  //   // });
+  // }
 
   final profilegetService = new ProfilegetService();
 
-  Profile profile;
+  Profile profilezzz;
 
   // @override
   // void initState() {
@@ -50,23 +64,25 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
     //print(profile);
 
     return Scaffold(
-        body: CustomScrollView(
-      slivers: <Widget>[
-        _crearAppbar(usuario),
-        SliverList(
-          delegate: SliverChildListDelegate([
-            SizedBox(height: 10.0),
-            _posterTitulo(context, usuario),
-            SizedBox(height: 10.0),
-            _botonAdd(),
-            SizedBox(height: 40.0),
-            //showProfile(context, profile)
-            _mostrarPerfil(),
-            //_cargarProfiles()
-          ]),
-        )
-      ],
-    ));
+        body: circular
+            ? Center(child: CircularProgressIndicator())
+            : CustomScrollView(
+                slivers: <Widget>[
+                  _crearAppbar(usuario),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      SizedBox(height: 10.0),
+                      _posterTitulo(context, usuario),
+                      SizedBox(height: 10.0),
+                      _botonAdd(),
+                      SizedBox(height: 40.0),
+                      //showProfile(context, profile)
+                      _mostrarPerfil(),
+                      //_cargarProfiles()
+                    ]),
+                  )
+                ],
+              ));
   }
 
   _cargarProfiles() async {
@@ -168,25 +184,25 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
   Widget _mostrarPerfil() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
-      //   child: Row(
-      //     children: <Widget>[
-      //       DefaultImg(titulo: 'Profile'), //TODO: Quitar el icon de la camara
-      //       SizedBox(width: 20.0),
-      //       Flexible(
-      //         child: Column(
-      //           crossAxisAlignment: CrossAxisAlignment.start,
-      //           children: <Widget>[
-      //             Text(profile.about,
-      //                 style: Theme.of(context).textTheme.title,
-      //                 overflow: TextOverflow.ellipsis),
-      //           ],
-      //         ),
-      //       )
-      //     ],
-      //   ),
+      // child: Row(
+      //   children: <Widget>[
+      //     DefaultImg(titulo: 'Profile'), //TODO: Quitar el icon de la camara
+      //     SizedBox(width: 20.0),
+      //     Flexible(
+      //       child: Column(
+      //         crossAxisAlignment: CrossAxisAlignment.start,
+      //         children: <Widget>[
+      //           Text(profile.about,
+      //               style: Theme.of(context).textTheme.title,
+      //               overflow: TextOverflow.ellipsis),
+      //         ],
+      //       ),
+      //     )
+      //   ],
+      // ),
       child: Text(
-        //profile.about,
-        'Hola! A menudo me estarán viendo por los alrededores, soy practicante de la carrera de Ingeniería en informática',
+        profile.about,
+        //'Hola! A menudo me estarán viendo por los alrededores, soy practicante de la carrera de Ingeniería en informática',
         textAlign: TextAlign.justify,
 
         style: Theme.of(context).textTheme.subtitle1,

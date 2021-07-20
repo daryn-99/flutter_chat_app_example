@@ -20,7 +20,7 @@ class ProfileAvatar extends StatelessWidget {
       radius: 20.0,
       backgroundColor: Colors.grey[200],
       //child: Text(usuario.nombre.substring(0, 2)),
-      backgroundImage: CachedNetworkImageProvider(imageUrl),
+      //backgroundImage: CachedNetworkImageProvider(imageUrl),
     );
   }
 }

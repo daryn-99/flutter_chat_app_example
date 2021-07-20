@@ -10,8 +10,8 @@ import 'auth_services.dart';
 
 class PostService with ChangeNotifier {
   Post post;
-  Future poster(String title) async {
-    final data = {'title': title};
+  Future poster(String title, String caption) async {
+    final data = {'title': title, 'caption': caption};
 
     final uri = Uri.parse('${Environment.apiUrl}/post/new');
     final resp = await http.post(uri, body: jsonEncode(data), headers: {
@@ -22,7 +22,7 @@ class PostService with ChangeNotifier {
     print(resp.body);
     if (resp.statusCode == 200) {
       final postResponse = postResponseFromJson(resp.body);
-      this.post = postResponse.post as Post;
+      this.post = postResponse.post;
       return true;
     } else {
       final respBody = jsonDecode(resp.body);

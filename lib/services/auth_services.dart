@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:chat/global/environments.dart';
+import 'package:chat/models/getprofile_response.dart';
 import 'package:chat/models/login_response.dart';
+import 'package:chat/models/profile.dart';
 import 'package:chat/models/register_response.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:logger/logger.dart';
 
 class AuthService with ChangeNotifier {
   Usuario usuario;
+  Profile profile;
   bool _autenticando = false;
 
   final _storage = new FlutterSecureStorage();
@@ -21,7 +24,7 @@ class AuthService with ChangeNotifier {
     notifyListeners();
   }
 
-  final baseurl = Environment.socketUrl;
+  final baseurl = Environment.apiUrl;
 
   var log = Logger();
   Future get(String url) async {
@@ -148,5 +151,22 @@ class AuthService with ChangeNotifier {
 
   Future logout() async {
     await _storage.delete(key: 'token');
+  }
+
+  Future<Profile> getProfiles() async {
+    try {
+      final resp = await http.get(
+          Uri.parse('${Environment.apiUrl}/profile/checkprofiles'),
+          headers: {
+            'Content-Type': 'application/json',
+            //'x-token': await AuthService.getToken()
+          });
+
+      final profileResponse = getprofileResponseFromJson(resp.body);
+
+      return profileResponse.profiles;
+    } catch (e) {
+      return null;
+    }
   }
 }

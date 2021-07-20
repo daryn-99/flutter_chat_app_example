@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/config/palette.dart';
-import 'package:chat/models/post_models.dart';
+import 'package:chat/models/ipost_models.dart';
+import 'package:chat/models/usuario.dart';
 import 'package:chat/widgets/profile_avatar.dart';
 import 'package:chat/widgets/responsive.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 class PostContainer extends StatelessWidget {
   final Post post;
+  final Usuario usuario;
 
-  const PostContainer({
-    Key key,
-    @required this.post,
-  }) : super(key: key);
+  const PostContainer({Key key, @required this.post, @required this.usuario})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +36,22 @@ class PostContainer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _PostHeader(post: post),
+                  _PostHeader(
+                    post: post,
+                    usuario: usuario,
+                  ),
                   const SizedBox(height: 4.0),
                   Text(post.caption),
-                  post.imageUrl != null
+                  post.coverImage != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),
                 ],
               ),
             ),
-            post.imageUrl != null
+            post.coverImage != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CachedNetworkImage(imageUrl: post.imageUrl),
+                    child: CachedNetworkImage(imageUrl: post.coverImage),
                   )
                 : const SizedBox.shrink(),
             Padding(
@@ -64,18 +67,17 @@ class PostContainer extends StatelessWidget {
 
 class _PostHeader extends StatelessWidget {
   final Post post;
+  final Usuario usuario;
 
-  const _PostHeader({
-    Key key,
-    @required this.post,
-  }) : super(key: key);
+  const _PostHeader({Key key, @required this.post, @required this.usuario})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         ProfileAvatar(
-          imageUrl: post.user.imageUrl,
+          imageUrl: null,
         ),
         const SizedBox(width: 8.0),
         Expanded(
@@ -83,27 +85,27 @@ class _PostHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                post.user.name,
+                usuario.nombre,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Row(
-                children: [
-                  Text(
-                    '${post.timeAgo} • ',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12.0,
-                    ),
-                  ),
-                  Icon(
-                    Icons.public,
-                    color: Colors.grey[600],
-                    size: 12.0,
-                  )
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     // Text(
+              //     //   '${post} • ',
+              //     //   style: TextStyle(
+              //     //     color: Colors.grey[600],
+              //     //     fontSize: 12.0,
+              //     //   ),
+              //     // ),
+              //     Icon(
+              //       Icons.public,
+              //       color: Colors.grey[600],
+              //       size: 12.0,
+              //     )
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -139,20 +141,20 @@ class _PostStats extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4.0),
-            Expanded(
-              child: Text(
-                '${post.likes}',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
-            Text(
-              '${post.comments} Comments',
-              style: TextStyle(
-                color: Colors.grey[600],
-              ),
-            ),
+            // Expanded(
+            //   child: Text(
+            //     '${post.}',
+            //     style: TextStyle(
+            //       color: Colors.grey[600],
+            //     ),
+            //   ),
+            // ),
+            // Text(
+            //   '${post.comments} Comments',
+            //   style: TextStyle(
+            //     color: Colors.grey[600],
+            //   ),
+            // ),
           ],
         ),
         const Divider(),

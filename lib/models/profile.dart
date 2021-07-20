@@ -9,9 +9,10 @@ import 'dart:convert';
 // part 'profile.g.dart';
 
 // @JsonSerializable()
-Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
 
-String profileToJson(Profile data) => json.encode(data.toJson());
+// Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
+
+// String profileToJson(Profile data) => json.encode(data.toJson());
 
 class Profile {
   Profile({

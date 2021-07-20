@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:chat/models/profile.dart';
+import 'package:flutter/cupertino.dart';
 
 GetProfileResponse getprofileResponseFromJson(String str) =>
     GetProfileResponse.fromJson(json.decode(str));
@@ -12,7 +13,7 @@ GetProfileResponse getprofileResponseFromJson(String str) =>
 String getprofileResponseToJson(GetProfileResponse data) =>
     json.encode(data.toJson());
 
-class GetProfileResponse {
+class GetProfileResponse with ChangeNotifier {
   GetProfileResponse({
     this.ok,
     this.profiles,

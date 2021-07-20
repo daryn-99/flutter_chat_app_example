@@ -4,9 +4,15 @@
 
 import 'dart:convert';
 
-Post postFromJson(String str) => Post.fromJson(json.decode(str));
+import 'package:json_annotation/json_annotation.dart';
 
-String postToJson(Post data) => json.encode(data.toJson());
+part 'ipost_models.g.dart';
+
+@JsonSerializable()
+
+// Post postFromJson(String str) => Post.fromJson(json.decode(str));
+
+// String postToJson(Post data) => json.encode(data.toJson());
 
 class Post {
   Post({this.title, this.caption, this.coverImage});
@@ -15,11 +21,15 @@ class Post {
   String caption;
   String coverImage;
 
-  factory Post.fromJson(Map<String, dynamic> json) => Post(
-      title: json["title"],
-      caption: json["caption"],
-      coverImage: json["coverImage"]);
+  // factory Post.fromJson(Map<String, dynamic> json) => Post(
+  //     title: json["title"],
+  //     caption: json["caption"],
+  //     coverImage: json["coverImage"]);
 
-  Map<String, dynamic> toJson() =>
-      {"title": title, "caption": caption, "coverImage": coverImage};
+  // Map<String, dynamic> toJson() =>
+  //     {"title": title, "caption": caption, "coverImage": coverImage};
+
+  factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PostToJson(this);
 }

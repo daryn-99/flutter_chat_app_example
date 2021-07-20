@@ -19,7 +19,7 @@ class Logo extends StatelessWidget {
             Text(this.titulo,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 50,
+                    fontSize: 40,
                     fontStyle: FontStyle.normal,
                     letterSpacing: -1.2,
                     color: Colors.blue[900]))

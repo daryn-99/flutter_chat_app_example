@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'package:chat/config/palette.dart';
+import 'package:chat/helpers/motrar_alerta.dart';
+import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/post_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import 'home_page.dart';
 
@@ -14,13 +18,18 @@ class AddBlog extends StatefulWidget {
 
 class _AddBlogState extends State<AddBlog> {
   final _globalkey = GlobalKey<FormState>();
-  TextEditingController _title = TextEditingController();
-  TextEditingController _body = TextEditingController();
+
+  TextEditingController titleCtrl = TextEditingController();
+  TextEditingController bodyCtrl = TextEditingController();
+
   ImagePicker _picker = ImagePicker();
   PickedFile _imageFile;
   IconData iconphoto = Icons.attach_file;
+
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final postService = PostService();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white54,
@@ -52,7 +61,7 @@ class _AddBlogState extends State<AddBlog> {
             SizedBox(
               height: 20,
             ),
-            addButton(),
+            addButton(postService),
           ],
         ),
       ),
@@ -66,7 +75,8 @@ class _AddBlogState extends State<AddBlog> {
         vertical: 10,
       ),
       child: TextFormField(
-        controller: _title,
+        controller: titleCtrl,
+        keyboardType: TextInputType.text,
         validator: (value) {
           if (value.isEmpty) {
             return "Title can't be empty";
@@ -108,6 +118,8 @@ class _AddBlogState extends State<AddBlog> {
         horizontal: 10,
       ),
       child: TextFormField(
+        controller: bodyCtrl,
+        keyboardType: TextInputType.text,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(
@@ -127,9 +139,20 @@ class _AddBlogState extends State<AddBlog> {
     );
   }
 
-  Widget addButton() {
+  Widget addButton(PostService postService) {
     return InkWell(
-      onTap: () async {},
+      onTap: () async {
+        print(titleCtrl);
+        print(bodyCtrl);
+        final profileOk = await postService.poster(
+            titleCtrl.text.trim(), bodyCtrl.text.trim());
+        if (profileOk == true) {
+          await mostrarAlerta(context, 'Actualización correcta', '');
+          Navigator.popAndPushNamed(context, 'nav_screen');
+        } else {
+          mostrarAlerta(context, 'Actualización incorrecta', 'Rellenar campo');
+        }
+      },
       child: Center(
         child: Container(
           height: 50,
