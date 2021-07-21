@@ -20,6 +20,8 @@ class Post {
   String title;
   String caption;
   String coverImage;
+  // int count;
+  // int comment;
 
   // factory Post.fromJson(Map<String, dynamic> json) => Post(
   //     title: json["title"],

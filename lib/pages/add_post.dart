@@ -3,6 +3,7 @@ import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/post_service.dart';
+import 'package:chat/widgets/overlay_card.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +44,20 @@ class _AddBlogState extends State<AddBlog> {
               Navigator.pop(context);
             }),
         actions: <Widget>[
-          FlatButton(
-            onPressed: () {},
+          TextButton(
+            onPressed: () {
+              if (_imageFile.path != null &&
+                  _globalkey.currentState.validate()) {
+                showModalBottomSheet(
+                  context: context,
+                  builder: ((builder) => OverlayCard(
+                      imagefile: _imageFile, title: titleCtrl.text)),
+                );
+              } else {
+                mostrarAlerta(context, 'Para tener una previsualización',
+                    'Primero adjunte una imagen');
+              }
+            },
             child: Text(
               "Preview",
               style: TextStyle(fontSize: 18, color: Colors.black),
@@ -79,9 +92,13 @@ class _AddBlogState extends State<AddBlog> {
         keyboardType: TextInputType.text,
         validator: (value) {
           if (value.isEmpty) {
-            return "Title can't be empty";
+            return mostrarAlerta(
+                context, 'El titulo no puede ir vacio', 'Rellenar campos');
           } else if (value.length > 100) {
-            return "Title length should be <=100";
+            return mostrarAlerta(
+                context,
+                'El titulo no puede ser mayor a 100 caracteres',
+                'Edite el titulo');
           }
           return null;
         },
@@ -120,6 +137,16 @@ class _AddBlogState extends State<AddBlog> {
       child: TextFormField(
         controller: bodyCtrl,
         keyboardType: TextInputType.text,
+        validator: (value) {
+          if (value.isEmpty) {
+            return mostrarAlerta(
+                context, 'El caption no puede ir vacio', 'Rellenar campos');
+          } else if (value.length > 100) {
+            return mostrarAlerta(
+                context, 'El caption no puede ir vacio', 'Rellenar campos');
+          }
+          return null;
+        },
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(

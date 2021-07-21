@@ -104,11 +104,12 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate([
-                    // SizedBox(height: 10.0),
-                    // postHeader(context, usuario),
-                    // SizedBox(height: 10.0),
-                    // postStats(context),
-                    // SizedBox(height: 10.0),
+                    postContainer(context, usuario, post),
+                    postContainer(context, usuario, post),
+                    postContainer(context, usuario, post),
+                    postContainer(context, usuario, post),
+                    postContainer(context, usuario, post),
+                    postContainer(context, usuario, post),
                     postContainer(context, usuario, post)
                   ]),
                 ),
@@ -127,7 +128,7 @@ class _HomePageState extends State<HomePage> {
       elevation: isDesktop ? 1.0 : 0.0,
       shape: isDesktop
           ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))
-          : 'No puede ser',
+          : null,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         color: Colors.white,
@@ -141,6 +142,7 @@ class _HomePageState extends State<HomePage> {
                   postHeader(context, usuario),
                   const SizedBox(height: 40.0),
                   Text(post.title),
+                  Text(post.caption),
                   post.coverImage != ''
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),

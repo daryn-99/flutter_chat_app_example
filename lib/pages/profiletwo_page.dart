@@ -23,25 +23,24 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
   Profile profile;
 
   @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
+  void initState() {
+    super.initState();
 
-  //   fetchData();
-  // }
+    fetchData();
+  }
 
-  // void fetchData() async {
-  //   final resp = await networkHandler.get('/profile/get');
-  //   setState(() {
-  //     profile = Profile.fromJson(resp['data']);
-  //     circular = false;
-  //   });
+  void fetchData() async {
+    final resp = await networkHandler.get('/profile/get');
+    setState(() {
+      profile = Profile.fromJson(resp['data']);
+      circular = false;
+    });
 
-  //   // headers: {
-  //   //   'Content-Type': 'application/json',
-  //   //   'x-token': await AuthService.getToken()
-  //   // });
-  // }
+    // headers: {
+    //   'Content-Type': 'application/json',
+    //   'x-token': await AuthService.getToken()
+    // });
+  }
 
   final profilegetService = new ProfilegetService();
 
