@@ -1,9 +1,12 @@
 import 'package:chat/pages/add_post.dart';
+import 'package:chat/pages/all_users_page.dart';
 import 'package:chat/pages/home_page.dart';
+import 'package:chat/pages/menu_page.dart';
 import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/pages/profile_editing.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/select_contact_page.dart';
+import 'package:chat/pages/terminos_condiciones.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/pages/chat_page.dart';
@@ -23,5 +26,8 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'nav_screen': (_) => NavScreen(),
   'profiletwo': (_) => ProfiletwoPage(),
   'editing_profile': (_) => ProfileEditingPage(),
-  'add_post': (_) => AddBlog()
+  'add_post': (_) => AddBlog(),
+  'menu_page': (_) => MenuPage(),
+  'all_users': (_) => AllUsers(),
+  'terminos': (_) => TerminosPage()
 };

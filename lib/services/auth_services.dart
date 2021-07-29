@@ -47,6 +47,36 @@ class AuthService with ChangeNotifier {
     return baseurl + url;
   }
 
+  NetworkImage getImage(String imgUrl) {
+    String url = formater("/$imgUrl");
+    log.i(url);
+    return NetworkImage(url);
+  }
+
+  Future<http.StreamedResponse> patchImage(String url, String filepath) async {
+    url = formater(url);
+    final token = await _storage.read(key: 'token');
+    var request = http.MultipartRequest('PATCH', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath("imgUrl", filepath));
+    request.headers
+        .addAll({"Content-type": "multipart/form-data", 'x-token': token});
+    var response = request.send();
+    return response;
+  }
+
+  Future<http.Response> post(String url, Map<String, String> body) async {
+    final token = await _storage.read(key: 'token');
+    url = formater(url);
+    log.d(body);
+    final uri = Uri.parse('$url');
+    var response = await http.post(
+      uri,
+      headers: {"Content-type": "application/json", 'x-token': token},
+      body: json.encode(body),
+    );
+    return response;
+  }
+
   // Getters del token de forma estatica
   static Future<String> getToken() async {
     final _storage = new FlutterSecureStorage();

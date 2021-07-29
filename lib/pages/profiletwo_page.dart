@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:chat/config/palette.dart';
 import 'package:chat/global/environments.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/profile.dart';
@@ -6,8 +9,8 @@ import 'package:chat/models/usuario.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/profile_get.dart';
 import 'package:chat/services/profile_service.dart';
-import 'package:chat/widgets/default_img.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,6 +25,9 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
   ProfilegetService getService = ProfilegetService();
   Profile profile;
 
+  PickedFile _imageFile;
+  final ImagePicker _picker = ImagePicker();
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +37,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
 
   void fetchData() async {
     final resp = await networkHandler.get('/profile/get');
+
     setState(() {
       profile = Profile.fromJson(resp['data']);
       circular = false;
@@ -43,8 +50,6 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
   }
 
   final profilegetService = new ProfilegetService();
-
-  Profile profilezzz;
 
   // @override
   // void initState() {
@@ -94,28 +99,6 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
 
   Widget page = CircularProgressIndicator();
 
-  // void checkProfile() async {
-  //   final resp = await http.get(
-  //       Uri.parse('${Environment.apiUrl}/profile/checkprofiles'),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'x-token': await AuthService.getToken()
-  //       });
-
-  //       if (resp.statusCode == 200) {
-  //     final registerResponse = registerResponseFromJson(resp.body);
-  //     this.usuario = registerResponse.usuario;
-
-  //     return true;
-  //   } else {
-  //     final respBody = jsonDecode(resp.body);
-  //     return respBody['msg'];
-  //   }
-  //   setState(() {
-  //     page = showProfile();
-  //   });
-  // }
-
   Widget showProfile(BuildContext context, Profile profile) {
     return Center(
       child: Text(profile.about),
@@ -125,19 +108,17 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
   Widget _crearAppbar(Usuario usuario) {
     return SliverAppBar(
       elevation: 2.0,
-      backgroundColor: Colors.indigoAccent,
+      backgroundColor: Palette.colorBlue,
       expandedHeight: 200.0,
       floating: false,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        // centerTitle: true,
-        // title: Text(
-        //   usuario.nombre,
-        //   style: TextStyle(color: Colors.white, fontSize: 16.0),
-        // ),
+        centerTitle: true,
         background: FadeInImage(
           image: NetworkImage(
-              'https://image.freepik.com/vector-gratis/fondo-construccion-graficos-informacion-construccion-diseno-portada-libro_40382-67.jpg'),
+              //'https://scontent.fsap4-1.fna.fbcdn.net/v/t1.6435-9/p960x960/189418878_3817325464982636_394025055086716610_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=36a2c1&_nc_ohc=EBIVLzHaWLUAX-MVM7X&_nc_ht=scontent.fsap4-1.fna&oh=69f35621d754e8b0f9365799fcf538fe&oe=61262D2F'),
+              //'http://192.168.80.124:3000/api/storage/imgs/1626987990868-Logo%20RECO%20-%20Tipografico-01.png'),
+              'https://www.jorgechavezonroatan.com/wp-content/uploads/2017/03/weather-in-Reco-1-1024x575.jpeg'),
           width: 130,
           height: 190,
           placeholder: NetworkImage(
@@ -154,7 +135,8 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         children: <Widget>[
-          DefaultImg(titulo: 'Profile'), //TODO: Quitar el icon de la camara
+          profileImg(context),
+          //DefaultImg(titulo: 'Profile'), //TODO: Quitar el icon de la camara
           SizedBox(width: 20.0),
           Flexible(
             child: Column(
@@ -201,9 +183,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
       // ),
       child: Text(
         profile.about,
-        //'Hola! A menudo me estarán viendo por los alrededores, soy practicante de la carrera de Ingeniería en informática',
         textAlign: TextAlign.justify,
-
         style: Theme.of(context).textTheme.subtitle1,
       ),
     );
@@ -221,5 +201,19 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
             onPressed: () {
               Navigator.pushReplacementNamed(context, 'editing_profile');
             }));
+  }
+
+  Widget profileImg(BuildContext context) {
+    return Center(
+      child: Stack(
+        children: <Widget>[
+          CircleAvatar(
+              radius: 50.0,
+              //backgroundImage: AuthService().getImage(profile.imgUrl))
+              backgroundImage: NetworkImage(
+                  'http://192.168.80.124:3000/api/storage/1627484367691-profiledos.jpeg'))
+        ],
+      ),
+    );
   }
 }

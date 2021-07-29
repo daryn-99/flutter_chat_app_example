@@ -41,7 +41,6 @@ class PostContainer extends StatelessWidget {
                     usuario: usuario,
                   ),
                   const SizedBox(height: 4.0),
-                  Text(post.caption),
                   post.coverImage != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),

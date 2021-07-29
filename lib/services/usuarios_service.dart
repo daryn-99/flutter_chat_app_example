@@ -21,4 +21,20 @@ class UsuariosService {
       return [];
     }
   }
+
+  Future<List<Usuario>> getAllUsuarios() async {
+    try {
+      final resp = await http
+          .get(Uri.parse('${Environment.apiUrl}/usuarios/allusers'), headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken()
+      });
+
+      final allusuariosResponse = usuariosResponseFromJson(resp.body);
+
+      return allusuariosResponse.usuarios;
+    } catch (e) {
+      return [];
+    }
+  }
 }

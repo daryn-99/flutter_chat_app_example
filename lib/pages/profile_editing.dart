@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/usuario.dart';
+import 'package:chat/pages/home_page.dart';
+import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/profile_service.dart';
 import 'package:chat/services/sockets_service.dart';
@@ -16,9 +20,13 @@ class ProfileEditingPage extends StatefulWidget {
 
 class _ProfileEditingPageState extends State<ProfileEditingPage> {
   TextEditingController aboutCtrl = TextEditingController();
+  AuthService networkHandler = AuthService();
+  bool circular = false;
 
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
+  final _globalkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
@@ -32,8 +40,8 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
           delegate: SliverChildListDelegate([
             SizedBox(height: 10.0),
             _getAppBar(),
-            SizedBox(height: 10.0),
-            DefaultImg(titulo: 'Profile'),
+            SizedBox(height: 40.0),
+            imgProfile(context),
             SizedBox(height: 40.0),
             _crearAbout(),
             SizedBox(height: 40.0),
@@ -63,21 +71,77 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
       actions: <Widget>[
         Container(
           margin: EdgeInsets.only(right: 10),
-          child: IconButton(
-              icon: Icon(Icons.check, color: Colors.black),
-              onPressed: () async {
-                print(aboutCtrl);
-                final profileOk =
-                    await profileService.profiler(aboutCtrl.text.trim());
-                if (profileOk == true) {
-                  await Navigator.popAndPushNamed(context, 'profiletwo');
-                } else {
-                  mostrarAlerta(
-                      context, 'Actualización incorrecta', 'Rellenar campo');
-                }
-              }),
+          child: circular
+              ? CircularProgressIndicator()
+              : IconButton(
+                  icon: Icon(Icons.check, color: Colors.black),
+                  onPressed: () async {
+                    setState(() {
+                      circular = true;
+                    });
+                    Map<String, String> data = {'about': aboutCtrl.text};
+                    print(aboutCtrl);
+                    var response =
+                        await networkHandler.post('/profile/add', data);
+                    if (response.statusCode == 200 ||
+                        response.statusCode == 201) {
+                      if (_imageFile.path != null) {
+                        var imageResponse = await networkHandler.patchImage(
+                            '/profile/add/profileimg', _imageFile.path);
+                        if (imageResponse.statusCode == 200) {
+                          setState(() {
+                            circular = false;
+                          });
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => ProfiletwoPage()),
+                              (route) => false);
+                        }
+                      } else {
+                        setState(() {
+                          circular = false;
+                        });
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => ProfiletwoPage()),
+                            (route) => false);
+                        //Navigator.popAndPushNamed(context, 'profiletwo');
+                      }
+                    }
+                  }),
         )
       ],
+    );
+  }
+
+  Widget imgProfile(BuildContext context) {
+    return Center(
+      child: Stack(
+        children: <Widget>[
+          CircleAvatar(
+            radius: 50.0,
+            backgroundImage: _imageFile == null
+                ? AssetImage('assets/user-logo.png')
+                : FileImage(File(_imageFile.path)),
+          ),
+          Positioned(
+              bottom: 20.0,
+              right: 11.0,
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: ((builder) => bottomSheet()),
+                  );
+                },
+                child: Icon(
+                  Icons.photo_camera_rounded,
+                  color: Colors.white,
+                  size: 28.0,
+                ),
+              )),
+        ],
+      ),
     );
   }
 

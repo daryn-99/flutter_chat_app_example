@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
+import 'package:chat/models/ipost_models.dart';
+import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/post_service.dart';
 import 'package:chat/widgets/overlay_card.dart';
@@ -19,10 +21,11 @@ class AddBlog extends StatefulWidget {
 
 class _AddBlogState extends State<AddBlog> {
   final _globalkey = GlobalKey<FormState>();
+  AuthService networkHandler = AuthService();
 
   TextEditingController titleCtrl = TextEditingController();
-  TextEditingController bodyCtrl = TextEditingController();
 
+  bool circular = false;
   ImagePicker _picker = ImagePicker();
   PickedFile _imageFile;
   IconData iconphoto = Icons.attach_file;
@@ -70,7 +73,6 @@ class _AddBlogState extends State<AddBlog> {
         child: ListView(
           children: <Widget>[
             titleTextField(),
-            bodyTextField(),
             SizedBox(
               height: 20,
             ),
@@ -94,12 +96,13 @@ class _AddBlogState extends State<AddBlog> {
           if (value.isEmpty) {
             return mostrarAlerta(
                 context, 'El titulo no puede ir vacio', 'Rellenar campos');
-          } else if (value.length > 100) {
-            return mostrarAlerta(
-                context,
-                'El titulo no puede ser mayor a 100 caracteres',
-                'Edite el titulo');
           }
+          // else if (value.length > 100) {
+          //   return mostrarAlerta(
+          //       context,
+          //       'El titulo no puede ser mayor a 100 caracteres',
+          //       'Edite el titulo');
+          // }
           return null;
         },
         decoration: InputDecoration(
@@ -123,44 +126,7 @@ class _AddBlogState extends State<AddBlog> {
             onPressed: takeCoverPhoto,
           ),
         ),
-        maxLength: 100,
-        maxLines: null,
-      ),
-    );
-  }
-
-  Widget bodyTextField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      child: TextFormField(
-        controller: bodyCtrl,
-        keyboardType: TextInputType.text,
-        validator: (value) {
-          if (value.isEmpty) {
-            return mostrarAlerta(
-                context, 'El caption no puede ir vacio', 'Rellenar campos');
-          } else if (value.length > 100) {
-            return mostrarAlerta(
-                context, 'El caption no puede ir vacio', 'Rellenar campos');
-          }
-          return null;
-        },
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Palette.colorBlue,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Palette.scaffold,
-              width: 2,
-            ),
-          ),
-          labelText: "¿Qué esta pasando en RECO?",
-        ),
+        // maxLength: 100,
         maxLines: null,
       ),
     );
@@ -169,15 +135,33 @@ class _AddBlogState extends State<AddBlog> {
   Widget addButton(PostService postService) {
     return InkWell(
       onTap: () async {
+        setState(() {
+          circular = true;
+        });
+        Map<String, String> data = {'title': titleCtrl.text};
         print(titleCtrl);
-        print(bodyCtrl);
-        final profileOk = await postService.poster(
-            titleCtrl.text.trim(), bodyCtrl.text.trim());
-        if (profileOk == true) {
-          await mostrarAlerta(context, 'Actualización correcta', '');
-          Navigator.popAndPushNamed(context, 'nav_screen');
-        } else {
-          mostrarAlerta(context, 'Actualización incorrecta', 'Rellenar campo');
+        var response = await networkHandler.post('/new', data);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          if (_imageFile.path != null) {
+            var imageResponse = await networkHandler.patchImage(
+                '/profile/add/profileimg', _imageFile.path);
+            if (imageResponse.statusCode == 200) {
+              setState(() {
+                circular = false;
+              });
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => ProfiletwoPage()),
+                  (route) => false);
+            }
+          } else {
+            setState(() {
+              circular = false;
+            });
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => ProfiletwoPage()),
+                (route) => false);
+            //Navigator.popAndPushNamed(context, 'profiletwo');
+          }
         }
       },
       child: Center(

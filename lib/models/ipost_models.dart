@@ -15,13 +15,21 @@ part 'ipost_models.g.dart';
 // String postToJson(Post data) => json.encode(data.toJson());
 
 class Post {
-  Post({this.title, this.caption, this.coverImage});
+  Post(
+      {this.count,
+      this.comment,
+      this.id,
+      this.user,
+      this.title,
+      this.coverImage});
 
+  int count;
+  int comment;
+  @JsonKey(name: '_id')
+  String id;
+  String user;
   String title;
-  String caption;
   String coverImage;
-  // int count;
-  // int comment;
 
   // factory Post.fromJson(Map<String, dynamic> json) => Post(
   //     title: json["title"],

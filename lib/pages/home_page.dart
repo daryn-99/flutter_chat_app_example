@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/config/palette.dart';
 import 'package:chat/data/data.dart';
 import 'package:chat/models/ipost_models.dart';
 import 'package:chat/models/usuario.dart';
+import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/select_contact_page.dart';
+import 'package:chat/pages/terminos_condiciones.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/post_get.dart';
+import 'package:chat/services/sockets_service.dart';
 import 'package:chat/services/usuarios_service.dart';
 import 'package:chat/widgets/circle_buttom.dart';
 import 'package:chat/widgets/create_post_container.dart';
@@ -14,6 +19,7 @@ import 'package:chat/widgets/profile_avatar.dart';
 import 'package:chat/widgets/responsive.dart';
 import 'package:chat/widgets/rooms.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -50,8 +56,60 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final usuario = authService.usuario;
+    final socketService = Provider.of<SocketService>(context);
 
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+                child: Column(
+              children: [
+                Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      image: const DecorationImage(
+                          image: NetworkImage(
+                              'http://192.168.80.124:3000/api/storage/1627484367691-profiledos.jpeg'))),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(usuario.username),
+              ],
+            )),
+            SizedBox(
+              height: 20,
+            ),
+            ListTile(
+              title: Text('Ver perfil'),
+              trailing: Icon(MdiIcons.accountCircleOutline),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
+              },
+            ),
+            ListTile(
+              title: Text('Ver Terminos y condiciones de uso'),
+              trailing: Icon(Icons.library_books),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => TerminosPage()));
+              },
+            ),
+            ListTile(
+                title: Text('Cerrar sesión'),
+                trailing: Icon(MdiIcons.logout),
+                onTap: () {
+                  socketService.disconnect();
+                  Navigator.pushReplacementNamed(context, 'login');
+                  AuthService.deleteToken();
+                })
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         heroTag: "btn1",
         backgroundColor: Palette.colorBlue,
@@ -70,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                   brightness: Brightness.light,
                   backgroundColor: Colors.white,
                   title: Text(
-                    usuario.nombre,
+                    "RECONET",
                     style: const TextStyle(
                       color: Palette.colorBlue,
                       fontSize: 20.0,
@@ -110,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                     postContainer(context, usuario, post),
                     postContainer(context, usuario, post),
                     postContainer(context, usuario, post),
-                    postContainer(context, usuario, post)
+                    postContainer(context, usuario, post),
                   ]),
                 ),
               ],
@@ -142,18 +200,28 @@ class _HomePageState extends State<HomePage> {
                   postHeader(context, usuario),
                   const SizedBox(height: 40.0),
                   Text(post.title),
-                  Text(post.caption),
-                  post.coverImage != ''
+                  Text(post.coverImage),
+                  post.coverImage != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),
                 ],
               ),
             ),
-            post.coverImage != ''
+            post.coverImage != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CachedNetworkImage(imageUrl: post.coverImage),
-                  )
+                    child: Image.network(
+                        'https://www.recoroatan.com/wp-content/uploads/2021/07/WhatsApp-Image-2021-06-06-at-12.40.31.jpeg')
+                    //NetworkImage('http://192.168.80.124:3000/api/storage/1627483691175-profile.jpg'),
+                    //child: Image(image: AuthService().getImage(post.coverImage))
+                    //child: CachedNetworkImage(imageUrl: post.coverImage),
+                    // child: Image.network(post.coverImage,
+                    //     loadingBuilder: (context, child, progress) {
+                    //   return progress == null
+                    //       ? child
+                    //       : LinearProgressIndicator(color: Colors.blue);
+                    // }),
+                    )
                 : const SizedBox.shrink(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -168,8 +236,11 @@ class _HomePageState extends State<HomePage> {
   Widget postHeader(BuildContext context, Usuario usuario) {
     return Row(
       children: [
-        ProfileAvatar(
-          imageUrl: '',
+        CircleAvatar(
+          radius: 20.0,
+          backgroundColor: Colors.grey[200],
+          backgroundImage: NetworkImage(
+              'http://192.168.80.124:3000/api/storage/1627484367691-profiledos.jpeg'),
         ),
         const SizedBox(width: 8.0),
         Expanded(
