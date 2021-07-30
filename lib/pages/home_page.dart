@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/config/palette.dart';
 import 'package:chat/data/data.dart';
 import 'package:chat/models/ipost_models.dart';
+import 'package:chat/models/profile.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/select_contact_page.dart';
@@ -35,6 +36,7 @@ class _HomePageState extends State<HomePage> {
   AuthService networkHandler = AuthService();
   PostgetService getPost = PostgetService();
   Post post;
+  Profile profile;
 
   @override
   void initState() {
@@ -42,12 +44,22 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     fetchData();
+    fetchDataProfile();
   }
 
   void fetchData() async {
     final resp = await networkHandler.get('/post/get');
     setState(() {
       post = Post.fromJson(resp['data']);
+      circular = false;
+    });
+  }
+
+  void fetchDataProfile() async {
+    final resp = await networkHandler.get('/profile/get');
+
+    setState(() {
+      profile = Profile.fromJson(resp['data']);
       circular = false;
     });
   }
@@ -59,27 +71,21 @@ class _HomePageState extends State<HomePage> {
     final socketService = Provider.of<SocketService>(context);
 
     return Scaffold(
+      //drawerScrimColor: Colors.transparent,
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
             DrawerHeader(
-                child: Column(
-              children: [
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      image: const DecorationImage(
-                          image: NetworkImage(
-                              'http://192.168.80.124:3000/api/storage/1627484367691-profiledos.jpeg'))),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(usuario.username),
-              ],
-            )),
+                child: Column(children: <Widget>[
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: AuthService().getImage(profile.imgUrl),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(usuario.username),
+            ])),
             SizedBox(
               height: 20,
             ),
@@ -151,15 +157,16 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 //Container para publicar
-                SliverToBoxAdapter(
-                    //child: CreatePostContainer(),
-                    ),
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
-                  sliver: SliverToBoxAdapter(
-                    child: Rooms(),
-                  ),
-                ),
+                // SliverToBoxAdapter(
+                //     //child: CreatePostContainer(),
+                //     ),
+                // //Container con los cumpleañeros
+                // SliverPadding(
+                //   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
+                //   sliver: SliverToBoxAdapter(
+                //     child: Rooms(),
+                //   ),
+                // ),
                 SliverList(
                   delegate: SliverChildListDelegate([
                     postContainer(context, usuario, post),
@@ -210,10 +217,10 @@ class _HomePageState extends State<HomePage> {
             post.coverImage != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Image.network(
-                        'https://www.recoroatan.com/wp-content/uploads/2021/07/WhatsApp-Image-2021-06-06-at-12.40.31.jpeg')
+                    // child: Image.network(
+                    //     'https://www.recoroatan.com/wp-content/uploads/2021/07/WhatsApp-Image-2021-06-06-at-12.40.31.jpeg')
                     //NetworkImage('http://192.168.80.124:3000/api/storage/1627483691175-profile.jpg'),
-                    //child: Image(image: AuthService().getImage(post.coverImage))
+                    child: Image(image: AuthService().getImage(post.coverImage))
                     //child: CachedNetworkImage(imageUrl: post.coverImage),
                     // child: Image.network(post.coverImage,
                     //     loadingBuilder: (context, child, progress) {
@@ -236,11 +243,18 @@ class _HomePageState extends State<HomePage> {
   Widget postHeader(BuildContext context, Usuario usuario) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 20.0,
-          backgroundColor: Colors.grey[200],
-          backgroundImage: NetworkImage(
-              'http://192.168.80.124:3000/api/storage/1627484367691-profiledos.jpeg'),
+        InkWell(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
+          },
+          child: CircleAvatar(
+              radius: 20.0,
+              backgroundColor: Colors.grey[200],
+              backgroundImage: AuthService().getImage(profile.imgUrl)
+              // NetworkImage(
+              //     'http://192.168.80.124:3000/api/storage/1627484367691-profiledos.jpeg'),
+              ),
         ),
         const SizedBox(width: 8.0),
         Expanded(

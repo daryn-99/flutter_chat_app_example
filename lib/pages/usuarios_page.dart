@@ -1,5 +1,6 @@
 import 'package:chat/config/palette.dart';
 import 'package:chat/models/mensajes_response.dart';
+import 'package:chat/models/profile.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/select_contact_page.dart';
 import 'package:chat/services/auth_services.dart';
@@ -15,26 +16,33 @@ class UsuariosPage extends StatefulWidget {
   @override
   _UsuariosPageState createState() => _UsuariosPageState();
 }
+//TODO: Cambiar la foto de perfil en el chat
 
 class _UsuariosPageState extends State<UsuariosPage> {
   final usuarioService = new UsuariosService();
+  AuthService networkHandler = AuthService();
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  Profile profile;
 
   List<Usuario> usuarios = [];
-
-  /*final usuarios = [
-    Usuario(uid: '1', nombre: 'Maria', email: 'test1@test.com', online: true),
-    Usuario(uid: '2', nombre: 'Jose', email: 'test2@test.com', online: true),
-    Usuario(uid: '3', nombre: 'Mireya', email: 'test3@test.com', online: true),
-    Usuario(uid: '4', nombre: 'Luis', email: 'test4@test.com', online: false),
-  ];*/
 
   @override
   void initState() {
     this._cargarUsuarios();
     super.initState();
+    //fetchDataProfile();
   }
+
+  // void fetchDataProfile() async {
+  //   final resp = await networkHandler.get('/profile/get');
+
+  //   setState(() {
+  //     profile = Profile.fromJson(resp['data']);
+  //     //circular = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +110,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
       subtitle: Text(usuario
           .apellido), //TODO:aqui debo de mostrar el ultimo mensaje enviado
       leading: CircleAvatar(
+        //backgroundImage: AuthService().getImage(profile.imgUrl),
         child: Text(usuario.nombre.substring(0, 2)),
         backgroundColor: Colors.blue[100],
       ),

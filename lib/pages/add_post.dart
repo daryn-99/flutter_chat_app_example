@@ -144,7 +144,7 @@ class _AddBlogState extends State<AddBlog> {
         if (response.statusCode == 200 || response.statusCode == 201) {
           if (_imageFile.path != null) {
             var imageResponse = await networkHandler.patchImage(
-                '/profile/add/profileimg', _imageFile.path);
+                '/post/updateImg', _imageFile.path);
             if (imageResponse.statusCode == 200) {
               setState(() {
                 circular = false;

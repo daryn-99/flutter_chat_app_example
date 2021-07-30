@@ -115,14 +115,15 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         background: FadeInImage(
-          image: NetworkImage(
-              //'https://scontent.fsap4-1.fna.fbcdn.net/v/t1.6435-9/p960x960/189418878_3817325464982636_394025055086716610_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=36a2c1&_nc_ohc=EBIVLzHaWLUAX-MVM7X&_nc_ht=scontent.fsap4-1.fna&oh=69f35621d754e8b0f9365799fcf538fe&oe=61262D2F'),
-              //'http://192.168.80.124:3000/api/storage/imgs/1626987990868-Logo%20RECO%20-%20Tipografico-01.png'),
-              'https://www.jorgechavezonroatan.com/wp-content/uploads/2017/03/weather-in-Reco-1-1024x575.jpeg'),
+          image: AssetImage('assets/weather-in-Reco-1-1024x575.jpeg'),
+
+          //NetworkImage(
+          //       //'https://scontent.fsap4-1.fna.fbcdn.net/v/t1.6435-9/p960x960/189418878_3817325464982636_394025055086716610_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=36a2c1&_nc_ohc=EBIVLzHaWLUAX-MVM7X&_nc_ht=scontent.fsap4-1.fna&oh=69f35621d754e8b0f9365799fcf538fe&oe=61262D2F'),
+          //       //'http://192.168.80.124:3000/api/storage/imgs/1626987990868-Logo%20RECO%20-%20Tipografico-01.png'),
+          //       'https://www.jorgechavezonroatan.com/wp-content/uploads/2017/03/weather-in-Reco-1-1024x575.jpeg'),
           width: 130,
           height: 190,
-          placeholder: NetworkImage(
-              'https://th.bing.com/th/id/OIP.8Wx1NF2j4eAMj9FpMoDohgHaFj?pid=ImgDet&rs=1'),
+          placeholder: AssetImage('assets/tenor.gif'),
           fadeInDuration: Duration(milliseconds: 150),
           fit: BoxFit.cover,
         ),
@@ -136,7 +137,6 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
       child: Row(
         children: <Widget>[
           profileImg(context),
-          //DefaultImg(titulo: 'Profile'), //TODO: Quitar el icon de la camara
           SizedBox(width: 20.0),
           Flexible(
             child: Column(
@@ -165,22 +165,6 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
   Widget _mostrarPerfil() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
-      // child: Row(
-      //   children: <Widget>[
-      //     DefaultImg(titulo: 'Profile'), //TODO: Quitar el icon de la camara
-      //     SizedBox(width: 20.0),
-      //     Flexible(
-      //       child: Column(
-      //         crossAxisAlignment: CrossAxisAlignment.start,
-      //         children: <Widget>[
-      //           Text(profile.about,
-      //               style: Theme.of(context).textTheme.title,
-      //               overflow: TextOverflow.ellipsis),
-      //         ],
-      //       ),
-      //     )
-      //   ],
-      // ),
       child: Text(
         profile.about,
         textAlign: TextAlign.justify,
@@ -196,7 +180,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
         width: 70,
         height: 30,
         child: ElevatedButton(
-            child: Text("Editar descripción",
+            child: Text("Editar Perfil",
                 style: TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () {
               Navigator.pushReplacementNamed(context, 'editing_profile');
@@ -209,9 +193,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
         children: <Widget>[
           CircleAvatar(
               radius: 50.0,
-              //backgroundImage: AuthService().getImage(profile.imgUrl))
-              backgroundImage: NetworkImage(
-                  'http://192.168.80.124:3000/api/storage/1627484367691-profiledos.jpeg'))
+              backgroundImage: AuthService().getImage(profile.imgUrl))
         ],
       ),
     );

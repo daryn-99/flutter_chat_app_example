@@ -23,13 +23,6 @@ class MenuPage extends StatelessWidget {
             )),
         elevation: 1,
         backgroundColor: Colors.white,
-        leading: IconButton(
-            onPressed: () {
-              socketService.disconnect();
-              Navigator.pushReplacementNamed(context, 'login');
-              AuthService.deleteToken();
-            },
-            icon: Icon(Icons.exit_to_app, color: Colors.black87)),
       ),
       body: Container(
         margin: EdgeInsets.only(top: 120),

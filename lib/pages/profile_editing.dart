@@ -82,7 +82,7 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
                     Map<String, String> data = {'about': aboutCtrl.text};
                     print(aboutCtrl);
                     var response =
-                        await networkHandler.post('/profile/add', data);
+                        await networkHandler.patch('/profile/update', data);
                     if (response.statusCode == 200 ||
                         response.statusCode == 201) {
                       if (_imageFile.path != null) {

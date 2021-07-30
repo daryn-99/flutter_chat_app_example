@@ -48,7 +48,7 @@ class AuthService with ChangeNotifier {
   }
 
   NetworkImage getImage(String imgUrl) {
-    String url = formater("/$imgUrl");
+    String url = formater("/storage//$imgUrl");
     log.i(url);
     return NetworkImage(url);
   }
@@ -61,6 +61,19 @@ class AuthService with ChangeNotifier {
     request.headers
         .addAll({"Content-type": "multipart/form-data", 'x-token': token});
     var response = request.send();
+    return response;
+  }
+
+  Future<http.Response> patch(String url, Map<String, String> body) async {
+    String token = await _storage.read(key: "token");
+    url = formater(url);
+    log.d(body);
+    final uri = Uri.parse('$url');
+    var response = await http.patch(
+      uri,
+      headers: {"Content-type": "application/json", 'x-token': token},
+      body: json.encode(body),
+    );
     return response;
   }
 
