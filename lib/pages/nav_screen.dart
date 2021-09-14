@@ -1,4 +1,5 @@
 import 'package:chat/data/data.dart';
+import 'package:chat/pages/charts.dart';
 import 'package:chat/pages/groups_page.dart';
 import 'package:chat/pages/menu_page.dart';
 import 'package:chat/pages/notification_page.dart';
@@ -9,6 +10,7 @@ import 'package:chat/widgets/custom_app_bar.dart';
 import 'package:chat/widgets/custom_tab_bar.dart';
 import 'package:chat/widgets/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'home_page.dart';
@@ -26,13 +28,17 @@ class _NavScreenState extends State<NavScreen> {
     ProfiletwoPage(),
     //NotificationPage(),
     MenuPage(),
+    ChartPage()
   ];
   final List<IconData> _icons = const [
     Icons.home,
     MdiIcons.messageText, //videos cargados
     //MdiIcons.accountGroupOutline, //grupos de trabajo
     MdiIcons.accountCircleOutline, //cuenta
-    MdiIcons.accountGroupOutline
+    MdiIcons.accountGroupOutline,
+    Icons.table_chart_sharp
+    //MdiIcons.chartSankey
+    //FontAwesomeIcons.chartBar
     //MdiIcons.bellOutline, //notificaciones
     //Icons.menu,
   ];

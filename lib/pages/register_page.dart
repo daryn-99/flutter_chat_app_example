@@ -90,7 +90,7 @@ class __FormState extends State<_Form> {
             keyboardType: TextInputType.phone,
             textController: numerotelCtrl,
           ),
-          DateInput(
+          CustomInput(
             icon: Icons.cake,
             placeholder: 'Fecha de nacimiento',
             keyboardType: TextInputType.text,
@@ -144,7 +144,7 @@ class __FormState extends State<_Form> {
                         areaCtrl.text.trim(),
                         emailCtrl.text.trim(),
                         passCtrl.text.trim());
-                    if (registroOk == true) {
+                    if (registroOk != true) {
                       socketService.connect();
                       mostrarAlerta(context, 'Usuario ingresado exitosamente',
                           'Bienvenido');

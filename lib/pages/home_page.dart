@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void fetchData() async {
-    final resp = await networkHandler.get('/post/get');
+    final resp = await networkHandler.get('/post/getOtherPost');
     setState(() {
       post = Post.fromJson(resp['data']);
       circular = false;
@@ -170,12 +170,6 @@ class _HomePageState extends State<HomePage> {
                 SliverList(
                   delegate: SliverChildListDelegate([
                     postContainer(context, usuario, post),
-                    postContainer(context, usuario, post),
-                    postContainer(context, usuario, post),
-                    postContainer(context, usuario, post),
-                    postContainer(context, usuario, post),
-                    postContainer(context, usuario, post),
-                    postContainer(context, usuario, post),
                   ]),
                 ),
               ],
@@ -207,7 +201,6 @@ class _HomePageState extends State<HomePage> {
                   postHeader(context, usuario),
                   const SizedBox(height: 40.0),
                   Text(post.title),
-                  Text(post.coverImage),
                   post.coverImage != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),

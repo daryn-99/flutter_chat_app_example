@@ -57,7 +57,8 @@ class AuthService with ChangeNotifier {
     url = formater(url);
     final token = await _storage.read(key: 'token');
     var request = http.MultipartRequest('PATCH', Uri.parse(url));
-    request.files.add(await http.MultipartFile.fromPath("imgUrl", filepath));
+    request.files
+        .add(await http.MultipartFile.fromPath("coverImage", filepath));
     request.headers
         .addAll({"Content-type": "multipart/form-data", 'x-token': token});
     var response = request.send();
@@ -77,7 +78,33 @@ class AuthService with ChangeNotifier {
     return response;
   }
 
+  Future<http.Response> delete(String url, Map<String, String> body) async {
+    String token = await _storage.read(key: "token");
+    url = formater(url);
+    log.d(body);
+    final uri = Uri.parse('$url');
+    var response = await http.delete(
+      uri,
+      headers: {"Content-type": "application/json", 'x-token': token},
+      body: json.encode(body),
+    );
+    return response;
+  }
+
   Future<http.Response> post(String url, Map<String, String> body) async {
+    final token = await _storage.read(key: 'token');
+    url = formater(url);
+    log.d(body);
+    final uri = Uri.parse('$url');
+    var response = await http.post(
+      uri,
+      headers: {"Content-type": "application/json", 'x-token': token},
+      body: json.encode(body),
+    );
+    return response;
+  }
+
+  Future<http.Response> post1(String url, var body) async {
     final token = await _storage.read(key: 'token');
     url = formater(url);
     log.d(body);

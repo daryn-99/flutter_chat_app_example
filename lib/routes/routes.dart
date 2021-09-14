@@ -1,5 +1,6 @@
 import 'package:chat/pages/add_post.dart';
 import 'package:chat/pages/all_users_page.dart';
+import 'package:chat/pages/charts.dart';
 import 'package:chat/pages/home_page.dart';
 import 'package:chat/pages/menu_page.dart';
 import 'package:chat/pages/nav_screen.dart';
@@ -29,5 +30,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'add_post': (_) => AddBlog(),
   'menu_page': (_) => MenuPage(),
   'all_users': (_) => AllUsers(),
-  'terminos': (_) => TerminosPage()
+  'terminos': (_) => TerminosPage(),
+  'charts': (_) => ChartPage()
 };

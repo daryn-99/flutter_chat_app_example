@@ -1,4 +1,3 @@
-import 'package:chat/config/palette.dart';
 import 'package:chat/models/getprofile_response.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';

@@ -97,13 +97,7 @@ class _AddBlogState extends State<AddBlog> {
             return mostrarAlerta(
                 context, 'El titulo no puede ir vacio', 'Rellenar campos');
           }
-          // else if (value.length > 100) {
-          //   return mostrarAlerta(
-          //       context,
-          //       'El titulo no puede ser mayor a 100 caracteres',
-          //       'Edite el titulo');
-          // }
-          return null;
+          return mostrarAlerta(context, "Accion realizada con exito", "a");
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(
@@ -126,7 +120,6 @@ class _AddBlogState extends State<AddBlog> {
             onPressed: takeCoverPhoto,
           ),
         ),
-        // maxLength: 100,
         maxLines: null,
       ),
     );
@@ -135,32 +128,26 @@ class _AddBlogState extends State<AddBlog> {
   Widget addButton(PostService postService) {
     return InkWell(
       onTap: () async {
-        setState(() {
-          circular = true;
-        });
-        Map<String, String> data = {'title': titleCtrl.text};
-        print(titleCtrl);
-        var response = await networkHandler.post('/new', data);
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          if (_imageFile.path != null) {
-            var imageResponse = await networkHandler.patchImage(
-                '/post/updateImg', _imageFile.path);
-            if (imageResponse.statusCode == 200) {
-              setState(() {
-                circular = false;
-              });
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => ProfiletwoPage()),
-                  (route) => false);
+        if (_imageFile != null && _globalkey.currentState.validate()) {
+          Map<String, String> addBlogModel = {'title': titleCtrl.text};
+          print(titleCtrl);
+          //Post addBlogModel = Post(title: titleCtrl.text);
+          var response = await networkHandler.post1('/post/new', addBlogModel);
+          print(response.body);
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            final id = json.decode(response.body)["data"];
+            if (_imageFile.path != null) {
+              var imageResponse = await networkHandler.patchImage(
+                  '/post/updateImg/$id', _imageFile.path);
+              print(imageResponse.statusCode);
+              if (imageResponse.statusCode == 200 ||
+                  imageResponse.statusCode == 201) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                    (route) => false);
+              }
             }
-          } else {
-            setState(() {
-              circular = false;
-            });
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => ProfiletwoPage()),
-                (route) => false);
-            //Navigator.popAndPushNamed(context, 'profiletwo');
           }
         }
       },
