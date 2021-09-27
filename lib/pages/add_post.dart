@@ -97,7 +97,8 @@ class _AddBlogState extends State<AddBlog> {
             return mostrarAlerta(
                 context, 'El titulo no puede ir vacio', 'Rellenar campos');
           }
-          return mostrarAlerta(context, "Accion realizada con exito", "a");
+          return null;
+          //mostrarAlerta(context, "Accion realizada con exito", "a");
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(

@@ -1,5 +1,4 @@
 import 'package:chat/config/palette.dart';
-import 'package:chat/pages/forgot_Password.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:chat/widgets/boton_azul.dart';
@@ -11,7 +10,9 @@ import 'package:chat/widgets/custom_input.dart';
 import 'package:provider/provider.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 
-class LoginPage extends StatelessWidget {
+import 'login_page.dart';
+
+class ForgotPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,7 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Logo(titulo: 'Login'),
+                  Logo(titulo: ''),
                   _Form(),
                 ],
               ),
@@ -66,45 +67,20 @@ class __FormState extends State<_Form> {
             isPassword: true,
           ),
           BotonAzul(
-            text: 'Ingrese',
-            onPressed: authService.autenticando
-                ? null
-                : () async {
-                    FocusScope.of(context).unfocus();
-
-                    final loginOk = await authService.login(
-                        emailCtrl.text.trim(), passCtrl.text.trim());
-
-                    if (loginOk) {
-                      socketService.connect();
-                      Navigator.restorablePushReplacementNamed(
-                          context, 'nav_screen');
-                    } else {
-                      mostrarAlerta(context, 'Login incorrecto',
-                          'Verificar credenciales');
-                    }
-                  },
-          ),
-          SizedBox(height: 40.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ForgotPasswordPage()));
-                },
-                child: Text(
-                  '¿Olvidó su contraseña?',
-                  style: TextStyle(
-                      color: Palette.colorBlue,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-              )
-            ],
+            text: 'Actualizar',
+            onPressed: () async {
+              Map<String, String> data = {"password": passCtrl.text};
+              print("/usuarios/passwordUpdate/${emailCtrl.text}");
+              var response = await authService.patch1(
+                  "/usuarios/passwordUpdate/${emailCtrl.text}", data);
+              if (response.statusCode == 200 || response.statusCode == 201) {
+                print("/user/update/${emailCtrl.text}");
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    (route) => false);
+              }
+            },
           )
         ],
       ),

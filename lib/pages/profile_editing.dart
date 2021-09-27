@@ -86,8 +86,10 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
                     if (response.statusCode == 200 ||
                         response.statusCode == 201) {
                       if (_imageFile.path != null) {
-                        var imageResponse = await networkHandler.patchImage(
+                        var imageResponse = await networkHandler.patchImage1(
                             '/profile/add/profileimg', _imageFile.path);
+                        print(_imageFile.path);
+                        print(imageResponse.statusCode);
                         if (imageResponse.statusCode == 200) {
                           setState(() {
                             circular = false;

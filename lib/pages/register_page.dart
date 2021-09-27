@@ -29,8 +29,8 @@ class RegisterPage extends StatelessWidget {
                   _Form(),
                   Labels(
                     ruta: 'login',
-                    titulo: '¿Ya tienes una cuenta?',
-                    subTitulo: 'Ingresa ahora!',
+                    titulo: '¿Quieres ingresar con el usuario recien creado?',
+                    subTitulo: '¡Ingresa ahora!',
                   )
                 ],
               ),
@@ -51,6 +51,7 @@ class __FormState extends State<_Form> {
   final apellidoCtrl = TextEditingController();
   final numerotelCtrl = TextEditingController();
   final birthCtrl = TextEditingController();
+  //final roleCtrl = TextEditingController();
   final cargoCtrl = TextEditingController();
   final areaCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
@@ -96,6 +97,12 @@ class __FormState extends State<_Form> {
             keyboardType: TextInputType.text,
             textController: birthCtrl,
           ),
+          // CustomInput(
+          //   icon: Icons.android_sharp,
+          //   placeholder: 'Rol en la aplicación',
+          //   keyboardType: TextInputType.text,
+          //   textController: roleCtrl,
+          // ),
           CustomInput(
             icon: Icons.engineering,
             placeholder: 'Cargo en la empresa',
@@ -130,6 +137,7 @@ class __FormState extends State<_Form> {
                     print(apellidoCtrl.text);
                     print(numerotelCtrl.text);
                     print(birthCtrl.text);
+                    //print(roleCtrl.text);
                     print(cargoCtrl.text);
                     print(areaCtrl.text);
                     print(emailCtrl.text);
@@ -140,14 +148,25 @@ class __FormState extends State<_Form> {
                         apellidoCtrl.text.trim(),
                         numerotelCtrl.text.trim(),
                         birthCtrl.text.trim(),
+                        //roleCtrl.text.trim(),
                         cargoCtrl.text.trim(),
                         areaCtrl.text.trim(),
                         emailCtrl.text.trim(),
                         passCtrl.text.trim());
-                    if (registroOk != true) {
+                    if (registroOk == true) {
                       socketService.connect();
-                      mostrarAlerta(context, 'Usuario ingresado exitosamente',
-                          'Bienvenido');
+                      mostrarAlerta(context, 'Bienvenido',
+                          'Usuario ingresado exitosamente');
+                      usernameCtrl.clear();
+                      nameCtrl.clear();
+                      apellidoCtrl.clear();
+                      numerotelCtrl.clear();
+                      birthCtrl.clear();
+                      //roleCtrl.clear();
+                      cargoCtrl.clear();
+                      areaCtrl.clear();
+                      emailCtrl.clear();
+                      passCtrl.clear();
                     } else {
                       mostrarAlerta(
                           context, 'Registro incorrecto', 'Rellenar campos');

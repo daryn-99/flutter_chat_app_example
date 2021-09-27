@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Reco App',
+        title: 'RECONET',
         initialRoute: 'loading',
         color: Colors.white,
         routes: appRoutes,

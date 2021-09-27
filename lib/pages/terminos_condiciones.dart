@@ -9,7 +9,7 @@ class TerminosPage extends StatelessWidget {
           title: Text('Terminos y condiciones de uso'),
           backgroundColor: Palette.colorBlue,
         ),
-        body: Center(
+        body: SingleChildScrollView(
             child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(
@@ -32,11 +32,11 @@ class TerminosPage extends StatelessWidget {
                     'PROPIEDAD' +
                 '\n\n'
                     'Usted no puede declarar propiedad intelectual o exclusiva a ninguno de nuestras publicaciones, modificadas o sin modificar. Todas las publicaciones son propiedad de la empresa.' +
-                '\n'
+                '\n\n'
                     'PRIVACIDAD' +
                 '\n\n'
                     'Este software garantiza que la información personal que usted envía cuenta con la seguridad necesaria. Los datos ingresados por usuario, salvo que deba ser revelada en cumplimiento a una orden judicial o requerimientos legales.' +
-                '\n'
+                '\n\n'
                     'Roatan Electric Company reserva los derechos de cambiar o de modificar estos términos sin previo aviso.',
             textAlign: TextAlign.justify,
             style: Theme.of(context).textTheme.subtitle1,

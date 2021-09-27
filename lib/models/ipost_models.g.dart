@@ -22,5 +22,6 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'comment': instance.comment,
       '_id': instance.id,
       'user': instance.user,
+      'title': instance.title,
       'coverImage': instance.coverImage,
     };

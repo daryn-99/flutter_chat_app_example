@@ -135,7 +135,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
     this.usuarios = await usuarioService.getUsuarios();
 
     setState(() {});
-    //await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }

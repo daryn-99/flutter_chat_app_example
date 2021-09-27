@@ -6,6 +6,7 @@ import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/profile.dart';
 import 'package:chat/models/register_response.dart';
 import 'package:chat/models/usuario.dart';
+import 'package:chat/pages/profile_editing.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/profile_get.dart';
 import 'package:chat/services/profile_service.dart';
@@ -143,16 +144,16 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(usuario.nombre,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                     overflow: TextOverflow.ellipsis),
                 Text(usuario.cargo,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.bodyText2,
                     overflow: TextOverflow.ellipsis),
                 Text(usuario.area,
-                    style: Theme.of(context).textTheme.subhead,
+                    style: Theme.of(context).textTheme.subtitle1,
                     overflow: TextOverflow.ellipsis),
                 Text(usuario.birth,
-                    style: Theme.of(context).textTheme.subhead,
+                    style: Theme.of(context).textTheme.subtitle2,
                     overflow: TextOverflow.ellipsis),
               ],
             ),
@@ -183,7 +184,10 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
             child: Text("Editar Perfil",
                 style: TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, 'editing_profile');
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ProfileEditingPage()));
+});
+              //Navigator.pushReplacementNamed(context, 'editing_profile');
             }));
   }
 

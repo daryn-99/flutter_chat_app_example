@@ -62,18 +62,6 @@ class _SelectContactState extends State<SelectContact> {
             itemBuilder: (BuildContext contesxt) {
               return [
                 PopupMenuItem(
-                  child: Text("Invitar a un amigo"),
-                  value: "Invitar a un amigo",
-                ),
-                PopupMenuItem(
-                  child: Text("Contactos"),
-                  value: "Contactos",
-                ),
-                PopupMenuItem(
-                  child: Text("Actualizar"),
-                  value: "Actualizar",
-                ),
-                PopupMenuItem(
                   child: Text("Ayuda"),
                   value: "Ayuda",
                 ),

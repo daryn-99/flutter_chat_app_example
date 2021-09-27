@@ -16,6 +16,7 @@ class Usuario {
     this.apellido,
     this.numerotel,
     this.birth,
+    //this.role,
     this.cargo,
     this.area,
     this.email,
@@ -28,6 +29,7 @@ class Usuario {
   String apellido;
   String numerotel;
   String birth;
+  //List<String> role = [];
   String cargo;
   String area;
   String email;
@@ -40,6 +42,7 @@ class Usuario {
         apellido: json["apellido"],
         numerotel: json["numerotel"],
         birth: json["birth"],
+        //role: json["role"],
         cargo: json["cargo"],
         area: json["area"],
         email: json["email"],
@@ -53,6 +56,7 @@ class Usuario {
         "apellido": apellido,
         "numerotel": numerotel,
         "birth": birth,
+        //"role": role,
         "cargo": cargo,
         "area": area,
         "email": email,

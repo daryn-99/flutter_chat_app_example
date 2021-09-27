@@ -65,6 +65,17 @@ class AuthService with ChangeNotifier {
     return response;
   }
 
+  Future<http.StreamedResponse> patchImage1(String url, String filepath) async {
+    url = formater(url);
+    final token = await _storage.read(key: 'token');
+    var request = http.MultipartRequest('PATCH', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath("imgUrl", filepath));
+    request.headers
+        .addAll({"Content-type": "multipart/form-data", 'x-token': token});
+    var response = request.send();
+    return response;
+  }
+
   Future<http.Response> patch(String url, Map<String, String> body) async {
     String token = await _storage.read(key: "token");
     url = formater(url);
@@ -73,6 +84,18 @@ class AuthService with ChangeNotifier {
     var response = await http.patch(
       uri,
       headers: {"Content-type": "application/json", 'x-token': token},
+      body: json.encode(body),
+    );
+    return response;
+  }
+
+  Future<http.Response> patch1(String url, Map<String, String> body) async {
+    url = formater(url);
+    log.d(body);
+    final uri = Uri.parse('$url');
+    var response = await http.patch(
+      uri,
+      headers: {"Content-type": "application/json"},
       body: json.encode(body),
     );
     return response;
@@ -110,6 +133,19 @@ class AuthService with ChangeNotifier {
     log.d(body);
     final uri = Uri.parse('$url');
     var response = await http.post(
+      uri,
+      headers: {"Content-type": "application/json", 'x-token': token},
+      body: json.encode(body),
+    );
+    return response;
+  }
+
+  Future<http.Response> deleter(String url, var body) async {
+    final token = await _storage.read(key: 'token');
+    url = formater(url);
+    log.d(body);
+    final uri = Uri.parse('$url');
+    var response = await http.delete(
       uri,
       headers: {"Content-type": "application/json", 'x-token': token},
       body: json.encode(body),
@@ -160,6 +196,7 @@ class AuthService with ChangeNotifier {
       String birth,
       String cargo,
       String area,
+      //String role,
       String email,
       String password) async {
     this.autenticando = true;
@@ -170,6 +207,7 @@ class AuthService with ChangeNotifier {
       'apellido': apellido,
       'numerotel': numerotel,
       'birth': birth,
+      //'role': role,
       'cargo': cargo,
       'area': area,
       'email': email,

@@ -1,18 +1,24 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/config/palette.dart';
 import 'package:chat/models/ipost_models.dart';
+import 'package:chat/models/profile.dart';
 import 'package:chat/models/usuario.dart';
-import 'package:chat/widgets/profile_avatar.dart';
+import 'package:chat/pages/profiletwo_page.dart';
+import 'package:chat/services/auth_services.dart';
 import 'package:chat/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class PostContainer extends StatelessWidget {
+  const PostContainer(
+      {Key key,
+      @required this.post,
+      @required this.usuario,
+      @required this.profile})
+      : super(key: key);
+
   final Post post;
   final Usuario usuario;
-
-  const PostContainer({Key key, @required this.post, @required this.usuario})
-      : super(key: key);
+  final Profile profile;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +42,9 @@ class PostContainer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _PostHeader(
-                    post: post,
-                    usuario: usuario,
-                  ),
-                  const SizedBox(height: 4.0),
+                  postHeader(context, usuario),
+                  const SizedBox(height: 40.0),
+                  Text(post.title),
                   post.coverImage != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),
@@ -50,33 +54,31 @@ class PostContainer extends StatelessWidget {
             post.coverImage != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CachedNetworkImage(imageUrl: post.coverImage),
-                  )
+                    child:
+                        Image(image: AuthService().getImage(post.coverImage)))
                 : const SizedBox.shrink(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: _PostStats(post: post),
+              child: postStats(context),
             ),
           ],
         ),
       ),
     );
   }
-}
 
-class _PostHeader extends StatelessWidget {
-  final Post post;
-  final Usuario usuario;
-
-  const _PostHeader({Key key, @required this.post, @required this.usuario})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget postHeader(BuildContext context, Usuario usuario) {
     return Row(
       children: [
-        ProfileAvatar(
-          imageUrl: null,
+        InkWell(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
+          },
+          child: CircleAvatar(
+              radius: 20.0,
+              backgroundColor: Colors.grey[200],
+              backgroundImage: AuthService().getImage(profile.imgUrl)),
         ),
         const SizedBox(width: 8.0),
         Expanded(
@@ -111,18 +113,8 @@ class _PostHeader extends StatelessWidget {
       ],
     );
   }
-}
 
-class _PostStats extends StatelessWidget {
-  final Post post;
-
-  const _PostStats({
-    Key key,
-    @required this.post,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget postStats(BuildContext context) {
     return Column(
       children: [
         Row(
