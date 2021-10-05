@@ -4,11 +4,11 @@
 
 import 'dart:convert';
 
-// import 'package:json_annotation/json_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-// part 'profile.g.dart';
+part 'profile.g.dart';
 
-// @JsonSerializable()
+@JsonSerializable()
 
 // Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
 
@@ -22,19 +22,19 @@ class Profile {
 
   String about;
   String imgUrl;
+  @JsonKey(name: '_id')
+  factory Profile.fromJson(Map<String, dynamic> json) =>
+      _$ProfileFromJson(json);
 
-  // factory Profile.fromJson(Map<String, dynamic> json) =>
-  //     _$ProfileFromJson(json);
+  Map<String, dynamic> toJson() => _$ProfileToJson(this);
 
-  // Map<String, dynamic> toJson() => _$ProfileToJson(this);
+  // factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+  //       about: json["about"],
+  //       imgUrl: json["imgUrl"],
+  //     );
 
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        about: json["about"],
-        imgUrl: json["imgUrl"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "about": about,
-        "imgUrl": imgUrl,
-      };
+  // Map<String, dynamic> toJson() => {
+  //       "about": about,
+  //       "imgUrl": imgUrl,
+  //     };
 }

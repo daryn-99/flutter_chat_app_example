@@ -28,7 +28,7 @@ class _NavScreenState extends State<NavScreen> {
     ProfiletwoPage(),
     //NotificationPage(),
     MenuPage(),
-    ChartPage()
+    //ChartPage()
   ];
   final List<IconData> _icons = const [
     Icons.home,
@@ -36,7 +36,7 @@ class _NavScreenState extends State<NavScreen> {
     //MdiIcons.accountGroupOutline, //grupos de trabajo
     MdiIcons.accountCircleOutline, //cuenta
     MdiIcons.accountGroupOutline,
-    Icons.table_chart_sharp
+    //Icons.table_chart_sharp
     //MdiIcons.chartSankey
     //FontAwesomeIcons.chartBar
     //MdiIcons.bellOutline, //notificaciones

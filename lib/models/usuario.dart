@@ -9,19 +9,19 @@ Usuario usuarioFromJson(String str) => Usuario.fromJson(json.decode(str));
 String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario {
-  Usuario({
-    this.online,
-    this.username,
-    this.nombre,
-    this.apellido,
-    this.numerotel,
-    this.birth,
-    //this.role,
-    this.cargo,
-    this.area,
-    this.email,
-    this.uid,
-  });
+  Usuario(
+      {this.online,
+      this.username,
+      this.nombre,
+      this.apellido,
+      this.numerotel,
+      this.birth,
+      //this.role,
+      this.cargo,
+      this.area,
+      this.email,
+      this.uid,
+      this.imgUrl});
 
   bool online;
   String username;
@@ -34,20 +34,21 @@ class Usuario {
   String area;
   String email;
   String uid;
+  String imgUrl;
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
-        online: json["online"],
-        username: json["username"],
-        nombre: json["nombre"],
-        apellido: json["apellido"],
-        numerotel: json["numerotel"],
-        birth: json["birth"],
-        //role: json["role"],
-        cargo: json["cargo"],
-        area: json["area"],
-        email: json["email"],
-        uid: json["uid"],
-      );
+      online: json["online"],
+      username: json["username"],
+      nombre: json["nombre"],
+      apellido: json["apellido"],
+      numerotel: json["numerotel"],
+      birth: json["birth"],
+      //role: json["role"],
+      cargo: json["cargo"],
+      area: json["area"],
+      email: json["email"],
+      uid: json["uid"],
+      imgUrl: json["imgUrl"]);
 
   Map<String, dynamic> toJson() => {
         "online": online,
@@ -61,5 +62,6 @@ class Usuario {
         "area": area,
         "email": email,
         "uid": uid,
+        "imgUrl": imgUrl
       };
 }

@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/services/auth_services.dart';
@@ -10,42 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:chat/widgets/labels.dart';
 import 'package:chat/widgets/logo.dart';
 import 'package:chat/widgets/custom_input.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Color(0xffF2F2F2),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              height: MediaQuery.of(context).size.height + 450,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Logo(titulo: 'Registro'),
-                  _Form(),
-                  Labels(
-                    ruta: 'login',
-                    titulo: '¿Quieres ingresar con el usuario recien creado?',
-                    subTitulo: '¡Ingresa ahora!',
-                  )
-                ],
-              ),
-            ),
-          ),
-        ));
-  }
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _Form extends StatefulWidget {
-  @override
-  __FormState createState() => __FormState();
-}
-
-class __FormState extends State<_Form> {
+class _RegisterPageState extends State<RegisterPage> {
   final usernameCtrl = TextEditingController();
   final nameCtrl = TextEditingController();
   final apellidoCtrl = TextEditingController();
@@ -57,8 +34,138 @@ class __FormState extends State<_Form> {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
 
+  PickedFile _imageFile;
+  final ImagePicker _picker = ImagePicker();
+  final _globalkey = GlobalKey<FormState>();
+  AuthService networkHandler = AuthService();
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Color(0xffF2F2F2),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              height: MediaQuery.of(context).size.height + 250,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  //Logo(titulo: 'Registro'),
+                  titulo(context),
+                  imgProfile(context),
+                  form(context),
+                  Labels(
+                    ruta: 'login',
+                    titulo: '¿Quieres ingresar con el usuario recien creado?',
+                    subTitulo: '¡Ingresa ahora!',
+                  )
+                ],
+              ),
+            ),
+          ),
+        ));
+  }
+
+  Widget titulo(BuildContext context) {
+    return Title(
+        color: Palette.colorBlue,
+        child: Text("Registro",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 40,
+                fontStyle: FontStyle.normal,
+                letterSpacing: -1.2,
+                color: Colors.blue[900])));
+  }
+
+  Widget imgProfile(BuildContext context) {
+    return Center(
+      child: Stack(
+        children: <Widget>[
+          CircleAvatar(
+            radius: 70.0,
+            backgroundImage: _imageFile == null
+                ? AssetImage('assets/user-logo.png')
+                : FileImage(File(_imageFile.path)),
+          ),
+          Positioned(
+              bottom: 40.0,
+              right: 11.0,
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: ((builder) => bottomSheet()),
+                  );
+                },
+                child: Icon(
+                  Icons.photo_camera_rounded,
+                  color: Colors.white,
+                  size: 34.0,
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget bottomSheet() {
+    return Container(
+      height: 100.0,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: <Widget>[
+          Text(
+            "Escoger foto de perfil",
+            style: TextStyle(fontSize: 20.0),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: <Widget>[
+              TextButton.icon(
+                icon: Icon(Icons.photo_camera_rounded),
+                onPressed: () {
+                  takePhoto(ImageSource.camera);
+                },
+                label: Text("Tomar fotografía"),
+              ),
+              TextButton.icon(
+                icon: Icon(Icons.add_photo_alternate_outlined),
+                onPressed: () {
+                  importimg(ImageSource.gallery);
+                },
+                label: Text("Adjuntar de galería"),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void takePhoto(ImageSource source) async {
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.camera,
+    );
+    setState(() {
+      _imageFile = pickedFile;
+    });
+  }
+
+  void importimg(ImageSource source) async {
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      _imageFile = pickedFile;
+    });
+  }
+
+  Widget form(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final socketService = Provider.of<SocketService>(context);
 
@@ -132,31 +239,43 @@ class __FormState extends State<_Form> {
             onPressed: authService.autenticando
                 ? null
                 : () async {
-                    print(usernameCtrl.text);
-                    print(nameCtrl.text);
-                    print(apellidoCtrl.text);
-                    print(numerotelCtrl.text);
-                    print(birthCtrl.text);
-                    //print(roleCtrl.text);
-                    print(cargoCtrl.text);
-                    print(areaCtrl.text);
-                    print(emailCtrl.text);
-                    print(passCtrl.text);
-                    final registroOk = await authService.register(
-                        usernameCtrl.text.trim(),
-                        nameCtrl.text.trim(),
-                        apellidoCtrl.text.trim(),
-                        numerotelCtrl.text.trim(),
-                        birthCtrl.text.trim(),
-                        //roleCtrl.text.trim(),
-                        cargoCtrl.text.trim(),
-                        areaCtrl.text.trim(),
-                        emailCtrl.text.trim(),
-                        passCtrl.text.trim());
-                    if (registroOk == true) {
+                    Map<String, String> addUserModel = {
+                      'username': usernameCtrl.text.trim(),
+                      'nombre': nameCtrl.text.trim(),
+                      'apellido': apellidoCtrl.text.trim(),
+                      'numerotel': numerotelCtrl.text.trim(),
+                      'birth': birthCtrl.text.trim(),
+                      //'role': role,
+                      'cargo': cargoCtrl.text.trim(),
+                      'area': areaCtrl.text.trim(),
+                      'email': emailCtrl.text.trim(),
+                      'password': passCtrl.text.trim(),
+                    };
+                    print(usernameCtrl);
+                    print(nameCtrl);
+                    print(apellidoCtrl);
+                    print(numerotelCtrl);
+                    print(birthCtrl);
+                    //print(roleCtrl);
+                    print(cargoCtrl);
+                    print(areaCtrl);
+                    print(emailCtrl);
+                    print(passCtrl);
+                    final registroOk =
+                        await authService.post1('/login/new', addUserModel);
+                    print(registroOk.body);
+                    if (registroOk.statusCode == 200 ||
+                        registroOk.statusCode == 201) {
                       socketService.connect();
-                      mostrarAlerta(context, 'Bienvenido',
-                          'Usuario ingresado exitosamente');
+                      final id = json.decode(registroOk.body)["data"];
+                      var imageResponse = await authService.patchImage2(
+                          '/login/update/$id', _imageFile.path);
+                      print(imageResponse.statusCode);
+                      if (imageResponse.statusCode == 200 ||
+                          imageResponse.statusCode == 201) {
+                        mostrarAlerta(context, 'Bienvenido',
+                            'Usuario ingresado exitosamente');
+                      }
                       usernameCtrl.clear();
                       nameCtrl.clear();
                       apellidoCtrl.clear();

@@ -12,12 +12,12 @@ class PostContainer extends StatelessWidget {
   const PostContainer(
       {Key key,
       @required this.post,
-      @required this.usuario,
+      // @required this.usuario,
       @required this.profile})
       : super(key: key);
 
   final Post post;
-  final Usuario usuario;
+  // final Usuario usuario;
   final Profile profile;
 
   @override
@@ -42,7 +42,7 @@ class PostContainer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  postHeader(context, usuario),
+                  postHeader(context),
                   const SizedBox(height: 40.0),
                   Text(post.title),
                   post.coverImage != null
@@ -67,13 +67,17 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Widget postHeader(BuildContext context, Usuario usuario) {
+  Widget postHeader(BuildContext context) {
     return Row(
       children: [
         InkWell(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (_) => ProfiletwoPage()));
+            });
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
           },
           child: CircleAvatar(
               radius: 20.0,
@@ -86,7 +90,7 @@ class PostContainer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                usuario.nombre,
+                post.user,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                 ),

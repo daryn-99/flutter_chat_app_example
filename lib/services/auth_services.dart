@@ -76,6 +76,17 @@ class AuthService with ChangeNotifier {
     return response;
   }
 
+  Future<http.StreamedResponse> patchImage2(String url, String filepath) async {
+    url = formater(url);
+    final token = await _storage.read(key: 'token');
+    var request = http.MultipartRequest('PATCH', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath("imgUrl", filepath));
+    request.headers
+        .addAll({"Content-type": "multipart/form-data", 'x-token': token});
+    var response = request.send();
+    return response;
+  }
+
   Future<http.Response> patch(String url, Map<String, String> body) async {
     String token = await _storage.read(key: "token");
     url = formater(url);
@@ -198,7 +209,8 @@ class AuthService with ChangeNotifier {
       String area,
       //String role,
       String email,
-      String password) async {
+      String password,
+      String imgUrl) async {
     this.autenticando = true;
 
     final data = {
@@ -211,7 +223,8 @@ class AuthService with ChangeNotifier {
       'cargo': cargo,
       'area': area,
       'email': email,
-      'password': password
+      'password': password,
+      'imgUrl': imgUrl
     };
     final token = await _storage.read(key: 'token');
 

@@ -8,6 +8,8 @@ import 'package:chat/widgets/circle_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'add_post.dart';
+
 class MenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,10 +34,14 @@ class MenuPage extends StatelessWidget {
             BotonAzul(
                 text: 'Agregar usuarios',
                 onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) => RegisterPage()))
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (_) => RegisterPage()));
+                      })
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (builder) => RegisterPage()))
                     }),
             SizedBox(
               width: 15.0,

@@ -129,7 +129,7 @@ class _AddBlogState extends State<AddBlog> {
   Widget addButton(PostService postService) {
     return InkWell(
       onTap: () async {
-        if (_imageFile != null && _globalkey.currentState.validate()) {
+        if (titleCtrl != null && _globalkey.currentState.validate()) {
           Map<String, String> addBlogModel = {'title': titleCtrl.text};
           print(titleCtrl);
           //Post addBlogModel = Post(title: titleCtrl.text);
@@ -137,18 +137,18 @@ class _AddBlogState extends State<AddBlog> {
           print(response.body);
           if (response.statusCode == 200 || response.statusCode == 201) {
             final id = json.decode(response.body)["data"];
-            if (_imageFile.path != null) {
-              var imageResponse = await networkHandler.patchImage(
-                  '/post/updateImg/$id', _imageFile.path);
-              print(imageResponse.statusCode);
-              if (imageResponse.statusCode == 200 ||
-                  imageResponse.statusCode == 201) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                    (route) => false);
-              }
+            //if (_imageFile.path != null) {
+            var imageResponse = await networkHandler.patchImage(
+                '/post/updateImg/$id', _imageFile.path);
+            print(imageResponse.statusCode);
+            if (imageResponse.statusCode == 200 ||
+                imageResponse.statusCode == 201) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                  (route) => false);
             }
+            //}
           }
         }
       },

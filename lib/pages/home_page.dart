@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/ipost_models.dart';
 import 'package:chat/models/profile.dart';
 import 'package:chat/models/super_model.dart';
+import 'package:chat/models/super_model_profile.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/terminos_condiciones.dart';
@@ -28,9 +31,12 @@ class _HomePageState extends State<HomePage> {
   AuthService networkHandler = AuthService();
   PostgetService getPost = PostgetService();
   List<Post> data = [];
+  //List<Profile> profile = [];
+
   Profile profile;
-  Usuario usuario;
+  //Usuario usuario;
   SuperModel superModel;
+  SuperModelProfile superModelProfile;
 
   @override
   void initState() {
@@ -51,9 +57,10 @@ class _HomePageState extends State<HomePage> {
 
   void fetchDataProfile() async {
     final resp = await networkHandler.get('/profile/get');
-
+    //superModelProfile = SuperModelProfile.fromJson(resp);
     setState(() {
       profile = Profile.fromJson(resp['data']);
+      //profile = superModelProfile.dato;
       circular = false;
     });
   }
@@ -115,8 +122,12 @@ class _HomePageState extends State<HomePage> {
         heroTag: "btn1",
         backgroundColor: Palette.colorBlue,
         onPressed: () => {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (builder) => AddBlog()))
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => AddBlog()));
+          })
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (builder) => AddBlog()))
         },
         child: Icon(Icons.add),
       ),
@@ -165,8 +176,8 @@ class _HomePageState extends State<HomePage> {
                 SliverList(
                   delegate: SliverChildListDelegate(data.length > 0
                       ? data
-                          .map((item) => PostContainer(
-                              post: item, usuario: usuario, profile: profile))
+                          .map((item) =>
+                              PostContainer(post: item, profile: profile))
                           .toList()
                       : mostrarAlerta(context, 'Ups!',
                           '"No hay publicaciones disponibles"')),
