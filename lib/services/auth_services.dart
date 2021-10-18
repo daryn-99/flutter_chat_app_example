@@ -5,6 +5,7 @@ import 'package:chat/models/getprofile_response.dart';
 import 'package:chat/models/login_response.dart';
 import 'package:chat/models/profile.dart';
 import 'package:chat/models/register_response.dart';
+import 'package:chat/models/role_model.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,7 @@ import 'package:logger/logger.dart';
 class AuthService with ChangeNotifier {
   Usuario usuario;
   Profile profile;
+  Role roles;
   bool _autenticando = false;
 
   final _storage = new FlutterSecureStorage();

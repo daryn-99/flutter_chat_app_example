@@ -15,19 +15,12 @@ part 'ipost_models.g.dart';
 // String postToJson(Post data) => json.encode(data.toJson());
 
 class Post {
-  Post(
-      {this.count,
-      this.comment,
-      this.id,
-      this.user,
-      this.title,
-      this.coverImage});
+  Post({this.count, this.comment, this.id, this.title, this.coverImage});
 
   int count;
   int comment;
   @JsonKey(name: '_id')
   String id;
-  String user;
   String title;
   String coverImage;
 

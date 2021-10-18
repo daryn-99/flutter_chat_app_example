@@ -9,6 +9,7 @@ import 'package:chat/pages/profile_editing.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/select_contact_page.dart';
 import 'package:chat/pages/terminos_condiciones.dart';
+import 'package:chat/widgets/post_tap.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/pages/chat_page.dart';
@@ -33,5 +34,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'all_users': (_) => AllUsers(),
   'terminos': (_) => TerminosPage(),
   'charts': (_) => ChartPage(),
-  'forgot_password': (_) => ForgotPasswordPage()
+  'forgot_password': (_) => ForgotPasswordPage(),
+  'post_tab': (_) => PostTab()
 };

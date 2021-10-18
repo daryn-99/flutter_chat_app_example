@@ -4,25 +4,99 @@ import 'package:chat/models/profile.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
-import 'package:chat/widgets/post_tap.dart';
 import 'package:chat/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class PostContainer extends StatelessWidget {
-  const PostContainer({
-    Key key,
-    @required this.post,
-    // @required this.usuario,
-    // @required this.profile
-  }) : super(key: key);
+class PostTab extends StatefulWidget {
+  @override
+  _PostTabState createState() => _PostTabState();
+}
 
-  final Post post;
-  // final Usuario usuario;
-  // final Profile profile;
+class _PostTabState extends State<PostTab> {
+  bool circular = true;
+  AuthService networkHandler = AuthService();
+  Post post;
+  Usuario user;
+  Profile profile;
+
+  Widget profilePhoto = Container(
+    height: 100,
+    width: 100,
+    decoration: BoxDecoration(
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(50),
+    ),
+  );
 
   @override
+  void initState() {
+    fetchDataProfile();
+    fetchData();
+    super.initState();
+
+    //fetchRole();
+  }
+
+  void fetchData() async {
+    final resp = await networkHandler.get('/post/get');
+
+    setState(() {
+      post = Post.fromJson(resp['data']);
+      circular = false;
+    });
+  }
+
+  void fetchDataProfile() async {
+    final resp = await networkHandler.get('/profile/get');
+
+    setState(() {
+      profile = Profile.fromJson(resp['data']);
+      //dato = superModelProfile.dato;
+      circular = false;
+      profilePhoto = CircleAvatar(
+          radius: 50, backgroundImage: AuthService().getImage(profile.imgUrl));
+    });
+  }
+
+  void fetchDataUser() async {
+    final resp = await networkHandler.get('/usuarios');
+
+    setState(() {
+      user = Usuario.fromJson(resp['usuarios']);
+      circular = false;
+    });
+  }
+
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: circular
+          ? Center(child: CircularProgressIndicator())
+          : CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                  brightness: Brightness.dark,
+                  backgroundColor: Colors.white,
+                  title: Text(
+                    'RECONNET',
+                    style: const TextStyle(
+                        color: Palette.colorBlue,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -1.2),
+                  ),
+                  centerTitle: false,
+                  floating: true,
+                ),
+                SliverList(
+                    delegate:
+                        SliverChildListDelegate([postTap(context, user, post)]))
+              ],
+            ),
+    );
+  }
+
+  Widget postTap(BuildContext context, Usuario usuario, Post post) {
     final bool isDesktop = Responsive.isDesktop(context);
     return Card(
       margin: EdgeInsets.symmetric(
@@ -43,8 +117,8 @@ class PostContainer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  //postHeader(context),
-                  const SizedBox(height: 20.0),
+                  postHeader(context, user, profile),
+                  const SizedBox(height: 40.0),
                   Text(post.title),
                   post.coverImage != null
                       ? const SizedBox.shrink()
@@ -53,18 +127,8 @@ class PostContainer extends StatelessWidget {
               ),
             ),
             post.coverImage != null
-                ?
-                // InkWell(
-                //     onTap: () {
-                //       Future.delayed(Duration(seconds: 1), () {
-                //         Navigator.of(context).pushAndRemoveUntil(
-                //             MaterialPageRoute(builder: (context) => PostTab()),
-                //             (route) => false);
-                //       });
-                //     },
-                //     child:
-                Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6.0),
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child:
                         Image(image: AuthService().getImage(post.coverImage)))
                 : const SizedBox.shrink(),
@@ -78,56 +142,56 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  // Widget postHeader(BuildContext context) {
-  //   return Row(
-  //     children: [
-  //       InkWell(
-  //         onTap: () {
-  //           WidgetsBinding.instance.addPostFrameCallback((_) {
-  //             Navigator.pushReplacement(
-  //                 context, MaterialPageRoute(builder: (_) => ProfiletwoPage()));
-  //           });
-  //           // Navigator.push(context,
-  //           //     MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
-  //         },
-  //         child: CircleAvatar(
-  //             radius: 20.0,
-  //             backgroundColor: Colors.grey[200],
-  //             backgroundImage: AuthService().getImage(profile.imgUrl)),
-  //       ),
-  //       const SizedBox(width: 8.0),
-  //       Expanded(
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               usuario.nombre,
-  //               style: const TextStyle(
-  //                 fontWeight: FontWeight.w600,
-  //               ),
-  //             ),
-  //             // Row(
-  //             //   children: [
-  //             //     Text(
-  //             //       '${} • ',
-  //             //       style: TextStyle(
-  //             //         color: Colors.grey[600],
-  //             //         fontSize: 12.0,
-  //             //       ),
-  //             //     ),
-  //             //     Icon(
-  //             //       Icons.public,
-  //             //       color: Colors.grey[600],
-  //             //       size: 12.0,
-  //             //     )
-  //             //   ],
-  //             // ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget postHeader(BuildContext context, Usuario usuario, Profile profile) {
+    return Row(
+      children: [
+        InkWell(
+          onTap: () {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (_) => ProfiletwoPage()));
+            });
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
+          },
+          child: CircleAvatar(
+              radius: 20.0,
+              backgroundColor: Colors.grey[200],
+              backgroundImage: AuthService().getImage(profile.imgUrl)),
+        ),
+        const SizedBox(width: 8.0),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                usuario.nombre,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              // Row(
+              //   children: [
+              //     // Text(
+              //     //   '${post} • ',
+              //     //   style: TextStyle(
+              //     //     color: Colors.grey[600],
+              //     //     fontSize: 12.0,
+              //     //   ),
+              //     // ),
+              //     Icon(
+              //       Icons.public,
+              //       color: Colors.grey[600],
+              //       size: 12.0,
+              //     )
+              //   ],
+              // ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget postStats(BuildContext context) {
     return Column(
@@ -137,7 +201,7 @@ class PostContainer extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
-                color: Palette.colorBlue,
+                color: Palette.colorYellow,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -169,7 +233,7 @@ class PostContainer extends StatelessWidget {
             _PostButton(
               icon: Icon(
                 Icons.lightbulb_outline_sharp,
-                color: Palette.colorBlue,
+                color: Palette.colorYellow,
                 size: 25.0,
               ),
               label: 'Charge',

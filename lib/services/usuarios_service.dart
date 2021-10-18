@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chat/global/environments.dart';
 import 'package:chat/models/usuarios_response.dart';
 import 'package:chat/services/auth_services.dart';
@@ -35,6 +37,24 @@ class UsuariosService {
       return allusuariosResponse.usuarios;
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<Usuario> deleteUser(String userId) async {
+    print(userId);
+    final response = await http.delete(
+      Uri.parse('${Environment.apiUrl}/usuarios/$userId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken()
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return Usuario.fromJson(jsonDecode(response.body)['usuario']);
+    } else {
+      print(response.statusCode);
+      throw Exception('Error al eliminar el usuario');
     }
   }
 }

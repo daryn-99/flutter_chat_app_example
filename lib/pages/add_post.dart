@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/ipost_models.dart';
+import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/post_service.dart';
@@ -44,7 +45,9 @@ class _AddBlogState extends State<AddBlog> {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (builder) => NavScreen()));
+              //Navigator.pop(context);
             }),
         actions: <Widget>[
           TextButton(
@@ -135,12 +138,21 @@ class _AddBlogState extends State<AddBlog> {
           //Post addBlogModel = Post(title: titleCtrl.text);
           var response = await networkHandler.post1('/post/new', addBlogModel);
           print(response.body);
+          print(response.statusCode);
+          if (response.statusCode == 403) {
+            mostrarAlerta(context, 'Permiso denegado',
+                'Requiere permisos de Gerente o Administrador');
+          }
           if (response.statusCode == 200 || response.statusCode == 201) {
             final id = json.decode(response.body)["data"];
             //if (_imageFile.path != null) {
             var imageResponse = await networkHandler.patchImage(
                 '/post/updateImg/$id', _imageFile.path);
             print(imageResponse.statusCode);
+            if (imageResponse.statusCode == 403) {
+              mostrarAlerta(context, 'Permiso denegado',
+                  'Requiere permisos de Gerente o Administrador');
+            }
             if (imageResponse.statusCode == 200 ||
                 imageResponse.statusCode == 201) {
               Navigator.pushAndRemoveUntil(

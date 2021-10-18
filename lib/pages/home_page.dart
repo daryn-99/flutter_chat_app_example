@@ -4,16 +4,18 @@ import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/ipost_models.dart';
 import 'package:chat/models/profile.dart';
+import 'package:chat/models/role_model.dart';
 import 'package:chat/models/super_model.dart';
 import 'package:chat/models/super_model_profile.dart';
+import 'package:chat/models/super_model_role.dart';
 import 'package:chat/models/usuario.dart';
+import 'package:chat/pages/post_header.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/terminos_condiciones.dart';
 import 'package:chat/services/auth_services.dart';
-import 'package:chat/services/post_get.dart';
+import 'package:chat/services/role_service.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:chat/widgets/post_container.dart';
-import 'package:chat/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -27,27 +29,38 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //final roleService = new RoleService();
   bool circular = true;
   AuthService networkHandler = AuthService();
-  PostgetService getPost = PostgetService();
   List<Post> data = [];
-  //List<Profile> profile = [];
-
+  // List<Profile> profile = [];
+  List<Role> info;
   Profile profile;
-  //Usuario usuario;
+  Usuario usuario;
   SuperModel superModel;
   SuperModelProfile superModelProfile;
+  SuperModelRole superModelRole;
+
+  Widget profilePhoto = Container(
+    height: 100,
+    width: 100,
+    decoration: BoxDecoration(
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(50),
+    ),
+  );
 
   @override
   void initState() {
+    fetchDataProfile();
+    fetchData();
     super.initState();
 
-    fetchData();
-    fetchDataProfile();
+    //fetchRole();
   }
 
   void fetchData() async {
-    final resp = await networkHandler.get('/post/getOtherPost');
+    final resp = await networkHandler.get('/post/getStoryOther');
     superModel = SuperModel.fromJson(resp);
     setState(() {
       data = superModel.data;
@@ -55,13 +68,29 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // void fetchRole() async {
+  //   final resp = await networkHandler.get('/role/getrole');
+  //   superModelRole = SuperModelRole.fromJson(resp);
+  //   //this.role = await roleService.getRoles();
+
+  //   setState(() {
+  //     //role = Role.fromJson(resp['info']);
+  //     info = superModelRole.info;
+
+  //     circular = false;
+  //   });
+  //   //await Future.delayed(Duration(milliseconds: 1000));
+  // }
+
   void fetchDataProfile() async {
     final resp = await networkHandler.get('/profile/get');
     //superModelProfile = SuperModelProfile.fromJson(resp);
     setState(() {
       profile = Profile.fromJson(resp['data']);
-      //profile = superModelProfile.dato;
+      //dato = superModelProfile.dato;
       circular = false;
+      profilePhoto = CircleAvatar(
+          radius: 50, backgroundImage: AuthService().getImage(profile.imgUrl));
     });
   }
 
@@ -70,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     final authService = Provider.of<AuthService>(context);
     final usuario = authService.usuario;
     final socketService = Provider.of<SocketService>(context);
-
+    final roles = authService.roles;
     return Scaffold(
       //drawerScrimColor: Colors.transparent,
       drawer: Drawer(
@@ -78,11 +107,12 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             DrawerHeader(
                 child: Column(children: <Widget>[
-              CircleAvatar(
-                radius: 50,
-                // backgroundImage: AuthService().getImage(profile
-                //     .imgUrl), //TODO:el error de inicio es provocado por ésta linea
-              ),
+              profilePhoto,
+              // CircleAvatar(
+              //     radius: 50,
+              //     backgroundImage: AuthService().getImage(profile
+              //         .imgUrl) //TODO:el error de inicio es provocado por está linea
+              //     ),
               SizedBox(
                 height: 10,
               ),
@@ -103,8 +133,14 @@ class _HomePageState extends State<HomePage> {
               title: Text('Ver Terminos y condiciones de uso'),
               trailing: Icon(Icons.library_books),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (builder) => TerminosPage()));
+                Future.delayed(Duration.zero, () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => TerminosPage()),
+                      (route) => false);
+                });
+
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (builder) => TerminosPage()));
               },
             ),
             ListTile(
@@ -122,10 +158,23 @@ class _HomePageState extends State<HomePage> {
         heroTag: "btn1",
         backgroundColor: Palette.colorBlue,
         onPressed: () => {
+          // if (roles.name == "administrador")
+          //   {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (_) => AddBlog()));
           })
+          //   }
+          // else
+          //   {
+          //     mostrarAlerta(
+          //         context, 'Alto', 'Requiere permisos de administrador')
+          //   }
+
+          // WidgetsBinding.instance.addPostFrameCallback((_) {
+          //   Navigator.pushReplacement(
+          //       context, MaterialPageRoute(builder: (_) => AddBlog()));
+          // })
           // Navigator.push(
           //     context, MaterialPageRoute(builder: (builder) => AddBlog()))
         },
@@ -173,11 +222,18 @@ class _HomePageState extends State<HomePage> {
                 //     child: Rooms(),
                 //   ),
                 // ),
+                // SliverList(
+                //   delegate: SliverChildListDelegate(dato.length > 0
+                //       ? dato.map((items) => PostHeader(profile: items)).toList()
+                //       : mostrarAlerta(context, 'Ups!',
+                //           '"No hay publicaciones disponibles"')),
+                // ),
                 SliverList(
                   delegate: SliverChildListDelegate(data.length > 0
                       ? data
-                          .map((item) =>
-                              PostContainer(post: item, profile: profile))
+                          .map((item) => PostContainer(
+                                post: item,
+                              ))
                           .toList()
                       : mostrarAlerta(context, 'Ups!',
                           '"No hay publicaciones disponibles"')),

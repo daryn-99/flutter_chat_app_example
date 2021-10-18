@@ -53,17 +53,17 @@ class MenuPage extends StatelessWidget {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (builder) => AllUsers()))
                     }),
-            SizedBox(
-              width: 15.0,
-              height: 20,
-            ),
-            BotonAzul(
-                text: 'Ultimos Agregados',
-                onPressed: () => {print('Ultimos usuarios')}),
-            SizedBox(
-              width: 15.0,
-              height: 20,
-            ),
+            // SizedBox(
+            //   width: 15.0,
+            //   height: 20,
+            // ),
+            // BotonAzul(
+            //     text: 'Ultimos Agregados',
+            //     onPressed: () => {print('Ultimos usuarios')}),
+            // SizedBox(
+            //   width: 15.0,
+            //   height: 20,
+            // ),
           ],
         ),
       ),

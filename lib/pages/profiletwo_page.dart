@@ -185,21 +185,24 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
                 style: TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ProfileEditingPage()));
-});
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (_) => ProfileEditingPage()));
+              });
               //Navigator.pushReplacementNamed(context, 'editing_profile');
             }));
   }
 
   Widget profileImg(BuildContext context) {
     return Center(
-      child: Stack(
-        children: <Widget>[
-          CircleAvatar(
-              radius: 50.0,
-              backgroundImage: AuthService().getImage(profile.imgUrl))
-        ],
-      ),
+      child: networkHandler == null
+          ? Text('-')
+          : Stack(
+              children: <Widget>[
+                CircleAvatar(
+                    radius: 50.0,
+                    backgroundImage: AuthService().getImage(profile.imgUrl))
+              ],
+            ),
     );
   }
 }

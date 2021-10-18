@@ -2,6 +2,7 @@ import 'package:chat/config/palette.dart';
 import 'package:chat/models/mensajes_response.dart';
 import 'package:chat/models/profile.dart';
 import 'package:chat/models/usuario.dart';
+import 'package:chat/pages/chat_page.dart';
 import 'package:chat/pages/select_contact_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
@@ -126,7 +127,11 @@ class _UsuariosPageState extends State<UsuariosPage> {
       onTap: () {
         final chatService = Provider.of<ChatService>(context, listen: false);
         chatService.usuarioPara = usuario;
-        Navigator.popAndPushNamed(context, 'chat');
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => ChatPage()));
+        });
+        //Navigator.popAndPushNamed(context, 'chat');
       },
     );
   }
