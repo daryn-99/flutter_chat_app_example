@@ -45,8 +45,7 @@ class _AddBlogState extends State<AddBlog> {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (builder) => NavScreen()));
+              Navigator.pushReplacementNamed(context, 'nav_screen');
               //Navigator.pop(context);
             }),
         actions: <Widget>[

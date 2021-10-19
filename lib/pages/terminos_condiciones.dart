@@ -8,6 +8,12 @@ class TerminosPage extends StatelessWidget {
         appBar: AppBar(
           title: Text('Terminos y condiciones de uso'),
           backgroundColor: Palette.colorBlue,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'nav_screen');
+            },
+            icon: Icon(Icons.chevron_left_sharp, color: Colors.white),
+          ),
         ),
         body: SingleChildScrollView(
             child: Container(

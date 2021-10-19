@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/ipost_models.dart';
@@ -9,11 +7,9 @@ import 'package:chat/models/super_model.dart';
 import 'package:chat/models/super_model_profile.dart';
 import 'package:chat/models/super_model_role.dart';
 import 'package:chat/models/usuario.dart';
-import 'package:chat/pages/post_header.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/terminos_condiciones.dart';
 import 'package:chat/services/auth_services.dart';
-import 'package:chat/services/role_service.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:chat/widgets/post_container.dart';
 import 'package:flutter/material.dart';
@@ -52,11 +48,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    fetchDataProfile();
+    //fetchDataProfile();
     fetchData();
     super.initState();
 
     //fetchRole();
+  }
+
+  void elState() {
+    fetchDataProfile();
   }
 
   void fetchData() async {
@@ -160,10 +160,11 @@ class _HomePageState extends State<HomePage> {
         onPressed: () => {
           // if (roles.name == "administrador")
           //   {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => AddBlog()));
-          })
+          Navigator.restorablePushReplacementNamed(context, 'add_post')
+          // WidgetsBinding.instance.addPostFrameCallback((_) {
+          //   Navigator.pushReplacement(
+          //       context, MaterialPageRoute(builder: (_) => AddBlog()));
+          // })
           //   }
           // else
           //   {

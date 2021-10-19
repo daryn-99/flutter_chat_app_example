@@ -1,14 +1,11 @@
 import 'package:chat/pages/all_users_page.dart';
+import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/pages/register_page.dart';
-import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:chat/widgets/boton_azul.dart';
-import 'package:chat/widgets/circle_buttom.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'add_post.dart';
 
 class MenuPage extends StatelessWidget {
   @override
@@ -25,6 +22,17 @@ class MenuPage extends StatelessWidget {
             )),
         elevation: 1,
         backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Future.delayed(Duration.zero, () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => NavScreen()),
+                  (route) => false);
+            });
+            //Navigator.pushReplacementNamed(context, 'menu_page');
+          },
+          icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
+        ),
       ),
       body: Container(
         margin: EdgeInsets.only(top: 120),

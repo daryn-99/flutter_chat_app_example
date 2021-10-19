@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/usuario.dart';
+import 'package:chat/pages/menu_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/sockets_service.dart';
 import 'package:chat/widgets/boton_azul.dart';
@@ -42,6 +43,28 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text("Registro",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: -1.2,
+                  color: Colors.blue[900])),
+          leading: IconButton(
+            onPressed: () {
+              Future.delayed(Duration.zero, () {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => MenuPage()),
+                    (route) => false);
+              });
+              //Navigator.pushReplacementNamed(context, 'menu_page');
+            },
+            icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
+          ),
+        ),
         backgroundColor: Color(0xffF2F2F2),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -51,9 +74,12 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  //Logo(titulo: 'Registro'),
-                  titulo(context),
-                  imgProfile(context),
+                  Logo(titulo: ''),
+                  //titulo(context),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  //imgProfile(context),
                   form(context),
                   Labels(
                     ruta: 'login',
@@ -67,17 +93,17 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 
-  Widget titulo(BuildContext context) {
-    return Title(
-        color: Palette.colorBlue,
-        child: Text("Registro",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 40,
-                fontStyle: FontStyle.normal,
-                letterSpacing: -1.2,
-                color: Colors.blue[900])));
-  }
+  // Widget titulo(BuildContext context) {
+  //   return Title(
+  //       color: Palette.colorBlue,
+  //       child: Text("Registro",
+  //           style: TextStyle(
+  //               fontWeight: FontWeight.bold,
+  //               fontSize: 40,
+  //               fontStyle: FontStyle.normal,
+  //               letterSpacing: -1.2,
+  //               color: Colors.blue[900])));
+  // }
 
   Widget imgProfile(BuildContext context) {
     return Center(

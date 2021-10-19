@@ -1,10 +1,6 @@
 import 'package:chat/config/palette.dart';
 import 'package:chat/models/ipost_models.dart';
-import 'package:chat/models/profile.dart';
-import 'package:chat/models/usuario.dart';
-import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
-import 'package:chat/widgets/post_tap.dart';
 import 'package:chat/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
