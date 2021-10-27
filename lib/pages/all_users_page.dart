@@ -5,6 +5,7 @@ import 'package:chat/models/profile.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/home_page.dart';
 import 'package:chat/pages/menu_page.dart';
+import 'package:chat/pages/modify_page.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/register_page.dart';
 import 'package:chat/pages/select_contact_page.dart';
@@ -32,7 +33,8 @@ class _AllUsersState extends State<AllUsers> {
 
   @override
   void initState() {
-    this._cargarUsuarios();
+    _cargarUsuarios();
+
     super.initState();
   }
 
@@ -97,67 +99,12 @@ class _AllUsersState extends State<AllUsers> {
       onTap: () {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => RegisterPage()));
+              context, MaterialPageRoute(builder: (_) => ModifyPage(usuario)));
         });
       },
       onLongPress: () {
         removeUser(context, usuario);
       },
-      // leading: PopupMenuButton<String>(
-      //   padding: EdgeInsets.all(0),
-      //   onSelected: (value) {
-      //     if (value == "Ver") {
-      //       WidgetsBinding.instance.addPostFrameCallback((_) {
-      //         Navigator.pushReplacement(
-      //             context, MaterialPageRoute(builder: (_) => HomePage()));
-      //       });
-      //       // Navigator.push(
-      //       //     context, MaterialPageRoute(builder: (builder) => HomePage()));
-      //     }
-      //     if (value == 'Editar') {
-      //       WidgetsBinding.instance.addPostFrameCallback((_) {
-      //         Future.pushReplacement(
-      //             context, MaterialPageRoute(builder: (_) => ProfiletwoPage()));
-      //       });
-      //       // Navigator.push(context,
-      //       //     MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
-      //     }
-      //     if (value == 'Eliminar') {
-      //       WidgetsBinding.instance.addPostFrameCallback((_) {
-      //         Navigator.pushReplacement(
-      //             context, MaterialPageRoute(builder: (_) => RegisterPage()));
-      //       });
-      //       // Navigator.push(context,
-      //       //     MaterialPageRoute(builder: (builder) => RegisterPage()));
-      //     }
-      //   },
-      //   itemBuilder: (BuildContext context) {
-      //     return [
-      //       PopupMenuItem(
-      //         child: Text('Ver Usuario'),
-      //         value: 'Ver',
-      //       ),
-      //       PopupMenuItem(
-      //         child: Text('Editar Usuario'),
-      //         value: 'Editar',
-      //       ),
-      //       PopupMenuItem(
-      //         child: Text('Eliminar Usuario'),
-      //         value: 'Eliminar',
-      //       ),
-      //     ];
-      //   },
-      // ),
-      //IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit)),
-      // CircleAvatar(
-      //   child: Text(usuario.nombre.substring(0, 2)),
-      //   backgroundColor: Colors.blue[100],
-      // ),
-      // onTap: () {
-      //   final chatService = Provider.of<ChatService>(context, listen: false);
-      //   chatService.usuarioPara = usuario;
-      //   Navigator.popAndPushNamed(context, 'chat');
-      // },
     );
   }
 
@@ -171,13 +118,12 @@ class _AllUsersState extends State<AllUsers> {
               actions: [
                 TextButton(
                     onPressed: () {
-                      setState(() {
-                        usuarioService.deleteUser(usuario.uid).then((user) {
-                          if (user.uid.isEmpty) {
-                            setState(() {});
-                          }
-                        });
-                        Navigator.pop(context);
+                      usuarioService.deleteUser(usuario.uid).then((user) {
+                        _refreshController.refreshCompleted();
+                        if (user.uid.isEmpty) {
+                          setState(() {});
+                          Navigator.pop(context);
+                        }
                       });
                     },
                     child: Text(

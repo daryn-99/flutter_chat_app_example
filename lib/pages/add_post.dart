@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
-import 'package:chat/models/ipost_models.dart';
-import 'package:chat/pages/nav_screen.dart';
-import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/post_service.dart';
 import 'package:chat/widgets/overlay_card.dart';

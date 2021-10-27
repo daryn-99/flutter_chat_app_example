@@ -11,6 +11,7 @@ import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/terminos_condiciones.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/sockets_service.dart';
+import 'package:chat/services/usuarios_service.dart';
 import 'package:chat/widgets/post_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,13 +27,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //final roleService = new RoleService();
+  final usuarioService = new UsuariosService();
   bool circular = true;
   AuthService networkHandler = AuthService();
   List<Post> data = [];
   // List<Profile> profile = [];
   List<Role> info;
   Profile profile;
-  Usuario usuario;
+  List<Usuario> usuario;
   SuperModel superModel;
   SuperModelProfile superModelProfile;
   SuperModelRole superModelRole;
@@ -49,6 +51,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     //fetchDataProfile();
+    this._cargarUsuarios();
     fetchData();
     super.initState();
 
@@ -102,17 +105,18 @@ class _HomePageState extends State<HomePage> {
     final roles = authService.roles;
     return Scaffold(
       //drawerScrimColor: Colors.transparent,
+
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
             DrawerHeader(
                 child: Column(children: <Widget>[
-              profilePhoto,
-              // CircleAvatar(
-              //     radius: 50,
-              //     backgroundImage: AuthService().getImage(profile
-              //         .imgUrl) //TODO:el error de inicio es provocado por está linea
-              //     ),
+              //profilePhoto,
+              CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AuthService().getImage(usuario
+                      .imgUrl) //TODO:el error de inicio es provocado por está linea
+                  ),
               SizedBox(
                 height: 10,
               ),
@@ -242,5 +246,12 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
     );
+  }
+
+  _cargarUsuarios() async {
+    usuario = await usuarioService.getUsuarios();
+
+    setState(() {});
+    await Future.delayed(Duration(milliseconds: 1000));
   }
 }

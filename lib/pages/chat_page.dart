@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:chat/models/usuario.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
 import 'package:chat/services/sockets_service.dart';
+import 'package:chat/services/usuarios_service.dart';
 import 'package:chat/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
+  final usuarioService = new UsuariosService();
   final _textController = new TextEditingController();
   final _focusNode = new FocusNode();
 
@@ -25,6 +28,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   ChatService chatService;
   SocketService socketService;
   AuthService authService;
+  List<Usuario> usuario;
 
   List<ChatMessage> _messages = [];
 
@@ -41,6 +45,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     this.socketService.socket.on('mensaje-personal', _escucharMensaje);
 
     _cargarHistorial(this.chatService.usuarioPara.uid);
+    _cargarUsuarios();
   }
 
   void _cargarHistorial(String usuarioID) async {
@@ -76,8 +81,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Usuario usuario;
     final usuarioPara = chatService.usuarioPara;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -85,9 +90,10 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         title: Column(
           children: <Widget>[
             CircleAvatar(
-              child: Text(usuarioPara.nombre.substring(0, 2),
-                  style: TextStyle(fontSize: 12)),
-              backgroundColor: Colors.blue[100],
+              backgroundImage: AuthService().getImage(usuarioPara.imgUrl),
+              // child: Text(usuarioPara.nombre.substring(0, 2),
+              //     style: TextStyle(fontSize: 12)),
+              // backgroundColor: Colors.blue[100],
               maxRadius: 22,
             ),
             SizedBox(
@@ -357,5 +363,12 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
     this.socketService.socket.off('mensaje-personal');
     super.dispose();
+  }
+
+  _cargarUsuarios() async {
+    this.usuario = await usuarioService.getUsuarios();
+
+    setState(() {});
+    await Future.delayed(Duration(milliseconds: 1000));
   }
 }

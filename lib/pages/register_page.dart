@@ -29,7 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final apellidoCtrl = TextEditingController();
   final numerotelCtrl = TextEditingController();
   final birthCtrl = TextEditingController();
-  //final roleCtrl = TextEditingController();
+  final roleCtrl = TextEditingController();
   final cargoCtrl = TextEditingController();
   final areaCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Container(
-              height: MediaQuery.of(context).size.height + 250,
+              height: MediaQuery.of(context).size.height + 450,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -230,12 +230,12 @@ class _RegisterPageState extends State<RegisterPage> {
             keyboardType: TextInputType.text,
             textController: birthCtrl,
           ),
-          // CustomInput(
-          //   icon: Icons.android_sharp,
-          //   placeholder: 'Rol en la aplicación',
-          //   keyboardType: TextInputType.text,
-          //   textController: roleCtrl,
-          // ),
+          CustomInput(
+            icon: Icons.android_sharp,
+            placeholder: 'Rol en la aplicación',
+            keyboardType: TextInputType.text,
+            textController: roleCtrl,
+          ),
           CustomInput(
             icon: Icons.engineering,
             placeholder: 'Cargo en la empresa',
@@ -271,7 +271,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       'apellido': apellidoCtrl.text.trim(),
                       'numerotel': numerotelCtrl.text.trim(),
                       'birth': birthCtrl.text.trim(),
-                      //'role': role,
+                      'role': roleCtrl.text.toLowerCase().trim(),
                       'cargo': cargoCtrl.text.trim(),
                       'area': areaCtrl.text.trim(),
                       'email': emailCtrl.text.trim(),
@@ -282,7 +282,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     print(apellidoCtrl);
                     print(numerotelCtrl);
                     print(birthCtrl);
-                    //print(roleCtrl);
+                    print(roleCtrl);
                     print(cargoCtrl);
                     print(areaCtrl);
                     print(emailCtrl);
@@ -293,21 +293,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     if (registroOk.statusCode == 200 ||
                         registroOk.statusCode == 201) {
                       socketService.connect();
-                      final id = json.decode(registroOk.body)["data"];
-                      var imageResponse = await authService.patchImage2(
-                          '/login/update/$id', _imageFile.path);
-                      print(imageResponse.statusCode);
-                      if (imageResponse.statusCode == 200 ||
-                          imageResponse.statusCode == 201) {
-                        mostrarAlerta(context, 'Bienvenido',
-                            'Usuario ingresado exitosamente');
-                      }
+                      mostrarAlerta(context, 'Bienvenido',
+                          'Usuario ingresado exitosamente');
                       usernameCtrl.clear();
                       nameCtrl.clear();
                       apellidoCtrl.clear();
                       numerotelCtrl.clear();
                       birthCtrl.clear();
-                      //roleCtrl.clear();
+                      roleCtrl.clear();
                       cargoCtrl.clear();
                       areaCtrl.clear();
                       emailCtrl.clear();

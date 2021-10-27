@@ -1,9 +1,11 @@
+import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/add_post.dart';
 import 'package:chat/pages/all_users_page.dart';
 import 'package:chat/pages/charts.dart';
 import 'package:chat/pages/forgot_Password.dart';
 import 'package:chat/pages/home_page.dart';
 import 'package:chat/pages/menu_page.dart';
+import 'package:chat/pages/modify_page.dart';
 import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/pages/profile_editing.dart';
 import 'package:chat/pages/profiletwo_page.dart';
@@ -35,5 +37,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'terminos': (_) => TerminosPage(),
   'charts': (_) => ChartPage(),
   'forgot_password': (_) => ForgotPasswordPage(),
-  'post_tab': (_) => PostTab()
+  'post_tab': (_) => PostTab(),
+  //'modify': (_) => ModifyPage();
 };

@@ -10,6 +10,7 @@ import 'package:chat/pages/profile_editing.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/profile_get.dart';
 import 'package:chat/services/profile_service.dart';
+import 'package:chat/services/usuarios_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -21,10 +22,12 @@ class ProfiletwoPage extends StatefulWidget {
 }
 
 class _ProfiletwoPageState extends State<ProfiletwoPage> {
+  final usuarioService = new UsuariosService();
   bool circular = true;
   AuthService networkHandler = AuthService();
   ProfilegetService getService = ProfilegetService();
   Profile profile;
+  List<Usuario> usuario;
 
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -43,6 +46,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
       profile = Profile.fromJson(resp['data']);
       circular = false;
     });
+    await Future.delayed(Duration(milliseconds: 1000));
 
     // headers: {
     //   'Content-Type': 'application/json',
@@ -117,11 +121,6 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
         centerTitle: true,
         background: FadeInImage(
           image: AssetImage('assets/weather-in-Reco-1-1024x575.jpeg'),
-
-          //NetworkImage(
-          //       //'https://scontent.fsap4-1.fna.fbcdn.net/v/t1.6435-9/p960x960/189418878_3817325464982636_394025055086716610_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=36a2c1&_nc_ohc=EBIVLzHaWLUAX-MVM7X&_nc_ht=scontent.fsap4-1.fna&oh=69f35621d754e8b0f9365799fcf538fe&oe=61262D2F'),
-          //       //'http://192.168.80.124:3000/api/storage/imgs/1626987990868-Logo%20RECO%20-%20Tipografico-01.png'),
-          //       'https://www.jorgechavezonroatan.com/wp-content/uploads/2017/03/weather-in-Reco-1-1024x575.jpeg'),
           width: 130,
           height: 190,
           placeholder: AssetImage('assets/tenor.gif'),
@@ -137,7 +136,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         children: <Widget>[
-          profileImg(context),
+          profileImg(context, usuario),
           SizedBox(width: 20.0),
           Flexible(
             child: Column(
@@ -181,7 +180,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
         width: 70,
         height: 30,
         child: ElevatedButton(
-            child: Text("Editar Perfil",
+            child: Text("Editar foto de perfil",
                 style: TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -192,7 +191,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
             }));
   }
 
-  Widget profileImg(BuildContext context) {
+  Widget profileImg(BuildContext context, Usuario usuario) {
     return Center(
       child: networkHandler == null
           ? Text('-')
@@ -200,9 +199,16 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
               children: <Widget>[
                 CircleAvatar(
                     radius: 50.0,
-                    backgroundImage: AuthService().getImage(profile.imgUrl))
+                    backgroundImage: AuthService().getImage(usuario.imgUrl))
               ],
             ),
     );
+  }
+
+  _cargarUsuarios() async {
+    this.usuario = await usuarioService.getUsuarios();
+
+    setState(() {});
+    await Future.delayed(Duration(milliseconds: 1000));
   }
 }

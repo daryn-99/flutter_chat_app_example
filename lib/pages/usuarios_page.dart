@@ -111,9 +111,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
       subtitle: Text(usuario
           .apellido), //TODO:aqui debo de mostrar el ultimo mensaje enviado
       leading: CircleAvatar(
-        //backgroundImage: AuthService().getImage(profile.imgUrl),
-        child: Text(usuario.nombre.substring(0, 2)),
-        backgroundColor: Colors.blue[100],
+        backgroundImage: AuthService().getImage(usuario.imgUrl),
+        // child: Text(usuario.nombre.substring(0, 2)),
+        // backgroundColor: Colors.blue[100],
       ),
       trailing: Container(
         //child: Text('8:16'),

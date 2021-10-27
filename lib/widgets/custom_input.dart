@@ -36,10 +36,11 @@ class CustomInput extends StatelessWidget {
         keyboardType: this.keyboardType,
         obscureText: this.isPassword,
         decoration: InputDecoration(
-            prefixIcon: Icon(this.icon),
-            focusedBorder: InputBorder.none,
-            border: InputBorder.none,
-            hintText: this.placeholder),
+          prefixIcon: Icon(this.icon),
+          focusedBorder: InputBorder.none,
+          border: InputBorder.none,
+          hintText: this.placeholder,
+        ),
       ),
     );
   }

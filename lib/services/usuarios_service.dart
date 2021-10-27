@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chat/global/environments.dart';
+import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/usuarios_response.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:http/http.dart' as http;
@@ -43,7 +44,7 @@ class UsuariosService {
   Future<Usuario> deleteUser(String userId) async {
     print(userId);
     final response = await http.delete(
-      Uri.parse('${Environment.apiUrl}/usuarios/$userId'),
+      Uri.parse('${Environment.apiUrl}/usuarios/delete/$userId'),
       headers: {
         'Content-Type': 'application/json',
         'x-token': await AuthService.getToken()
@@ -51,10 +52,30 @@ class UsuariosService {
     );
 
     if (response.statusCode == 200) {
-      return Usuario.fromJson(jsonDecode(response.body)['usuario']);
+      print('a'); //Usuario.fromJson(jsonDecode(response.body)['usuario']);
     } else {
       print(response.statusCode);
       throw Exception('Error al eliminar el usuario');
+    }
+  }
+
+  Future<Usuario> modifyUser(String userId, Map<String, String> body) async {
+    print(userId);
+    var body = json.encode(Usuario());
+    print(body);
+    final response = await http.patch(
+        Uri.parse('${Environment.apiUrl}/usuarios/updateUser/$userId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken(),
+        },
+        body: body);
+
+    if (response.statusCode == 200) {
+      return Usuario.fromJson(jsonDecode(response.body)['usuario']);
+    } else {
+      print(response.statusCode);
+      throw Exception('Error al modificar el usuario');
     }
   }
 }
