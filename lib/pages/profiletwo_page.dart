@@ -35,24 +35,26 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
   @override
   void initState() {
     super.initState();
+    //this._cargarUsuarios();
 
-    fetchData();
+    //_cargarProfiles();
+    //fetchData();
   }
 
-  void fetchData() async {
-    final resp = await networkHandler.get('/profile/get');
+  // void fetchData() async {
+  //   final resp = await networkHandler.get('/profile/get');
 
-    setState(() {
-      profile = Profile.fromJson(resp['data']);
-      circular = false;
-    });
-    await Future.delayed(Duration(milliseconds: 1000));
+  //   setState(() {
+  //     profile = Profile.fromJson(resp['data']);
+  //     circular = false;
+  //   });
+  //   await Future.delayed(Duration(milliseconds: 1000));
 
-    // headers: {
-    //   'Content-Type': 'application/json',
-    //   'x-token': await AuthService.getToken()
-    // });
-  }
+  //   // headers: {
+  //   //   'Content-Type': 'application/json',
+  //   //   'x-token': await AuthService.getToken()
+  //   // });
+  // }
 
   final profilegetService = new ProfilegetService();
 
@@ -74,8 +76,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
 
     return Scaffold(
         body: circular
-            ? Center(child: CircularProgressIndicator())
-            : CustomScrollView(
+            ? CustomScrollView(
                 slivers: <Widget>[
                   _crearAppbar(usuario),
                   SliverList(
@@ -85,28 +86,30 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
                       SizedBox(height: 10.0),
                       _botonAdd(),
                       SizedBox(height: 40.0),
-                      //showProfile(context, profile)
-                      _mostrarPerfil(),
+                      showProfile(context, usuario),
+                      //_mostrarPerfil(),
                       //_cargarProfiles()
                     ]),
                   )
                 ],
-              ));
+              )
+            : Center(child: CircularProgressIndicator()));
   }
 
   _cargarProfiles() async {
-    this.profile = await profilegetService.getProfiles();
+    profile = await profilegetService.getProfiles();
 
-    // setState(() {});
-    //await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
+    setState(() {});
+    await Future.delayed(Duration(milliseconds: 1000));
   }
 
   Widget page = CircularProgressIndicator();
 
-  Widget showProfile(BuildContext context, Profile profile) {
+  Widget showProfile(BuildContext context, Usuario usuario) {
     return Center(
-      child: Text(profile.about),
+      child: Container(
+        child: Text(usuario.descripcion),
+      ),
     );
   }
 
@@ -180,7 +183,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
         width: 70,
         height: 30,
         child: ElevatedButton(
-            child: Text("Editar foto de perfil",
+            child: Text("Editar perfil",
                 style: TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -205,10 +208,10 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
     );
   }
 
-  _cargarUsuarios() async {
-    this.usuario = await usuarioService.getUsuarios();
+  // _cargarUsuarios() async {
+  //   this.usuario = await usuarioService.getUsuarios();
 
-    setState(() {});
-    await Future.delayed(Duration(milliseconds: 1000));
-  }
+  //   setState(() {});
+  //   await Future.delayed(Duration(milliseconds: 1000));
+  // }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat/models/getprofile_response.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/chat_service.dart';
@@ -12,7 +14,12 @@ import 'package:provider/provider.dart';
 
 import 'services/profile_service.dart';
 
-void main() => runApp(MyApp());
+void main()
+//=> runApp(MyApp());
+{
+  runApp(MyApp());
+  HttpOverrides.global = MyHttpOverrides();
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -36,5 +43,14 @@ class MyApp extends StatelessWidget {
         routes: appRoutes,
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

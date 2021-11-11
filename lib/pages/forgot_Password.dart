@@ -59,39 +59,56 @@ class __FormState extends State<_Form> {
             keyboardType: TextInputType.emailAddress,
             textController: emailCtrl,
           ),
-          CustomInput(
-            icon: Icons.lock_outline,
-            placeholder: 'Contraseña',
-            textController: passCtrl,
-            isPassword: true,
-          ),
-          CustomInput(
-            icon: Icons.lock_outline,
-            placeholder: 'Repetir contraseña',
-            textController: passCtrl1,
-            isPassword: true,
-          ),
+          // CustomInput(
+          //   icon: Icons.lock_outline,
+          //   placeholder: 'Contraseña',
+          //   textController: passCtrl,
+          //   isPassword: true,
+          // ),
+          // CustomInput(
+          //   icon: Icons.lock_outline,
+          //   placeholder: 'Repetir contraseña',
+          //   textController: passCtrl1,
+          //   isPassword: true,
+          // ),
           BotonAzul(
-            text: 'Actualizar',
-            onPressed: () async {
-              Map<String, String> data = {"password": passCtrl1.text};
-              if (passCtrl == passCtrl1) {
-                print("/usuarios/passwordUpdate/${emailCtrl.text}");
-                var response = await authService.patch1(
-                    "/usuarios/passwordUpdate/${emailCtrl.text}", data);
-                if (response.statusCode == 200 || response.statusCode == 201) {
-                  print("/user/update/${emailCtrl.text}");
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                      (route) => false);
+              text: 'Actualizar',
+              onPressed: () async {
+                Map<String, String> data = {"email": emailCtrl.text};
+                var response =
+                    await authService.post('/usuarios/forgotPassword', data);
+                print(response.body);
+                if (response.statusCode == 200) {
+                  Navigator.restorablePushReplacementNamed(context, 'login');
                 }
-              } else {
-                mostrarAlerta(context, "Las contraseñas no coinciden",
-                    "Repitalo de nuevo");
+                if (response.statusCode == 204) {
+                  mostrarAlerta(
+                      context, "Campo vacio", "El email es requerido");
+                }
+                if (response.statusCode == 206) {
+                  mostrarAlerta(
+                      context, "Campo vacio", "El email es requerido");
+                }
               }
-            },
-          ),
+              // async {
+              //   Map<String, String> data = {"password": passCtrl1.text};
+              //   if (passCtrl == passCtrl1) {
+              //     print("/usuarios/passwordUpdate/${emailCtrl.text}");
+              //     var response = await authService.patch1(
+              //         "/usuarios/passwordUpdate/${emailCtrl.text}", data);
+              //     if (response.statusCode == 200 || response.statusCode == 201) {
+              //       print("/user/update/${emailCtrl.text}");
+              //       Navigator.pushAndRemoveUntil(
+              //           context,
+              //           MaterialPageRoute(builder: (context) => LoginPage()),
+              //           (route) => false);
+              //     }
+              //   } else {
+              //     mostrarAlerta(context, "Las contraseñas no coinciden",
+              //         "Repitalo de nuevo");
+              //   }
+              // },
+              ),
           SizedBox(height: 10.0),
           BotonAzul(
               text: "Cancelar",

@@ -20,6 +20,7 @@ class Usuario {
       this.cargo,
       this.area,
       this.email,
+      this.descripcion,
       this.uid,
       this.imgUrl});
 
@@ -33,6 +34,7 @@ class Usuario {
   String cargo;
   String area;
   String email;
+  String descripcion;
   String uid;
   String imgUrl;
 
@@ -47,6 +49,7 @@ class Usuario {
       cargo: json["cargo"],
       area: json["area"],
       email: json["email"],
+      descripcion: json["descripcion"],
       uid: json["uid"],
       imgUrl: json["imgUrl"]);
 
@@ -61,6 +64,7 @@ class Usuario {
         "cargo": cargo,
         "area": area,
         "email": email,
+        "descripcion": descripcion,
         "uid": uid,
         "imgUrl": imgUrl
       };

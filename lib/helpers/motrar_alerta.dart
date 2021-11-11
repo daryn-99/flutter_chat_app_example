@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat/config/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -15,7 +16,7 @@ mostrarAlerta(BuildContext context, String titulo, String subtitulo) {
                 MaterialButton(
                     child: Text('Ok'),
                     elevation: 5,
-                    textColor: Colors.blue,
+                    textColor: Palette.colorBlue,
                     onPressed: () => Navigator.pop(context))
               ],
             ));

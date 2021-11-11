@@ -170,25 +170,25 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                       data: IconThemeData(color: Colors.blue[400]),
                       child: Row(
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: ((builder) => bottomSheet()),
-                              );
-                            },
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            icon: Icon(Icons.attach_file_rounded),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              takePhoto(ImageSource.camera);
-                            },
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            icon: Icon(Icons.photo_camera_rounded),
-                          ),
+                          // IconButton(
+                          //   onPressed: () {
+                          //     showModalBottomSheet(
+                          //       context: context,
+                          //       builder: ((builder) => bottomSheet()),
+                          //     );
+                          //   },
+                          //   highlightColor: Colors.transparent,
+                          //   splashColor: Colors.transparent,
+                          //   icon: Icon(Icons.attach_file_rounded),
+                          // ),
+                          // IconButton(
+                          //   onPressed: () {
+                          //     takePhoto(ImageSource.camera);
+                          //   },
+                          //   highlightColor: Colors.transparent,
+                          //   splashColor: Colors.transparent,
+                          //   icon: Icon(Icons.photo_camera_rounded),
+                          // ),
                           IconButton(
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,

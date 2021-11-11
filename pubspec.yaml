@@ -31,8 +31,8 @@ dependencies:
   pull_to_refresh: ^2.0.0
   provider: ^5.0.0
   http: ^0.13.3
-  flutter_secure_storage: ^4.2.0
-  socket_io_client: ^2.0.0-beta.3-nullsafety.0
+  flutter_secure_storage: 
+  socket_io_client:
   image_picker: 
   cached_network_image:
   material_design_icons_flutter: 4.0.5955

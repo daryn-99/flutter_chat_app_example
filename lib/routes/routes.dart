@@ -7,6 +7,7 @@ import 'package:chat/pages/home_page.dart';
 import 'package:chat/pages/menu_page.dart';
 import 'package:chat/pages/modify_page.dart';
 import 'package:chat/pages/nav_screen.dart';
+import 'package:chat/pages/photo_profile.dart';
 import 'package:chat/pages/profile_editing.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/select_contact_page.dart';
@@ -38,5 +39,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'charts': (_) => ChartPage(),
   'forgot_password': (_) => ForgotPasswordPage(),
   'post_tab': (_) => PostTab(),
+  'photo_profile': (_) => PhotoProfile(),
   //'modify': (_) => ModifyPage();
 };

@@ -20,6 +20,7 @@ class ModifyPage extends StatefulWidget {
 }
 
 class _ModifyPageState extends State<ModifyPage> {
+  TextEditingController idCtrl;
   TextEditingController usernameCtrl;
   TextEditingController nameCtrl;
   TextEditingController apellidoCtrl;
@@ -34,6 +35,7 @@ class _ModifyPageState extends State<ModifyPage> {
   @override
   void initState() {
     Usuario u = widget.usuario;
+    idCtrl = TextEditingController(text: u.uid);
     usernameCtrl = TextEditingController(text: u.username);
     nameCtrl = TextEditingController(text: u.nombre);
     apellidoCtrl = TextEditingController(text: u.apellido);
@@ -100,6 +102,12 @@ class _ModifyPageState extends State<ModifyPage> {
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: <Widget>[
+          CustomInput(
+            icon: Icons.format_list_numbered_outlined,
+            placeholder: 'Id de usuario',
+            keyboardType: TextInputType.text,
+            textController: idCtrl,
+          ),
           CustomInput(
             icon: Icons.person_pin_rounded,
             placeholder: 'Nombre de usuario',
@@ -169,9 +177,10 @@ class _ModifyPageState extends State<ModifyPage> {
               print(cargoCtrl);
               print(areaCtrl);
               print(emailCtrl);
-              //final id = usuario.uid;
-              final registroOk =
-                  await authService.patch('/usuarios/updateUser', addUserModel);
+              final id = idCtrl;
+              print(id);
+              var registroOk = await authService.patch(
+                  '/usuarios/updateUser/$id', addUserModel);
               print(registroOk.body);
               print(registroOk.statusCode);
               if (registroOk.statusCode == 200 ||

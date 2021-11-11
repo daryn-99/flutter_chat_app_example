@@ -74,12 +74,12 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Logo(titulo: ''),
+                  //Logo(titulo: ''),
                   //titulo(context),
                   // SizedBox(
-                  //   height: 5,
+                  //   height: 0,
                   // ),
-                  //imgProfile(context),
+                  imgProfile(context),
                   form(context),
                   Labels(
                     ruta: 'login',
@@ -277,6 +277,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       'email': emailCtrl.text.trim(),
                       'password': passCtrl.text.trim(),
                     };
+                    print(_imageFile.path);
                     print(usernameCtrl);
                     print(nameCtrl);
                     print(apellidoCtrl);
@@ -290,11 +291,23 @@ class _RegisterPageState extends State<RegisterPage> {
                     final registroOk =
                         await authService.post1('/login/new', addUserModel);
                     print(registroOk.body);
+                    print(registroOk.statusCode);
                     if (registroOk.statusCode == 200 ||
                         registroOk.statusCode == 201) {
+                      final _id = json.decode(registroOk.body)["data"];
+                      print(registroOk.body);
+                      print(_id);
+                      var imageResponse = await authService.patchImage2(
+                          '/login/photoProfile/$_id', _imageFile.path);
+
+                      print(_imageFile.path);
+                      print(imageResponse.statusCode);
+                      if (imageResponse.statusCode == 200 ||
+                          imageResponse.statusCode == 201) {
+                        mostrarAlerta(context, 'Bienvenido',
+                            'Usuario ingresado exitosamente');
+                      }
                       socketService.connect();
-                      mostrarAlerta(context, 'Bienvenido',
-                          'Usuario ingresado exitosamente');
                       usernameCtrl.clear();
                       nameCtrl.clear();
                       apellidoCtrl.clear();

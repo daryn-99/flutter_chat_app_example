@@ -1,26 +1,21 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:chat/config/palette.dart';
-import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/usuario.dart';
-import 'package:chat/pages/home_page.dart';
-import 'package:chat/pages/photo_profile.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/profile_service.dart';
-import 'package:chat/services/sockets_service.dart';
-import 'package:chat/widgets/default_img.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class ProfileEditingPage extends StatefulWidget {
+class PhotoProfile extends StatefulWidget {
   @override
-  _ProfileEditingPageState createState() => _ProfileEditingPageState();
+  _PhotoProfileState createState() => _PhotoProfileState();
 }
 
-class _ProfileEditingPageState extends State<ProfileEditingPage> {
-  TextEditingController descripcionCtrl = TextEditingController();
+class _PhotoProfileState extends State<PhotoProfile> {
+  TextEditingController aboutCtrl = TextEditingController();
   AuthService networkHandler = AuthService();
   bool circular = false;
 
@@ -43,9 +38,8 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
             _getAppBar(),
             SizedBox(height: 40.0),
             imgProfile(context),
-            _cambiarFoto(),
             SizedBox(height: 40.0),
-            _crearAbout(),
+            //_crearAbout(),
             SizedBox(height: 40.0),
           ]),
         )
@@ -55,18 +49,19 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
 
   Widget _getAppBar() {
     final profileService = ProfileService();
+    final usuario = Usuario();
     return AppBar(
       backgroundColor: Colors.white,
       toolbarHeight: 70.0,
       title: Text(
-        'Editar perfil',
+        'Editar foto de perfil',
         style: TextStyle(color: Colors.black),
       ),
       centerTitle: true,
       elevation: 1,
       leading: IconButton(
           onPressed: () => {
-                Navigator.popAndPushNamed(context, 'nav_screen'),
+                Navigator.popAndPushNamed(context, 'editing_profile'),
               },
           icon: Icon(Icons.not_interested_rounded, color: Colors.black),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
@@ -81,14 +76,11 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
                     setState(() {
                       circular = true;
                     });
-                    Map<String, String> data = {
-                      'descripcion': descripcionCtrl.text
-                    };
-                    print(descripcionCtrl);
-                    var response =
-                        await networkHandler.patch('/usuarios/updateDes', data);
-                    if (response.statusCode == 200 ||
-                        response.statusCode == 201) {
+                    var imageResponse = await networkHandler.patchImage3(
+                        '/login/update', _imageFile.path);
+                    print(_imageFile.path);
+                    print(imageResponse.statusCode);
+                    if (imageResponse.statusCode == 200) {
                       setState(() {
                         circular = false;
                       });
@@ -112,49 +104,35 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
       child: Stack(
         children: <Widget>[
           CircleAvatar(
-            radius: 50.0,
+            radius: 70.0,
             backgroundImage: _imageFile == null
                 ? AssetImage('assets/user-logo.png')
                 : FileImage(File(_imageFile.path)),
           ),
-          // Positioned(
-          //     bottom: 20.0,
-          //     right: 11.0,
-          //     child: InkWell(
-          //       onTap: () {
-          //         showModalBottomSheet(
-          //           context: context,
-          //           builder: ((builder) => bottomSheet()),
-          //         );
-          //       },
-          //       child: Icon(
-          //         Icons.photo_camera_rounded,
-          //         color: Colors.white,
-          //         size: 28.0,
-          //       ),
-          //     )),
+          Positioned(
+              bottom: 40.0,
+              right: 11.0,
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: ((builder) => bottomSheet()),
+                  );
+                },
+                child: Icon(
+                  Icons.photo_camera_rounded,
+                  color: Colors.white,
+                  size: 34.0,
+                ),
+              )),
         ],
       ),
     );
   }
 
-  Widget _cambiarFoto() {
-    return TextButton(
-        onPressed: () {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => PhotoProfile()));
-          });
-        },
-        child: Text(
-          'Cambiar foto de perfil',
-          style: TextStyle(color: Colors.black),
-        ));
-  }
-
   Widget _crearAbout() {
     return TextField(
-      controller: descripcionCtrl,
+      controller: aboutCtrl,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(labelText: 'Escribe tu descripción'),
     );

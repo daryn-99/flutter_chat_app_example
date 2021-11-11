@@ -120,11 +120,18 @@ class _AllUsersState extends State<AllUsers> {
                     onPressed: () {
                       usuarioService.deleteUser(usuario.uid).then((user) {
                         _refreshController.refreshCompleted();
-                        if (user.uid.isEmpty) {
-                          setState(() {});
-                          Navigator.pop(context);
-                        }
+                        mostrarAlerta(context, "Acción realizada con éxito",
+                            "Usuario eliminado");
+
+                        //Navigator.pop(context);
+                        //_refreshController.refreshCompleted();
+                        // if (user.uid.isEmpty) {
+                        //   setState(() {});
+                        //   Navigator.pop(context);
+                        // }
                       });
+
+                      Navigator.pop(context);
                     },
                     child: Text(
                       "Eliminar",

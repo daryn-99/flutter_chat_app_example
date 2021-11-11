@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void elState() {
-    fetchDataProfile();
+    //fetchDataProfile();
   }
 
   void fetchData() async {

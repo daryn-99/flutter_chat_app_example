@@ -63,11 +63,12 @@ class PostContainer extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 6.0),
                     child:
                         Image(image: AuthService().getImage(post.coverImage)))
-                : const SizedBox.shrink(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: postStats(context),
-            ),
+                :
+                //const SizedBox.shrink(),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: postStats(context),
+                  ),
           ],
         ),
       ),

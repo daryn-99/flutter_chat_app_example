@@ -3,12 +3,12 @@ import 'dart:io';
 //Conexion con el servidor
 class Environment {
   static String apiUrl = Platform.isWindows
-      ? 'http://192.168.80.38:3000/api'
-      : 'http://192.168.80.38:3000/api';
+      ? 'https://reconet.recoroatan.com/api'
+      : 'https://reconet.recoroatan.com/api';
   static String socketUrl = Platform.isAndroid
-      ? 'http://192.168.80.38:3000'
-      : 'http://192.168.80.38:3000';
+      ? 'https://reconet.recoroatan.com/'
+      : 'https://reconet.recoroatan.com/';
   static String pcUrl = Platform.isWindows
-      ? 'http://192.168.80.38:3000'
-      : 'http://192.168.80.38:3000';
+      ? 'https://reconet.recoroatan.com/'
+      : 'https://reconet.recoroatan.com/';
 }

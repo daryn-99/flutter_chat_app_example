@@ -17,8 +17,8 @@ class BotonAzul extends StatelessWidget {
       shape: StadiumBorder(),
       onPressed: this.onPressed,
       child: Container(
-        width: double.infinity,
-        height: 55,
+        width: 180,
+        height: 30,
         child: Center(
           child: Text(this.text,
               style: TextStyle(color: Colors.white, fontSize: 17)),

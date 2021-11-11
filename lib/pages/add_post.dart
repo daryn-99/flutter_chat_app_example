@@ -47,16 +47,22 @@ class _AddBlogState extends State<AddBlog> {
             }),
         actions: <Widget>[
           TextButton(
+            //TODO: Poner un await
             onPressed: () {
-              if (_imageFile.path != null &&
-                  _globalkey.currentState.validate()) {
-                showModalBottomSheet(
-                  context: context,
-                  builder: ((builder) => OverlayCard(
-                      imagefile: _imageFile, title: titleCtrl.text)),
-                );
-              } else {
-                mostrarAlerta(context, 'Para tener una previsualización',
+              try {
+                if (_imageFile.path != null &&
+                    _globalkey.currentState.validate()) {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: ((builder) => OverlayCard(
+                        imagefile: _imageFile, title: titleCtrl.text)),
+                  );
+                } else {
+                  mostrarAlerta(context, 'Para tener una previsualización',
+                      'Primero adjunte una imagen');
+                }
+              } catch (e) {
+                return mostrarAlerta(context, 'Para tener una previsualización',
                     'Primero adjunte una imagen');
               }
             },
@@ -128,36 +134,44 @@ class _AddBlogState extends State<AddBlog> {
   Widget addButton(PostService postService) {
     return InkWell(
       onTap: () async {
-        if (titleCtrl != null && _globalkey.currentState.validate()) {
-          Map<String, String> addBlogModel = {'title': titleCtrl.text};
-          print(titleCtrl);
-          //Post addBlogModel = Post(title: titleCtrl.text);
-          var response = await networkHandler.post1('/post/new', addBlogModel);
-          print(response.body);
-          print(response.statusCode);
-          if (response.statusCode == 403) {
-            mostrarAlerta(context, 'Permiso denegado',
-                'Requiere permisos de Gerente o Administrador');
-          }
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            final id = json.decode(response.body)["data"];
-            //if (_imageFile.path != null) {
-            var imageResponse = await networkHandler.patchImage(
-                '/post/updateImg/$id', _imageFile.path);
-            print(imageResponse.statusCode);
-            if (imageResponse.statusCode == 403) {
+        // if (titleCtrl != "") {
+        //   mostrarAlerta(context, "No puede ir vacio", "Papo");
+        // }
+        try {
+          if (titleCtrl != null && _globalkey.currentState.validate()) {
+            Map<String, String> addBlogModel = {'title': titleCtrl.text};
+            print(titleCtrl);
+            //Post addBlogModel = Post(title: titleCtrl.text);
+            var response =
+                await networkHandler.post1('/post/new', addBlogModel);
+            print(response.body);
+            print(response.statusCode);
+            if (response.statusCode == 403) {
               mostrarAlerta(context, 'Permiso denegado',
                   'Requiere permisos de Gerente o Administrador');
             }
-            if (imageResponse.statusCode == 200 ||
-                imageResponse.statusCode == 201) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                  (route) => false);
+            if (response.statusCode == 200 || response.statusCode == 201) {
+              final id = json.decode(response.body)["data"];
+              //if (_imageFile.path != null) {
+              var imageResponse = await networkHandler.patchImage(
+                  '/post/updateImg/$id', _imageFile.path);
+              print(imageResponse.statusCode);
+              if (imageResponse.statusCode == 403) {
+                mostrarAlerta(context, 'Permiso denegado',
+                    'Requiere permisos de Gerente o Administrador');
+              }
+              if (imageResponse.statusCode == 200 ||
+                  imageResponse.statusCode == 201) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                    (route) => false);
+              }
+              //}
             }
-            //}
           }
+        } catch (e) {
+          return e;
         }
       },
       child: Center(
