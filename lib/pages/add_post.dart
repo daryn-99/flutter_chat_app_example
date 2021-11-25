@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
+import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/post_service.dart';
 import 'package:chat/widgets/overlay_card.dart';
@@ -27,6 +28,7 @@ class _AddBlogState extends State<AddBlog> {
   ImagePicker _picker = ImagePicker();
   PickedFile _imageFile;
   IconData iconphoto = Icons.attach_file;
+  IconData iconsss = Icons.photo_camera;
 
   @override
   Widget build(BuildContext context) {
@@ -106,26 +108,33 @@ class _AddBlogState extends State<AddBlog> {
           //mostrarAlerta(context, "Accion realizada con exito", "a");
         },
         decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Palette.colorBlue,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Palette.colorBlue,
+              ),
             ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Palette.scaffold,
-              width: 2,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Palette.scaffold,
+                width: 2,
+              ),
             ),
-          ),
-          labelText: "Agrega un archivo y una descripción",
-          prefixIcon: IconButton(
-            icon: Icon(
-              iconphoto,
-              color: Palette.colorBlue,
+            labelText: "Agrega un archivo y una descripción",
+            labelStyle: TextStyle(color: Colors.black, fontSize: 18),
+            prefixIcon: IconButton(
+              icon: Icon(
+                iconphoto,
+                color: Palette.colorBlue,
+              ),
+              onPressed: takeCoverPhoto,
             ),
-            onPressed: takeCoverPhoto,
-          ),
-        ),
+            icon: IconButton(
+              icon: Icon(
+                iconsss,
+                color: Palette.colorBlue,
+              ),
+              onPressed: takePhoto,
+            )),
         maxLines: null,
       ),
     );
@@ -138,14 +147,23 @@ class _AddBlogState extends State<AddBlog> {
         //   mostrarAlerta(context, "No puede ir vacio", "Papo");
         // }
         try {
-          if (titleCtrl != null && _globalkey.currentState.validate()) {
+          if (_imageFile.path != null && _globalkey.currentState.validate()) {
             Map<String, String> addBlogModel = {'title': titleCtrl.text};
             print(titleCtrl);
             //Post addBlogModel = Post(title: titleCtrl.text);
+
             var response =
                 await networkHandler.post1('/post/new', addBlogModel);
             print(response.body);
             print(response.statusCode);
+            if (response.statusCode == 200 || response.statusCode == 201) {
+              mostrarAlerta(context, 'Post realizado', 'Exito al postear');
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => NavScreen()),
+                  (route) => false);
+            }
+
             if (response.statusCode == 403) {
               mostrarAlerta(context, 'Permiso denegado',
                   'Requiere permisos de Gerente o Administrador');
@@ -156,22 +174,24 @@ class _AddBlogState extends State<AddBlog> {
               var imageResponse = await networkHandler.patchImage(
                   '/post/updateImg/$id', _imageFile.path);
               print(imageResponse.statusCode);
+              if (imageResponse.statusCode == 404) {
+                mostrarAlerta(context, 'Imagen vacia', 'Adjunte una imagen');
+              }
               if (imageResponse.statusCode == 403) {
                 mostrarAlerta(context, 'Permiso denegado',
                     'Requiere permisos de Gerente o Administrador');
               }
-              if (imageResponse.statusCode == 200 ||
-                  imageResponse.statusCode == 201) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                    (route) => false);
+              if (imageResponse.statusCode == 203) {
+                mostrarAlerta(
+                    context, 'Post incompleto', 'Error al cargar la imagen');
               }
+
               //}
             }
           }
         } catch (e) {
-          return e;
+          return mostrarAlerta(context, 'Ups!',
+              'Debes de adjuntar una imagen para hacer un post');
         }
       },
       child: Center(
@@ -197,6 +217,15 @@ class _AddBlogState extends State<AddBlog> {
     setState(() {
       _imageFile = coverPhoto;
       iconphoto = Icons.check_box;
+    });
+  }
+
+  void takePhoto() async {
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.camera,
+    );
+    setState(() {
+      _imageFile = pickedFile;
     });
   }
 }

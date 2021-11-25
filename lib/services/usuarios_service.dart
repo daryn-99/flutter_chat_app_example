@@ -63,7 +63,7 @@ class UsuariosService {
     print(userId);
     var body = json.encode(Usuario());
     print(body);
-    final response = await http.patch(
+    final response = await http.put(
         Uri.parse('${Environment.apiUrl}/usuarios/updateUser/$userId'),
         headers: {
           'Content-Type': 'application/json',

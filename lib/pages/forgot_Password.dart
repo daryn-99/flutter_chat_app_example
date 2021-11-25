@@ -54,11 +54,11 @@ class __FormState extends State<_Form> {
       child: Column(
         children: <Widget>[
           CustomInput(
-            icon: Icons.mail_outline,
-            placeholder: 'Correo',
-            keyboardType: TextInputType.emailAddress,
-            textController: emailCtrl,
-          ),
+              icon: Icons.mail_outline,
+              labelT: 'Correo',
+              keyboardType: TextInputType.emailAddress,
+              textController: emailCtrl,
+              icontwo: null),
           // CustomInput(
           //   icon: Icons.lock_outline,
           //   placeholder: 'Contraseña',
@@ -72,7 +72,7 @@ class __FormState extends State<_Form> {
           //   isPassword: true,
           // ),
           BotonAzul(
-              text: 'Actualizar',
+              text: 'Enviar',
               onPressed: () async {
                 Map<String, String> data = {"email": emailCtrl.text};
                 var response =
@@ -80,6 +80,9 @@ class __FormState extends State<_Form> {
                 print(response.body);
                 if (response.statusCode == 200) {
                   Navigator.restorablePushReplacementNamed(context, 'login');
+                } else {
+                  mostrarAlerta(context, 'Verificación incorrecta',
+                      'Verificar credenciales');
                 }
                 if (response.statusCode == 204) {
                   mostrarAlerta(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
@@ -8,6 +9,8 @@ import 'package:chat/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
+import 'nav_screen.dart';
 
 class PhotoProfile extends StatefulWidget {
   @override
@@ -37,7 +40,7 @@ class _PhotoProfileState extends State<PhotoProfile> {
             SizedBox(height: 10.0),
             _getAppBar(),
             SizedBox(height: 40.0),
-            imgProfile(context),
+            imgProfile(context, usuario),
             SizedBox(height: 40.0),
             //_crearAbout(),
             SizedBox(height: 40.0),
@@ -80,13 +83,16 @@ class _PhotoProfileState extends State<PhotoProfile> {
                         '/login/update', _imageFile.path);
                     print(_imageFile.path);
                     print(imageResponse.statusCode);
+                    if (imageResponse.statusCode == 403) {
+                      mostrarAlerta(context, 'Permiso denegado',
+                          'Requiere permisos de Gerente o Administrador');
+                    }
                     if (imageResponse.statusCode == 200) {
                       setState(() {
                         circular = false;
                       });
                       Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => ProfiletwoPage()),
+                          MaterialPageRoute(builder: (context) => NavScreen()),
                           (route) => false);
                     } else {
                       setState(() {
@@ -99,14 +105,15 @@ class _PhotoProfileState extends State<PhotoProfile> {
     );
   }
 
-  Widget imgProfile(BuildContext context) {
+  Widget imgProfile(BuildContext context, Usuario usuario) {
     return Center(
       child: Stack(
         children: <Widget>[
           CircleAvatar(
             radius: 70.0,
             backgroundImage: _imageFile == null
-                ? AssetImage('assets/user-logo.png')
+                ? AuthService().getImage(usuario.imgUrl)
+                //AssetImage('assets/user-logo.png')
                 : FileImage(File(_imageFile.path)),
           ),
           Positioned(

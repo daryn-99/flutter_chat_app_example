@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'RECONET',
-        initialRoute: 'loading',
+        initialRoute: 'register',
         color: Colors.white,
         routes: appRoutes,
       ),

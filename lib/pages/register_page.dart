@@ -107,6 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget imgProfile(BuildContext context) {
     return Center(
+      heightFactor: 1.2,
       child: Stack(
         children: <Widget>[
           CircleAvatar(
@@ -202,63 +203,95 @@ class _RegisterPageState extends State<RegisterPage> {
         children: <Widget>[
           CustomInput(
             icon: Icons.person_pin_rounded,
-            placeholder: 'Nombre de usuario',
             keyboardType: TextInputType.text,
             textController: usernameCtrl,
+            labelT: 'Nombre de usuario',
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(context, 'Ayuda',
+                      'Utiliza la primer letra del nombre y el primer apellido');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
-            icon: Icons.perm_identity,
-            placeholder: 'Nombre',
-            keyboardType: TextInputType.text,
-            textController: nameCtrl,
-          ),
+              icon: Icons.perm_identity,
+              labelT: 'Nombre',
+              keyboardType: TextInputType.text,
+              textController: nameCtrl,
+              icontwo: null),
           CustomInput(
-            icon: Icons.account_circle,
-            placeholder: 'Apellido',
-            keyboardType: TextInputType.text,
-            textController: apellidoCtrl,
-          ),
+              icon: Icons.account_circle,
+              labelT: 'Apellido',
+              keyboardType: TextInputType.text,
+              textController: apellidoCtrl,
+              icontwo: null),
           CustomInput(
             icon: Icons.phone,
-            placeholder: 'Numero de celular',
+            labelT: 'Numero de celular',
             keyboardType: TextInputType.phone,
             textController: numerotelCtrl,
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(
+                      context, 'Ayuda', 'No agregar guiones, solo números');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
             icon: Icons.cake,
-            placeholder: 'Fecha de nacimiento',
+            labelT: 'Fecha de nacimiento',
             keyboardType: TextInputType.text,
             textController: birthCtrl,
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(
+                      context, 'Ayuda', 'Utilizar el formato Año/Mes/Dia');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
             icon: Icons.android_sharp,
-            placeholder: 'Rol en la aplicación',
+            labelT: 'Rol en la aplicación',
             keyboardType: TextInputType.text,
             textController: roleCtrl,
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(context, 'Ayuda',
+                      'Existen tres roles: Administrador, Gerente y Empleado');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
             icon: Icons.engineering,
-            placeholder: 'Cargo en la empresa',
+            labelT: 'Cargo en la empresa',
             keyboardType: TextInputType.text,
             textController: cargoCtrl,
+            icontwo: null,
           ),
           CustomInput(
             icon: Icons.place,
-            placeholder: 'Area de su cargo',
+            labelT: 'Area de su cargo',
             keyboardType: TextInputType.text,
             textController: areaCtrl,
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(context, 'Ayuda',
+                      'Ejemplos de areas de trabajo: CSA, Medición, Trade Winds, etc');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
-            icon: Icons.mail_outline,
-            placeholder: 'Correo',
-            keyboardType: TextInputType.emailAddress,
-            textController: emailCtrl,
-          ),
+              icon: Icons.mail_outline,
+              labelT: 'Correo',
+              keyboardType: TextInputType.emailAddress,
+              textController: emailCtrl,
+              icontwo: null),
           CustomInput(
             icon: Icons.lock_outline,
-            placeholder: 'Contraseña',
+            labelT: 'Contraseña',
             textController: passCtrl,
             isPassword: true,
+            icontwo: null,
           ),
           BotonAzul(
             text: 'Crear cuenta',
@@ -277,7 +310,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       'email': emailCtrl.text.trim(),
                       'password': passCtrl.text.trim(),
                     };
-                    print(_imageFile.path);
+                    //print(_imageFile.path);
                     print(usernameCtrl);
                     print(nameCtrl);
                     print(apellidoCtrl);
@@ -292,14 +325,24 @@ class _RegisterPageState extends State<RegisterPage> {
                         await authService.post1('/login/new', addUserModel);
                     print(registroOk.body);
                     print(registroOk.statusCode);
+                    if (registroOk.statusCode == 403) {
+                      mostrarAlerta(context, 'Permiso denegado',
+                          'Requiere permisos de Gerente o Administrador');
+                    }
+                    if (registroOk.statusCode == 400 ||
+                        registroOk.statusCode == 404) {
+                      mostrarAlerta(context, 'Advertencia',
+                          'Correo o usuario ya registrado');
+                    }
                     if (registroOk.statusCode == 200 ||
                         registroOk.statusCode == 201) {
                       final _id = json.decode(registroOk.body)["data"];
+                      mostrarAlerta(context, 'Bienvenido',
+                          'Usuario ingresado exitosamente');
                       print(registroOk.body);
                       print(_id);
                       var imageResponse = await authService.patchImage2(
                           '/login/photoProfile/$_id', _imageFile.path);
-
                       print(_imageFile.path);
                       print(imageResponse.statusCode);
                       if (imageResponse.statusCode == 200 ||
@@ -322,6 +365,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       mostrarAlerta(
                           context, 'Registro incorrecto', 'Rellenar campos');
                     }
+
+                    //}
+                    // catch (e) {
+                    //   return mostrarAlerta(context, 'Campos requeridos',
+                    //       'Se deben de rellenar todos los campos');
+                    // }
                   },
           )
         ],

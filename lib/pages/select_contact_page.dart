@@ -36,38 +36,55 @@ class _SelectContactState extends State<SelectContact> {
     return Container(
         child: Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, 'nav_screen');
+          },
+        ),
         title: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Selecciona un contacto',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
-            Text(cantidad.toString(), style: TextStyle(fontSize: 18)),
+            Text(cantidad.toString(),
+                style: TextStyle(fontSize: 18, color: Colors.black)),
           ],
         ),
         actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                size: 26,
-              )),
-          PopupMenuButton<String>(
-            padding: EdgeInsets.all(0),
-            onSelected: (value) {
-              print(value);
-            },
-            itemBuilder: (BuildContext contesxt) {
-              return [
-                PopupMenuItem(
-                  child: Text("Ayuda"),
-                  value: "Ayuda",
-                ),
-              ];
-            },
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Icon(
+          //     Icons.search,
+          //     color: Colors.black,
+          //     size: 26,
+          //   ),
+          // ),
+          // PopupMenuButton<String>(
+          //   padding: EdgeInsets.all(0),
+          //   icon: Icon(
+          //     Icons.more_vert,
+          //     color: Colors.black,
+          //   ),
+          //   onSelected: (value) {
+          //     print(value);
+          //   },
+          //   itemBuilder: (BuildContext contesxt) {
+          //     return [
+          //       PopupMenuItem(
+          //         child: Text("Ayuda"),
+          //         value: "Ayuda",
+          //       ),
+          //     ];
+          //   },
+          // ),
         ],
       ),
       body: SmartRefresher(
@@ -97,8 +114,8 @@ class _SelectContactState extends State<SelectContact> {
       title: Text(usuario.nombre),
       subtitle: Text(usuario.email),
       leading: CircleAvatar(
-        child: Text(usuario.nombre.substring(0, 2)),
-        backgroundColor: Colors.blue[100],
+        backgroundImage: AuthService().getImage(usuario.imgUrl),
+        //backgroundColor: Colors.blue[100],
       ),
       onTap: () {
         final chatService = Provider.of<ChatService>(context, listen: false);

@@ -29,4 +29,29 @@ class PostService with ChangeNotifier {
       return respBody['msg'];
     }
   }
+
+  Future<Post> deletePost(String postId) async {
+    print(postId);
+    final response = await http.delete(
+      Uri.parse('${Environment.apiUrl}/post/$postId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken()
+      },
+    );
+    if (response.statusCode == 403) {
+      print('a'); //Usuario.fromJson(jsonDecode(response.body)['usuario']);
+    } else {
+      print(response.statusCode);
+      // throw Exception(
+      //     'No tiene los permisos requeridos para completar la acción');
+    }
+
+    if (response.statusCode == 200) {
+      print('a'); //Usuario.fromJson(jsonDecode(response.body)['usuario']);
+    } else {
+      print(response.statusCode);
+      print('adfff');
+    }
+  }
 }

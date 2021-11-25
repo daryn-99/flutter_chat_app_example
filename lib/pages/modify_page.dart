@@ -29,13 +29,13 @@ class _ModifyPageState extends State<ModifyPage> {
   TextEditingController cargoCtrl;
   TextEditingController areaCtrl;
   TextEditingController emailCtrl;
-
+  String id;
   AuthService networkHandler = AuthService();
 
   @override
   void initState() {
     Usuario u = widget.usuario;
-    idCtrl = TextEditingController(text: u.uid);
+    id = u.uid;
     usernameCtrl = TextEditingController(text: u.username);
     nameCtrl = TextEditingController(text: u.nombre);
     apellidoCtrl = TextEditingController(text: u.apellido);
@@ -95,7 +95,7 @@ class _ModifyPageState extends State<ModifyPage> {
     final authService = Provider.of<AuthService>(context);
     final socketService = Provider.of<SocketService>(context);
     final usuarioService = new UsuariosService();
-    Usuario usuario;
+    //Usuario usuario;
 
     return Container(
       margin: EdgeInsets.only(top: 10),
@@ -103,59 +103,78 @@ class _ModifyPageState extends State<ModifyPage> {
       child: Column(
         children: <Widget>[
           CustomInput(
-            icon: Icons.format_list_numbered_outlined,
-            placeholder: 'Id de usuario',
-            keyboardType: TextInputType.text,
-            textController: idCtrl,
-          ),
-          CustomInput(
             icon: Icons.person_pin_rounded,
-            placeholder: 'Nombre de usuario',
             keyboardType: TextInputType.text,
             textController: usernameCtrl,
+            labelT: 'Nombre de usuario',
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(context, 'Ayuda',
+                      'Utiliza la primer letra del nombre y el primer apellido');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
-            icon: Icons.perm_identity,
-            placeholder: 'Nombre',
-            keyboardType: TextInputType.text,
-            textController: nameCtrl,
-          ),
+              icon: Icons.perm_identity,
+              labelT: 'Nombre',
+              keyboardType: TextInputType.text,
+              textController: nameCtrl,
+              icontwo: null),
           CustomInput(
-            icon: Icons.account_circle,
-            placeholder: 'Apellido',
-            keyboardType: TextInputType.text,
-            textController: apellidoCtrl,
-          ),
+              icon: Icons.account_circle,
+              labelT: 'Apellido',
+              keyboardType: TextInputType.text,
+              textController: apellidoCtrl,
+              icontwo: null),
           CustomInput(
             icon: Icons.phone,
-            placeholder: 'Numero de celular',
+            labelT: 'Numero de celular',
             keyboardType: TextInputType.phone,
             textController: numerotelCtrl,
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(
+                      context, 'Ayuda', 'No agregar guiones, solo números');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
             icon: Icons.cake,
-            placeholder: 'Fecha de nacimiento',
+            labelT: 'Fecha de nacimiento',
             keyboardType: TextInputType.text,
             textController: birthCtrl,
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(
+                      context, 'Ayuda', 'Utilizar el formato Año/Mes/Dia');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
             icon: Icons.engineering,
-            placeholder: 'Cargo en la empresa',
+            labelT: 'Cargo en la empresa',
             keyboardType: TextInputType.text,
             textController: cargoCtrl,
+            icontwo: null,
           ),
           CustomInput(
             icon: Icons.place,
-            placeholder: 'Area de su cargo',
+            labelT: 'Area de su cargo',
             keyboardType: TextInputType.text,
             textController: areaCtrl,
+            icontwo: IconButton(
+                onPressed: () {
+                  mostrarAlerta(context, 'Ayuda',
+                      'Ejemplos de areas de trabajo: CSA, Medición, Trade Winds, etc');
+                },
+                icon: Icon(Icons.error_outline_sharp)),
           ),
           CustomInput(
-            icon: Icons.mail_outline,
-            placeholder: 'Correo',
-            keyboardType: TextInputType.emailAddress,
-            textController: emailCtrl,
-          ),
+              icon: Icons.mail_outline,
+              labelT: 'Correo',
+              keyboardType: TextInputType.emailAddress,
+              textController: emailCtrl,
+              icontwo: null),
           BotonAzul(
             text: 'Actualizar usuario',
             onPressed: () async {
@@ -177,8 +196,6 @@ class _ModifyPageState extends State<ModifyPage> {
               print(cargoCtrl);
               print(areaCtrl);
               print(emailCtrl);
-              final id = idCtrl;
-              print(id);
               var registroOk = await authService.patch(
                   '/usuarios/updateUser/$id', addUserModel);
               print(registroOk.body);
@@ -186,12 +203,12 @@ class _ModifyPageState extends State<ModifyPage> {
               if (registroOk.statusCode == 200 ||
                   registroOk.statusCode == 201) {
                 //socketService.connect();
-                mostrarAlerta(
+                await mostrarAlerta(
                     context, 'Exito', 'Usuario actualizado exitosamente');
                 Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (_) => AllUsers()));
               } else {
-                mostrarAlerta(
+                await mostrarAlerta(
                     context, 'Registro incorrecto', 'Rellenar campos');
               }
             },

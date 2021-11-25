@@ -12,6 +12,8 @@ mostrarAlerta(BuildContext context, String titulo, String subtitulo) {
         builder: (_) => AlertDialog(
               title: Text(titulo),
               content: Text(subtitulo),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0)),
               actions: <Widget>[
                 MaterialButton(
                     child: Text('Ok'),

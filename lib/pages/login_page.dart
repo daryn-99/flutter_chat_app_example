@@ -55,15 +55,17 @@ class __FormState extends State<_Form> {
         children: <Widget>[
           CustomInput(
             icon: Icons.mail_outline,
-            placeholder: 'Correo',
+            labelT: 'Correo',
             keyboardType: TextInputType.emailAddress,
             textController: emailCtrl,
+            icontwo: null,
           ),
           CustomInput(
             icon: Icons.lock_outline,
-            placeholder: 'Contraseña',
+            labelT: 'Contraseña',
             textController: passCtrl,
             isPassword: true,
+            icontwo: null,
           ),
           BotonAzul(
             text: 'Ingrese',

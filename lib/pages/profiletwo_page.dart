@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProfiletwoPage extends StatefulWidget {
   @override
@@ -22,12 +23,15 @@ class ProfiletwoPage extends StatefulWidget {
 }
 
 class _ProfiletwoPageState extends State<ProfiletwoPage> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   final usuarioService = new UsuariosService();
   bool circular = true;
   AuthService networkHandler = AuthService();
   ProfilegetService getService = ProfilegetService();
   Profile profile;
   List<Usuario> usuario;
+  final user = new Usuario();
 
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -36,43 +40,15 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
   void initState() {
     super.initState();
     //this._cargarUsuarios();
-
-    //_cargarProfiles();
     //fetchData();
   }
 
-  // void fetchData() async {
-  //   final resp = await networkHandler.get('/profile/get');
-
-  //   setState(() {
-  //     profile = Profile.fromJson(resp['data']);
-  //     circular = false;
-  //   });
-  //   await Future.delayed(Duration(milliseconds: 1000));
-
-  //   // headers: {
-  //   //   'Content-Type': 'application/json',
-  //   //   'x-token': await AuthService.getToken()
-  //   // });
-  // }
-
   final profilegetService = new ProfilegetService();
-
-  // @override
-  // void initState() {
-  //   this._cargarProfiles();
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final usuario = authService.usuario;
-
-    // final profilegetService = Provider.of<ProfilegetService>(context);
-    // final profile = profilegetService.profile;
-
-    //print(profile);
 
     return Scaffold(
         body: circular
@@ -84,23 +60,16 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
                       SizedBox(height: 10.0),
                       _posterTitulo(context, usuario),
                       SizedBox(height: 10.0),
-                      _botonAdd(),
+                      _botonAdd(context, user),
                       SizedBox(height: 40.0),
                       showProfile(context, usuario),
                       //_mostrarPerfil(),
                       //_cargarProfiles()
                     ]),
-                  )
+                  ),
                 ],
               )
             : Center(child: CircularProgressIndicator()));
-  }
-
-  _cargarProfiles() async {
-    profile = await profilegetService.getProfiles();
-
-    setState(() {});
-    await Future.delayed(Duration(milliseconds: 1000));
   }
 
   Widget page = CircularProgressIndicator();
@@ -165,18 +134,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
     );
   }
 
-  Widget _mostrarPerfil() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
-        profile.about,
-        textAlign: TextAlign.justify,
-        style: Theme.of(context).textTheme.subtitle1,
-      ),
-    );
-  }
-
-  Widget _botonAdd() {
+  Widget _botonAdd(BuildContext context, Usuario usuario) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 50),
         margin: EdgeInsets.only(left: 100),
@@ -208,10 +166,10 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
     );
   }
 
-  // _cargarUsuarios() async {
-  //   this.usuario = await usuarioService.getUsuarios();
+  _cargarUsuarios() async {
+    this.usuario = await usuarioService.getUsuarios();
 
-  //   setState(() {});
-  //   await Future.delayed(Duration(milliseconds: 1000));
-  // }
+    setState(() {});
+    await Future.delayed(Duration(milliseconds: 1000));
+  }
 }

@@ -4,25 +4,51 @@ import 'package:chat/config/palette.dart';
 import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/usuario.dart';
 import 'package:chat/pages/home_page.dart';
+import 'package:chat/pages/nav_screen.dart';
 import 'package:chat/pages/photo_profile.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/profile_service.dart';
 import 'package:chat/services/sockets_service.dart';
+import 'package:chat/services/usuarios_service.dart';
 import 'package:chat/widgets/default_img.dart';
+import 'package:chat/widgets/input_two.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileEditingPage extends StatefulWidget {
+  // final Usuario usuario;
+  // ProfileEditingPage(this.usuario);
   @override
   _ProfileEditingPageState createState() => _ProfileEditingPageState();
 }
 
 class _ProfileEditingPageState extends State<ProfileEditingPage> {
+  final usuarioService = new UsuariosService();
   TextEditingController descripcionCtrl = TextEditingController();
+  // TextEditingController nombreCtrl = TextEditingController();
+  // TextEditingController cargoCtrl = TextEditingController();
+  // TextEditingController areaCtrl = TextEditingController();
+  // TextEditingController birthCtrl = TextEditingController();
+
+  List<Usuario> usuarios = [];
+
   AuthService networkHandler = AuthService();
   bool circular = false;
+
+  // @override
+  // void initState() {
+  //   _cargarUsuarios();
+  //   Usuario u = widget.usuario;
+  //   descripcionCtrl = TextEditingController(text: u.descripcion);
+  //   nombreCtrl = TextEditingController(text: u.nombre);
+  //   cargoCtrl = TextEditingController(text: u.cargo);
+  //   areaCtrl = TextEditingController(text: u.area);
+  //   birthCtrl = TextEditingController(text: u.birth);
+
+  //   super.initState();
+  // }
 
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -42,11 +68,20 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
             SizedBox(height: 10.0),
             _getAppBar(),
             SizedBox(height: 40.0),
-            imgProfile(context),
+            imgProfile(context, usuario),
             _cambiarFoto(),
             SizedBox(height: 40.0),
-            _crearAbout(),
-            SizedBox(height: 40.0),
+            InputTwo(
+                placeholder: 'Ingresa tu descripcion',
+                textController: descripcionCtrl),
+            // InputTwo(
+            //     placeholder: 'Ingresa tu nombre', textController: nombreCtrl),
+            // InputTwo(
+            //     placeholder: 'Ingresa tu cargo', textController: cargoCtrl),
+            // InputTwo(placeholder: 'Ingresa tu area', textController: areaCtrl),
+            // InputTwo(
+            //     placeholder: 'Ingresa tu año de nacimiento',
+            //     textController: birthCtrl)
           ]),
         )
       ],
@@ -82,20 +117,27 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
                       circular = true;
                     });
                     Map<String, String> data = {
-                      'descripcion': descripcionCtrl.text
+                      'descripcion': descripcionCtrl.text.trim(),
+                      // 'nombre': nombreCtrl.text.trim(),
+                      // 'cargo': cargoCtrl.text.trim(),
+                      // 'area': areaCtrl.text.trim(),
+                      // 'birth': birthCtrl.text.trim(),
                     };
                     print(descripcionCtrl);
-                    var response =
-                        await networkHandler.patch('/usuarios/updateDes', data);
+                    // print(nombreCtrl);
+                    // print(cargoCtrl);
+                    // print(areaCtrl);
+                    // print(birthCtrl);
+                    var response = await networkHandler.patchDesc(
+                        '/usuarios/updateDes', data);
+                    print(response.statusCode);
                     if (response.statusCode == 200 ||
                         response.statusCode == 201) {
                       setState(() {
                         circular = false;
                       });
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => ProfiletwoPage()),
-                          (route) => false);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (_) => NavScreen()));
                     } else {
                       setState(() {
                         circular = false;
@@ -107,14 +149,15 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
     );
   }
 
-  Widget imgProfile(BuildContext context) {
+  Widget imgProfile(BuildContext context, Usuario usuario) {
     return Center(
       child: Stack(
         children: <Widget>[
           CircleAvatar(
             radius: 50.0,
             backgroundImage: _imageFile == null
-                ? AssetImage('assets/user-logo.png')
+                ? AuthService().getImage(usuario.imgUrl)
+                //AssetImage('assets/user-logo.png')
                 : FileImage(File(_imageFile.path)),
           ),
           // Positioned(
@@ -150,14 +193,6 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
           'Cambiar foto de perfil',
           style: TextStyle(color: Colors.black),
         ));
-  }
-
-  Widget _crearAbout() {
-    return TextField(
-      controller: descripcionCtrl,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(labelText: 'Escribe tu descripción'),
-    );
   }
 
   Widget bottomSheet() {
@@ -213,5 +248,13 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
     setState(() {
       _imageFile = pickedFile;
     });
+  }
+
+  _cargarUsuarios() async {
+    this.usuarios = await usuarioService.getAllUsuarios();
+
+    setState(() {});
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
   }
 }

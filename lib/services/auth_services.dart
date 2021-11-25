@@ -105,6 +105,19 @@ class AuthService with ChangeNotifier {
     url = formater(url);
     log.d(body);
     final uri = Uri.parse('$url');
+    var response = await http.put(
+      uri,
+      headers: {"Content-type": "application/json", 'x-token': token},
+      body: json.encode(body),
+    );
+    return response;
+  }
+
+  Future<http.Response> patchDesc(String url, Map<String, String> body) async {
+    String token = await _storage.read(key: "token");
+    url = formater(url);
+    log.d(body);
+    final uri = Uri.parse('$url');
     var response = await http.patch(
       uri,
       headers: {"Content-type": "application/json", 'x-token': token},
@@ -177,15 +190,14 @@ class AuthService with ChangeNotifier {
     return response;
   }
 
-  Future<http.Response> deleter(String url, var body) async {
+  Future<http.Response> deleter(String url) async {
     final token = await _storage.read(key: 'token');
     url = formater(url);
-    log.d(body);
+    ;
     final uri = Uri.parse('$url');
     var response = await http.delete(
       uri,
       headers: {"Content-type": "application/json", 'x-token': token},
-      body: json.encode(body),
     );
     return response;
   }

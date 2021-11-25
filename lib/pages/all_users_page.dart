@@ -43,7 +43,7 @@ class _AllUsersState extends State<AllUsers> {
     final authService = Provider.of<AuthService>(context);
     final socketService = Provider.of<SocketService>(context);
 
-    final usuario = authService.usuario;
+    final usuarios = authService.usuario;
 
     return Scaffold(
       appBar: AppBar(
@@ -63,19 +63,19 @@ class _AllUsersState extends State<AllUsers> {
             //Navigator.pushReplacementNamed(context, 'menu_page');
           },
         ),
-        actions: [
-          CircleButton(
-              icon: Icons.search,
-              iconSize: 30.0,
-              onPressed: () => print('Buscar'))
-        ],
+        // actions: [
+        //   CircleButton(
+        //       icon: Icons.search,
+        //       iconSize: 30.0,
+        //       onPressed: () => print('Buscar'))
+        // ],
       ),
       body: SmartRefresher(
         controller: _refreshController,
         enablePullDown: true,
         onRefresh: _cargarUsuarios,
         header: WaterDropHeader(
-          complete: Icon(Icons.check, color: Colors.blue[400]),
+          complete: Icon(Icons.check, color: Palette.scaffold),
           waterDropColor: Palette.colorBlue,
         ),
         child: _listViewUsuarios(),
@@ -94,7 +94,7 @@ class _AllUsersState extends State<AllUsers> {
 
   ListTile _usuarioListTile(Usuario usuario) {
     return ListTile(
-      title: Text(usuario.nombre + "" + usuario.apellido),
+      title: Text(usuario.nombre + " " + usuario.apellido),
       subtitle: Text(usuario.email),
       onTap: () {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -150,7 +150,7 @@ class _AllUsersState extends State<AllUsers> {
   }
 
   _cargarUsuarios() async {
-    this.usuarios = await usuarioService.getUsuarios();
+    this.usuarios = await usuarioService.getAllUsuarios();
 
     setState(() {});
     //await Future.delayed(Duration(milliseconds: 1000));

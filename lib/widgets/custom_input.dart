@@ -1,8 +1,11 @@
+import 'package:chat/config/palette.dart';
 import 'package:flutter/material.dart';
 
 class CustomInput extends StatelessWidget {
   final IconData icon;
-  final String placeholder;
+  final IconButton icontwo;
+  //final String helperT;
+  final String labelT;
   final TextEditingController textController;
   final TextInputType keyboardType;
   final bool isPassword;
@@ -10,8 +13,10 @@ class CustomInput extends StatelessWidget {
   const CustomInput(
       {Key key,
       @required this.icon,
-      @required this.placeholder,
       @required this.textController,
+      @required this.icontwo,
+      //@required this.helperT,
+      @required this.labelT,
       this.keyboardType = TextInputType.text,
       this.isPassword = false})
       : super(key: key);
@@ -31,16 +36,22 @@ class CustomInput extends StatelessWidget {
                 blurRadius: 5)
           ]),
       child: TextField(
+        textCapitalization: TextCapitalization.words,
+        cursorColor: Theme.of(context).backgroundColor,
         controller: this.textController,
         autocorrect: false,
         keyboardType: this.keyboardType,
         obscureText: this.isPassword,
         decoration: InputDecoration(
-          prefixIcon: Icon(this.icon),
-          focusedBorder: InputBorder.none,
-          border: InputBorder.none,
-          hintText: this.placeholder,
-        ),
+            prefixIcon: Icon(
+              this.icon,
+              color: Colors.grey,
+            ),
+            labelText: this.labelT,
+            labelStyle: TextStyle(color: Colors.grey[700]),
+            suffixIcon: this.icontwo,
+            focusedBorder: InputBorder.none,
+            border: InputBorder.none),
       ),
     );
   }

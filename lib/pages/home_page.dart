@@ -71,20 +71,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // void fetchRole() async {
-  //   final resp = await networkHandler.get('/role/getrole');
-  //   superModelRole = SuperModelRole.fromJson(resp);
-  //   //this.role = await roleService.getRoles();
-
-  //   setState(() {
-  //     //role = Role.fromJson(resp['info']);
-  //     info = superModelRole.info;
-
-  //     circular = false;
-  //   });
-  //   //await Future.delayed(Duration(milliseconds: 1000));
-  // }
-
   void fetchDataProfile() async {
     final resp = await networkHandler.get('/profile/get');
     //superModelProfile = SuperModelProfile.fromJson(resp);
@@ -202,6 +188,7 @@ class _HomePageState extends State<HomePage> {
                       letterSpacing: -1.2,
                     ),
                   ),
+                  iconTheme: IconThemeData(color: Palette.colorBlue),
                   centerTitle: false,
                   floating: true,
                   // actions: [

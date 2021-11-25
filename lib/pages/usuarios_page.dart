@@ -107,9 +107,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
 
   ListTile _usuarioListTile(Usuario usuario) {
     return ListTile(
-      title: Text(usuario.nombre),
-      subtitle: Text(usuario
-          .apellido), //TODO:aqui debo de mostrar el ultimo mensaje enviado
+      title: Text(usuario.nombre + " " + usuario.apellido),
+      subtitle: Text(
+          usuario.email), //TODO:aqui debo de mostrar el ultimo mensaje enviado
       leading: CircleAvatar(
         backgroundImage: AuthService().getImage(usuario.imgUrl),
         // child: Text(usuario.nombre.substring(0, 2)),

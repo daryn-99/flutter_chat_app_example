@@ -1,12 +1,15 @@
 import 'package:chat/config/palette.dart';
+import 'package:chat/helpers/motrar_alerta.dart';
 import 'package:chat/models/ipost_models.dart';
 import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/post_service.dart';
 import 'package:chat/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class PostContainer extends StatelessWidget {
-  const PostContainer({
+  final postService = new PostService();
+  PostContainer({
     Key key,
     @required this.post,
     // @required this.usuario,
@@ -40,8 +43,39 @@ class PostContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   //postHeader(context),
-                  const SizedBox(height: 20.0),
+                  //const SizedBox(height: 20.0),
                   Text(post.title),
+                  PopupMenuButton<String>(
+                    padding: EdgeInsets.only(
+                      left: 350,
+                    ),
+                    elevation: 25,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.black,
+                    ),
+                    onSelected: (value) {
+                      print(value);
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextButton(
+                            onPressed: () {
+                              removePost(context, post);
+                            },
+                            child: Text(
+                              'Eliminar',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ),
+                      ];
+                    },
+                  ),
                   post.coverImage != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),
@@ -73,6 +107,38 @@ class PostContainer extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  removePost(BuildContext context, Post post) {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              title: Text("Eliminar Post"),
+              content: Text("Esta seguro de eliminar la publicación"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      postService.deletePost(post.id).then((posts) {
+                        mostrarAlerta(context, "Acción realizada con éxito",
+                            "Post eliminado");
+                      });
+
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Eliminar",
+                      style: TextStyle(color: Colors.red),
+                    )),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Cancelar",
+                      style: TextStyle(color: Colors.blue),
+                    ))
+              ],
+            ));
   }
 
   // Widget postHeader(BuildContext context) {
@@ -138,7 +204,7 @@ class PostContainer extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const Icon(
-                Icons.lightbulb_outline_sharp,
+                Icons.bolt_outlined,
                 size: 10.0,
                 color: Colors.white,
               ),
@@ -165,7 +231,7 @@ class PostContainer extends StatelessWidget {
           children: [
             _PostButton(
               icon: Icon(
-                Icons.lightbulb_outline_sharp,
+                Icons.bolt_rounded,
                 color: Palette.colorBlue,
                 size: 25.0,
               ),
