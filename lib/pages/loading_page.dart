@@ -19,7 +19,7 @@ class LoadingPage extends StatelessWidget {
         future: checkLoginState(context),
         builder: (context, snapshot) {
           return Center(
-            child: Icon(Icons.lock_clock_sharp),
+            child: Image.asset('assets/loading-gif-transparent-10.gif'),
           );
         },
       ),

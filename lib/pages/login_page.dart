@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Logo(titulo: 'Login'),
+                  Logo(titulo: ''),
                   _Form(),
                 ],
               ),

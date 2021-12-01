@@ -7,6 +7,7 @@ import 'package:chat/models/super_model.dart';
 import 'package:chat/models/super_model_profile.dart';
 import 'package:chat/models/super_model_role.dart';
 import 'package:chat/models/usuario.dart';
+import 'package:chat/pages/new_password.dart';
 import 'package:chat/pages/profiletwo_page.dart';
 import 'package:chat/pages/terminos_condiciones.dart';
 import 'package:chat/services/auth_services.dart';
@@ -134,6 +135,21 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              title: Text('Cambiar contraseña'),
+              trailing: Icon(Icons.password_rounded),
+              onTap: () {
+                Future.delayed(Duration.zero, () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => NewPasswordPage()),
+                      (route) => false);
+                });
+
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (builder) => TerminosPage()));
+              },
+            ),
+            ListTile(
                 title: Text('Cerrar sesión'),
                 trailing: Icon(MdiIcons.logout),
                 onTap: () {
@@ -151,23 +167,6 @@ class _HomePageState extends State<HomePage> {
           // if (roles.name == "administrador")
           //   {
           Navigator.restorablePushReplacementNamed(context, 'add_post')
-          // WidgetsBinding.instance.addPostFrameCallback((_) {
-          //   Navigator.pushReplacement(
-          //       context, MaterialPageRoute(builder: (_) => AddBlog()));
-          // })
-          //   }
-          // else
-          //   {
-          //     mostrarAlerta(
-          //         context, 'Alto', 'Requiere permisos de administrador')
-          //   }
-
-          // WidgetsBinding.instance.addPostFrameCallback((_) {
-          //   Navigator.pushReplacement(
-          //       context, MaterialPageRoute(builder: (_) => AddBlog()));
-          // })
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (builder) => AddBlog()))
         },
         child: Icon(Icons.add),
       ),
@@ -191,17 +190,17 @@ class _HomePageState extends State<HomePage> {
                   iconTheme: IconThemeData(color: Palette.colorBlue),
                   centerTitle: false,
                   floating: true,
-                  // actions: [
-                  //   CircleButton(
-                  //     icon: Icons.search_rounded,
-                  //     iconSize: 30.0,
-                  //     onPressed: () => print('Buscar'),
-                  //   ),
-                  //   CircleButton(
-                  //       icon: MdiIcons.bell,
-                  //       iconSize: 30.0,
-                  //       onPressed: () => print('Notifications')),
-                  // ],
+                  actions: [
+                    IconButton(
+                      icon: Image.asset('assets/icono.ico'),
+                      iconSize: 40.0,
+                      onPressed: () => null,
+                    ),
+                    //   CircleButton(
+                    //       icon: MdiIcons.bell,
+                    //       iconSize: 30.0,
+                    //       onPressed: () => print('Notifications')),
+                  ],
                 ),
                 //Container para publicar
                 // SliverToBoxAdapter(

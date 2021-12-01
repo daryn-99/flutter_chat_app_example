@@ -141,11 +141,12 @@ class AuthService with ChangeNotifier {
 
   Future<http.Response> patch1(String url, Map<String, String> body) async {
     url = formater(url);
+    final token = await _storage.read(key: 'token');
     log.d(body);
     final uri = Uri.parse('$url');
-    var response = await http.patch(
+    var response = await http.post(
       uri,
-      headers: {"Content-type": "application/json"},
+      headers: {"Content-type": "application/json", 'x-token': token},
       body: json.encode(body),
     );
     return response;
