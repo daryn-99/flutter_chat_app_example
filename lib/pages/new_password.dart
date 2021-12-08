@@ -40,6 +40,7 @@ class _Form extends StatefulWidget {
 class __FormState extends State<_Form> {
   final passCtrl = TextEditingController();
   final passCtrl1 = TextEditingController();
+  bool obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -56,36 +57,10 @@ class __FormState extends State<_Form> {
             isPassword: true,
             icontwo: null,
           ),
-          CustomInput(
-            icon: Icons.vpn_key_outlined,
-            labelT: 'Repetir contraseña',
-            textController: passCtrl1,
-            isPassword: true,
-            icontwo: null,
-          ),
+          txtForm(context),
           BotonAzul(
             text: 'Enviar',
             onPressed: () async {
-              //   Map<String, String> data = {"email": emailCtrl.text};
-              //   var response =
-              //       await authService.post('/usuarios/forgotPassword', data);
-              //   print(response.body);
-              //   if (response.statusCode == 200) {
-              //     Navigator.restorablePushReplacementNamed(context, 'login');
-              //   } else {
-              //     mostrarAlerta(context, 'Verificación incorrecta',
-              //         'Verificar credenciales');
-              //   }
-              //   if (response.statusCode == 204) {
-              //     mostrarAlerta(
-              //         context, "Campo vacio", "El email es requerido");
-              //   }
-              //   if (response.statusCode == 206) {
-              //     mostrarAlerta(
-              //         context, "Campo vacio", "El email es requerido");
-              //   }
-              // }
-              // async {
               Map<String, String> data = {"password": passCtrl.text.trim()};
               if (passCtrl.text == passCtrl1.text) {
                 print("/usuarios/newpasswordUpdate");
@@ -113,9 +88,53 @@ class __FormState extends State<_Form> {
           BotonAzul(
               text: "Cancelar",
               onPressed: () {
-                Navigator.restorablePushReplacementNamed(context, 'login');
+                Navigator.popAndPushNamed(context, 'nav_screen');
               })
         ],
+      ),
+    );
+  }
+
+  Widget txtForm(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 20),
+      margin: EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                offset: Offset(0, 5),
+                blurRadius: 5)
+          ]),
+      child: TextField(
+        cursorColor: Theme.of(context).backgroundColor,
+        controller: passCtrl,
+        autocorrect: false,
+        obscureText: obscureText,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+            prefixIcon: GestureDetector(
+              child: Icon(
+                Icons.vpn_key_outlined,
+              ),
+            ),
+            labelText: 'Contraseña',
+            labelStyle: TextStyle(color: Colors.grey[700]),
+            suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    obscureText = !obscureText;
+                  });
+                },
+                child: obscureText
+                    ? const Icon(Icons.visibility_off_outlined,
+                        color: Colors.grey)
+                    : const Icon(Icons.visibility_outlined,
+                        color: Colors.grey)),
+            focusedBorder: InputBorder.none,
+            border: InputBorder.none),
       ),
     );
   }

@@ -114,7 +114,7 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(usuario.nombre,
+                Text(usuario.nombre + " " + usuario.apellido,
                     style: Theme.of(context).textTheme.headline6,
                     overflow: TextOverflow.ellipsis),
                 Text(usuario.cargo,
@@ -143,6 +143,11 @@ class _ProfiletwoPageState extends State<ProfiletwoPage> {
         child: ElevatedButton(
             child: Text("Editar perfil",
                 style: TextStyle(fontWeight: FontWeight.bold)),
+            style: ElevatedButton.styleFrom(
+              primary: Palette.colorBlue,
+              shape: const BeveledRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+            ),
             onPressed: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushReplacement(context,

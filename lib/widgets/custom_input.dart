@@ -36,7 +36,6 @@ class CustomInput extends StatelessWidget {
                 blurRadius: 5)
           ]),
       child: TextField(
-        textCapitalization: TextCapitalization.words,
         cursorColor: Theme.of(context).backgroundColor,
         controller: this.textController,
         autocorrect: false,

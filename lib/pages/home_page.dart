@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'add_post.dart';
 
@@ -31,6 +32,8 @@ class _HomePageState extends State<HomePage> {
   final usuarioService = new UsuariosService();
   bool circular = true;
   AuthService networkHandler = AuthService();
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   List<Post> data = [];
   // List<Profile> profile = [];
   List<Role> info;
@@ -70,6 +73,10 @@ class _HomePageState extends State<HomePage> {
       data = superModel.data;
       circular = false;
     });
+
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
   }
 
   void fetchDataProfile() async {
@@ -172,64 +179,74 @@ class _HomePageState extends State<HomePage> {
       ),
       body: circular
           ? Center(child: CircularProgressIndicator())
-          : CustomScrollView(
-              //Parte de arriba
-              slivers: <Widget>[
-                SliverAppBar(
-                  brightness: Brightness.light,
-                  backgroundColor: Colors.white,
-                  title: Text(
-                    "RECONET",
-                    style: const TextStyle(
-                      color: Palette.colorBlue,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -1.2,
+          : SmartRefresher(
+              controller: _refreshController,
+              enablePullDown: true,
+              onRefresh: fetchData,
+              header: WaterDropHeader(
+                complete: Icon(Icons.check, color: Palette.colorBlue),
+                waterDropColor: Palette.colorBlue,
+              ),
+              child: CustomScrollView(
+                //Parte de arriba
+                physics: BouncingScrollPhysics(),
+                slivers: <Widget>[
+                  SliverAppBar(
+                    brightness: Brightness.light,
+                    backgroundColor: Colors.white,
+                    title: Text(
+                      "RECONET",
+                      style: const TextStyle(
+                        color: Palette.colorBlue,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -1.2,
+                      ),
                     ),
+                    iconTheme: IconThemeData(color: Palette.colorBlue),
+                    centerTitle: false,
+                    floating: true,
+                    actions: [
+                      IconButton(
+                        icon: Image.asset('assets/icono.ico'),
+                        iconSize: 40.0,
+                        onPressed: () => null,
+                      ),
+                      //   CircleButton(
+                      //       icon: MdiIcons.bell,
+                      //       iconSize: 30.0,
+                      //       onPressed: () => print('Notifications')),
+                    ],
                   ),
-                  iconTheme: IconThemeData(color: Palette.colorBlue),
-                  centerTitle: false,
-                  floating: true,
-                  actions: [
-                    IconButton(
-                      icon: Image.asset('assets/icono.ico'),
-                      iconSize: 40.0,
-                      onPressed: () => null,
-                    ),
-                    //   CircleButton(
-                    //       icon: MdiIcons.bell,
-                    //       iconSize: 30.0,
-                    //       onPressed: () => print('Notifications')),
-                  ],
-                ),
-                //Container para publicar
-                // SliverToBoxAdapter(
-                //     //child: CreatePostContainer(),
-                //     ),
-                // //Container con los cumpleañeros
-                // SliverPadding(
-                //   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
-                //   sliver: SliverToBoxAdapter(
-                //     child: Rooms(),
-                //   ),
-                // ),
-                // SliverList(
-                //   delegate: SliverChildListDelegate(dato.length > 0
-                //       ? dato.map((items) => PostHeader(profile: items)).toList()
-                //       : mostrarAlerta(context, 'Ups!',
-                //           '"No hay publicaciones disponibles"')),
-                // ),
-                SliverList(
-                  delegate: SliverChildListDelegate(data.length > 0
-                      ? data
-                          .map((item) => PostContainer(
-                                post: item,
-                              ))
-                          .toList()
-                      : mostrarAlerta(context, 'Ups!',
-                          '"No hay publicaciones disponibles"')),
-                ),
-              ],
+                  //Container para publicar
+                  // SliverToBoxAdapter(
+                  //     //child: CreatePostContainer(),
+                  //     ),
+                  // //Container con los cumpleañeros
+                  // SliverPadding(
+                  //   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
+                  //   sliver: SliverToBoxAdapter(
+                  //     child: Rooms(),
+                  //   ),
+                  // ),
+                  // SliverList(
+                  //   delegate: SliverChildListDelegate(dato.length > 0
+                  //       ? dato.map((items) => PostHeader(profile: items)).toList()
+                  //       : mostrarAlerta(context, 'Ups!',
+                  //           '"No hay publicaciones disponibles"')),
+                  // ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(data.length > 0
+                        ? data
+                            .map((item) => PostContainer(
+                                  post: item,
+                                ))
+                            .toList()
+                        : mostrarAlerta(context, 'Ups!',
+                            '"No hay publicaciones disponibles"')),
+                  ),
+                ],
+              ),
             ),
     );
   }

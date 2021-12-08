@@ -42,6 +42,7 @@ class _Form extends StatefulWidget {
 class __FormState extends State<_Form> {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+  bool obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +61,7 @@ class __FormState extends State<_Form> {
             textController: emailCtrl,
             icontwo: null,
           ),
-          CustomInput(
-            icon: Icons.lock_outline,
-            labelT: 'Contraseña',
-            textController: passCtrl,
-            isPassword: true,
-            icontwo: null,
-          ),
+          txtForm(context),
           BotonAzul(
             text: 'Ingrese',
             onPressed: authService.autenticando
@@ -109,6 +104,50 @@ class __FormState extends State<_Form> {
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Widget txtForm(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 20),
+      margin: EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                offset: Offset(0, 5),
+                blurRadius: 5)
+          ]),
+      child: TextField(
+        cursorColor: Theme.of(context).backgroundColor,
+        controller: passCtrl,
+        autocorrect: false,
+        obscureText: obscureText,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+            prefixIcon: GestureDetector(
+              child: Icon(
+                Icons.lock_outline,
+              ),
+            ),
+            labelText: 'Contraseña',
+            labelStyle: TextStyle(color: Colors.grey[700]),
+            suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    obscureText = !obscureText;
+                  });
+                },
+                child: obscureText
+                    ? const Icon(Icons.visibility_off_outlined,
+                        color: Colors.grey)
+                    : const Icon(Icons.visibility_outlined,
+                        color: Colors.grey)),
+            focusedBorder: InputBorder.none,
+            border: InputBorder.none),
       ),
     );
   }

@@ -64,7 +64,7 @@ class _PhotoProfileState extends State<PhotoProfile> {
       elevation: 1,
       leading: IconButton(
           onPressed: () => {
-                Navigator.popAndPushNamed(context, 'editing_profile'),
+                Navigator.popAndPushNamed(context, 'nav_screen'),
               },
           icon: Icon(Icons.not_interested_rounded, color: Colors.black),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),

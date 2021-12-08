@@ -88,7 +88,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
         enablePullDown: true,
         onRefresh: _cargarUsuarios,
         header: WaterDropHeader(
-          complete: Icon(Icons.check, color: Colors.blue[400]),
+          complete: Icon(Icons.check, color: Palette.colorBlue),
           waterDropColor: Palette.colorBlue,
         ),
         child: _listViewUsuarios(),

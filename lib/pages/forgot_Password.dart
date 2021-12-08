@@ -79,6 +79,8 @@ class __FormState extends State<_Form> {
                     await authService.post('/usuarios/forgotPassword', data);
                 print(response.body);
                 if (response.statusCode == 200) {
+                  mostrarAlerta(context, 'Verificación correcta',
+                      'Revisar el buzón correo electrónico ');
                   Navigator.restorablePushReplacementNamed(context, 'login');
                 } else {
                   mostrarAlerta(context, 'Verificación incorrecta',

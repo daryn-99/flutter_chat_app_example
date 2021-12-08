@@ -19,6 +19,7 @@ class AddBlog extends StatefulWidget {
 }
 
 class _AddBlogState extends State<AddBlog> {
+  bool isActive = true;
   final _globalkey = GlobalKey<FormState>();
   AuthService networkHandler = AuthService();
 
@@ -141,74 +142,96 @@ class _AddBlogState extends State<AddBlog> {
   }
 
   Widget addButton(PostService postService) {
-    return InkWell(
-      onTap: () async {
-        // if (titleCtrl != "") {
-        //   mostrarAlerta(context, "No puede ir vacio", "Papo");
-        // }
-        try {
-          if (_imageFile.path != null && _globalkey.currentState.validate()) {
-            Map<String, String> addBlogModel = {'title': titleCtrl.text};
-            print(titleCtrl);
-            //Post addBlogModel = Post(title: titleCtrl.text);
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 50),
+      margin: EdgeInsets.only(),
+      width: 70,
+      height: 50,
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Palette.colorBlue,
+            shape: const BeveledRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+          ),
+          child: Text("Postear"),
+          onPressed: isActive
+              ? () async {
+                  setState(() => isActive = false);
+                  // if (titleCtrl != "") {
+                  //   mostrarAlerta(context, "No puede ir vacio", "Papo");
+                  // }
+                  try {
+                    if (_imageFile.path != null &&
+                        _globalkey.currentState.validate()) {
+                      Map<String, String> addBlogModel = {
+                        'title': titleCtrl.text
+                      };
+                      print(titleCtrl);
+                      //Post addBlogModel = Post(title: titleCtrl.text);
 
-            var response =
-                await networkHandler.post1('/post/new', addBlogModel);
-            print(response.body);
-            print(response.statusCode);
-            if (response.statusCode == 200 || response.statusCode == 201) {
-              mostrarAlerta(context, 'Post realizado', 'Exito al postear');
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => NavScreen()),
-                  (route) => false);
-            }
+                      var response =
+                          await networkHandler.post1('/post/new', addBlogModel);
+                      print(response.body);
+                      print(response.statusCode);
+                      if (response.statusCode == 200 ||
+                          response.statusCode == 201) {
+                        mostrarAlerta(
+                            context, 'Post realizado', 'Exito al postear');
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NavScreen()),
+                            (route) => false);
+                      }
 
-            if (response.statusCode == 403) {
-              mostrarAlerta(context, 'Permiso denegado',
-                  'Requiere permisos de Gerente o Administrador');
-            }
-            if (response.statusCode == 200 || response.statusCode == 201) {
-              final id = json.decode(response.body)["data"];
-              //if (_imageFile.path != null) {
-              var imageResponse = await networkHandler.patchImage(
-                  '/post/updateImg/$id', _imageFile.path);
-              print(imageResponse.statusCode);
-              if (imageResponse.statusCode == 404) {
-                mostrarAlerta(context, 'Imagen vacia', 'Adjunte una imagen');
-              }
-              if (imageResponse.statusCode == 403) {
-                mostrarAlerta(context, 'Permiso denegado',
-                    'Requiere permisos de Gerente o Administrador');
-              }
-              if (imageResponse.statusCode == 203) {
-                mostrarAlerta(
-                    context, 'Post incompleto', 'Error al cargar la imagen');
-              }
+                      if (response.statusCode == 403) {
+                        mostrarAlerta(context, 'Permiso denegado',
+                            'Requiere permisos de Gerente o Administrador');
+                      }
+                      if (response.statusCode == 200 ||
+                          response.statusCode == 201) {
+                        final id = json.decode(response.body)["data"];
+                        //if (_imageFile.path != null) {
+                        var imageResponse = await networkHandler.patchImage(
+                            '/post/updateImg/$id', _imageFile.path);
+                        print(imageResponse.statusCode);
+                        if (imageResponse.statusCode == 404) {
+                          mostrarAlerta(
+                              context, 'Imagen vacia', 'Adjunte una imagen');
+                        }
+                        if (imageResponse.statusCode == 403) {
+                          mostrarAlerta(context, 'Permiso denegado',
+                              'Requiere permisos de Gerente o Administrador');
+                        }
+                        if (imageResponse.statusCode == 203) {
+                          mostrarAlerta(context, 'Post incompleto',
+                              'Error al cargar la imagen');
+                        }
 
-              //}
-            }
-          }
-        } catch (e) {
-          return mostrarAlerta(context, 'Ups!',
-              'Debes de adjuntar una imagen para hacer un post');
-        }
-      },
-      child: Center(
-        child: Container(
-          height: 50,
-          width: 200,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Palette.colorBlue),
-          child: Center(
-              child: Text(
-            "Postear",
-            style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-          )),
-        ),
-      ),
+                        //}
+                      }
+                    }
+                  } catch (e) {
+                    return mostrarAlerta(context, 'Ups!',
+                        'Debes de adjuntar una imagen para hacer un post');
+                  }
+                  // Center(
+                  //   child: Container(
+                  //     height: 50,
+                  //     width: 200,
+                  //     decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //         color: Palette.colorBlue),
+                  //     child: Center(
+                  //         child: Text(
+                  //       "Postear",
+                  //       style: TextStyle(
+                  //           color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  //     )),
+                  //   ),
+                  // ),
+                }
+              : null),
     );
   }
 

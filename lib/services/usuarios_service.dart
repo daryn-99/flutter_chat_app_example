@@ -52,6 +52,7 @@ class UsuariosService {
     );
 
     if (response.statusCode == 200) {
+      print(response.statusCode);
       print('a'); //Usuario.fromJson(jsonDecode(response.body)['usuario']);
     } else {
       print(response.statusCode);
