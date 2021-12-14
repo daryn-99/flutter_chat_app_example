@@ -14,14 +14,24 @@ import 'home_page.dart';
 class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: checkLoginState(context),
-        builder: (context, snapshot) {
-          return Center(
-            child: Image.asset('assets/loading-gif-transparent-10.gif'),
-          );
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+        // () async {
+        //   print('Back Button pressed!');
+
+        //   final shouldPop = await showWarning(context);
+        //   return shouldPop;
+      },
+      child: Scaffold(
+        body: FutureBuilder(
+          future: checkLoginState(context),
+          builder: (context, snapshot) {
+            return Center(
+              child: Image.asset('assets/loading-gif-transparent-10.gif'),
+            );
+          },
+        ),
       ),
     );
   }

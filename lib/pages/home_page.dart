@@ -100,71 +100,83 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       //drawerScrimColor: Colors.transparent,
 
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-                child: Column(children: <Widget>[
-              //profilePhoto,
-              CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AuthService().getImage(usuario
-                      .imgUrl) //TODO:el error de inicio es provocado por está linea
-                  ),
+      drawer: WillPopScope(
+        onWillPop: () async {
+          return false;
+          // () async {
+          //   print('Back Button pressed!');
+
+          //   final shouldPop = await showWarning(context);
+          //   return shouldPop;
+        },
+        child: Drawer(
+          child: ListView(
+            children: <Widget>[
+              DrawerHeader(
+                  child: Column(children: <Widget>[
+                //profilePhoto,
+                CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AuthService().getImage(usuario
+                        .imgUrl) //TODO:el error de inicio es provocado por está linea
+                    ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(usuario.username),
+              ])),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
-              Text(usuario.username),
-            ])),
-            SizedBox(
-              height: 20,
-            ),
-            ListTile(
-              title: Text('Ver perfil'),
-              trailing: Icon(MdiIcons.accountCircleOutline),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (builder) => ProfiletwoPage()));
-              },
-            ),
-            ListTile(
-              title: Text('Ver Terminos y condiciones de uso'),
-              trailing: Icon(Icons.library_books),
-              onTap: () {
-                Future.delayed(Duration.zero, () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => TerminosPage()),
-                      (route) => false);
-                });
-
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (builder) => TerminosPage()));
-              },
-            ),
-            ListTile(
-              title: Text('Cambiar contraseña'),
-              trailing: Icon(Icons.password_rounded),
-              onTap: () {
-                Future.delayed(Duration.zero, () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => NewPasswordPage()),
-                      (route) => false);
-                });
-
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (builder) => TerminosPage()));
-              },
-            ),
-            ListTile(
-                title: Text('Cerrar sesión'),
-                trailing: Icon(MdiIcons.logout),
+              ListTile(
+                title: Text('Ver perfil'),
+                trailing: Icon(MdiIcons.accountCircleOutline),
                 onTap: () {
-                  socketService.disconnect();
-                  Navigator.pushReplacementNamed(context, 'login');
-                  AuthService.deleteToken();
-                })
-          ],
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => ProfiletwoPage()));
+                },
+              ),
+              ListTile(
+                title: Text('Ver Terminos y condiciones de uso'),
+                trailing: Icon(Icons.library_books),
+                onTap: () {
+                  Future.delayed(Duration.zero, () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => TerminosPage()),
+                        (route) => false);
+                  });
+
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (builder) => TerminosPage()));
+                },
+              ),
+              ListTile(
+                title: Text('Cambiar contraseña'),
+                trailing: Icon(Icons.password_rounded),
+                onTap: () {
+                  Future.delayed(Duration.zero, () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => NewPasswordPage()),
+                        (route) => false);
+                  });
+
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (builder) => TerminosPage()));
+                },
+              ),
+              ListTile(
+                  title: Text('Cerrar sesión'),
+                  trailing: Icon(MdiIcons.logout),
+                  onTap: () {
+                    socketService.disconnect();
+                    Navigator.pushReplacementNamed(context, 'login');
+                    AuthService.deleteToken();
+                  })
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

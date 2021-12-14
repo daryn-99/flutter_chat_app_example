@@ -13,23 +13,28 @@ import 'login_page.dart';
 class ForgotPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Color(0xffF2F2F2),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.9,
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Logo(titulo: ''),
-                  _Form(),
-                ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+          backgroundColor: Color(0xffF2F2F2),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.9,
+                child: Column(
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Logo(titulo: ''),
+                    _Form(),
+                  ],
+                ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
 
@@ -78,13 +83,19 @@ class __FormState extends State<_Form> {
                 var response =
                     await authService.post('/usuarios/forgotPassword', data);
                 print(response.body);
+                print(response.statusCode);
                 if (response.statusCode == 200) {
                   mostrarAlerta(context, 'Verificación correcta',
-                      'Revisar el buzón correo electrónico ');
+                      'Revise el buzón de su correo electrónico ');
                   Navigator.restorablePushReplacementNamed(context, 'login');
-                } else {
-                  mostrarAlerta(context, 'Verificación incorrecta',
-                      'Verificar credenciales');
+                }
+                // else {
+                //   mostrarAlerta(context, 'Verificación incorrecta',
+                //       'Verificar credenciales');
+                // }
+                if (response.statusCode == 404) {
+                  mostrarAlerta(
+                      context, "Campo vacio", "El email no fue encontrado");
                 }
                 if (response.statusCode == 204) {
                   mostrarAlerta(

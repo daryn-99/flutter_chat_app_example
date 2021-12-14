@@ -82,46 +82,57 @@ class _ModifyPageState extends State<ModifyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text("Modificar",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40,
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: -1.2,
-                  color: Colors.blue[900])),
-          leading: IconButton(
-            onPressed: () {
-              Future.delayed(Duration.zero, () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => AllUsers()),
-                    (route) => false);
-              });
-              //Navigator.pushReplacementNamed(context, 'menu_page');
-            },
-            icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
-          ),
-        ),
-        backgroundColor: Color(0xffF2F2F2),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              height: MediaQuery.of(context).size.height + 250,
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  //Logo(titulo: ''),
-                  imgProfile(context),
-                  form(context),
-                ],
-              ),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+        // () async {
+        //   print('Back Button pressed!');
+
+        //   final shouldPop = await showWarning(context);
+        //   return shouldPop;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            title: Text("Modificar",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: -1.2,
+                    color: Colors.blue[900])),
+            leading: IconButton(
+              onPressed: () {
+                Future.delayed(Duration.zero, () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => AllUsers()),
+                      (route) => false);
+                });
+                //Navigator.pushReplacementNamed(context, 'menu_page');
+              },
+              icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
             ),
           ),
-        ));
+          backgroundColor: Color(0xffF2F2F2),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              reverse: true,
+              physics: BouncingScrollPhysics(),
+              child: Container(
+                height: MediaQuery.of(context).size.height + 250,
+                child: Column(
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    //Logo(titulo: ''),
+                    imgProfile(context),
+                    form(context),
+                  ],
+                ),
+              ),
+            ),
+          )),
+    );
   }
 
   Widget imgProfile(BuildContext context) {

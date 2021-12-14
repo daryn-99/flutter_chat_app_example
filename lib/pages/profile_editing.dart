@@ -60,32 +60,42 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
 
     final usuario = authService.usuario;
 
-    return Scaffold(
-        body: CustomScrollView(
-      slivers: <Widget>[
-        SliverList(
-          delegate: SliverChildListDelegate([
-            SizedBox(height: 10.0),
-            _getAppBar(),
-            SizedBox(height: 40.0),
-            imgProfile(context, usuario),
-            _cambiarFoto(),
-            SizedBox(height: 40.0),
-            InputTwo(
-                placeholder: 'Ingresa tu descripcion',
-                textController: descripcionCtrl),
-            // InputTwo(
-            //     placeholder: 'Ingresa tu nombre', textController: nombreCtrl),
-            // InputTwo(
-            //     placeholder: 'Ingresa tu cargo', textController: cargoCtrl),
-            // InputTwo(placeholder: 'Ingresa tu area', textController: areaCtrl),
-            // InputTwo(
-            //     placeholder: 'Ingresa tu año de nacimiento',
-            //     textController: birthCtrl)
-          ]),
-        )
-      ],
-    ));
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+        // () async {
+        //   print('Back Button pressed!');
+
+        //   final shouldPop = await showWarning(context);
+        //   return shouldPop;
+      },
+      child: Scaffold(
+          body: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SizedBox(height: 10.0),
+              _getAppBar(),
+              SizedBox(height: 40.0),
+              imgProfile(context, usuario),
+              _cambiarFoto(),
+              SizedBox(height: 40.0),
+              InputTwo(
+                  placeholder: 'Ingresa tu descripcion',
+                  textController: descripcionCtrl),
+              // InputTwo(
+              //     placeholder: 'Ingresa tu nombre', textController: nombreCtrl),
+              // InputTwo(
+              //     placeholder: 'Ingresa tu cargo', textController: cargoCtrl),
+              // InputTwo(placeholder: 'Ingresa tu area', textController: areaCtrl),
+              // InputTwo(
+              //     placeholder: 'Ingresa tu año de nacimiento',
+              //     textController: birthCtrl)
+            ]),
+          )
+        ],
+      )),
+    );
   }
 
   Widget _getAppBar() {
@@ -196,38 +206,41 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
   }
 
   Widget bottomSheet() {
-    return Container(
-      height: 100.0,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Column(
-        children: <Widget>[
-          Text(
-            "Escoger foto de perfil",
-            style: TextStyle(fontSize: 20.0),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: <Widget>[
-              TextButton.icon(
-                icon: Icon(Icons.photo_camera_rounded),
-                onPressed: () {
-                  takePhoto(ImageSource.camera);
-                },
-                label: Text("Tomar fotografía"),
-              ),
-              TextButton.icon(
-                icon: Icon(Icons.add_photo_alternate_outlined),
-                onPressed: () {
-                  importimg(ImageSource.gallery);
-                },
-                label: Text("Adjuntar de galería"),
-              )
-            ],
-          )
-        ],
+    return SingleChildScrollView(
+      reverse: true,
+      child: Container(
+        height: 100.0,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          children: <Widget>[
+            Text(
+              "Escoger foto de perfil",
+              style: TextStyle(fontSize: 20.0, color: Colors.black),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: <Widget>[
+                TextButton.icon(
+                  icon: Icon(Icons.photo_camera_rounded),
+                  onPressed: () {
+                    takePhoto(ImageSource.camera);
+                  },
+                  label: Text("Tomar fotografía"),
+                ),
+                TextButton.icon(
+                  icon: Icon(Icons.add_photo_alternate_outlined),
+                  onPressed: () {
+                    importimg(ImageSource.gallery);
+                  },
+                  label: Text("Adjuntar de galería"),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

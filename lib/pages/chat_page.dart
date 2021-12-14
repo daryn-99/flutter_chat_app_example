@@ -83,51 +83,61 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     Usuario usuario;
     final usuarioPara = chatService.usuarioPara;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        toolbarHeight: 70.0,
-        title: Column(
-          children: <Widget>[
-            CircleAvatar(
-              backgroundImage: AuthService().getImage(usuarioPara.imgUrl),
-              // child: Text(usuarioPara.nombre.substring(0, 2),
-              //     style: TextStyle(fontSize: 12)),
-              // backgroundColor: Colors.blue[100],
-              maxRadius: 22,
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Text(usuarioPara.nombre,
-                style: TextStyle(color: Colors.black87, fontSize: 12))
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+        // () async {
+        //   print('Back Button pressed!');
+
+        //   final shouldPop = await showWarning(context);
+        //   return shouldPop;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          toolbarHeight: 70.0,
+          title: Column(
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: AuthService().getImage(usuarioPara.imgUrl),
+                // child: Text(usuarioPara.nombre.substring(0, 2),
+                //     style: TextStyle(fontSize: 12)),
+                // backgroundColor: Colors.blue[100],
+                maxRadius: 22,
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              Text(usuarioPara.nombre,
+                  style: TextStyle(color: Colors.black87, fontSize: 12))
+            ],
+          ),
+          leading: IconButton(
+              onPressed: () => {
+                    Navigator.popAndPushNamed(context, 'usuarios'),
+                  },
+              icon: Icon(Icons.chevron_left_sharp, color: Colors.black),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+          centerTitle: true,
+          elevation: 1,
         ),
-        leading: IconButton(
-            onPressed: () => {
-                  Navigator.popAndPushNamed(context, 'usuarios'),
-                },
-            icon: Icon(Icons.chevron_left_sharp, color: Colors.black),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-        centerTitle: true,
-        elevation: 1,
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Flexible(
-                child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: _messages.length,
-              itemBuilder: (_, i) => _messages[i],
-              reverse: true,
-            )),
-            Divider(height: 1),
-            Container(
-              color: Colors.white,
-              child: _inputChat(),
-            )
-          ],
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                  child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: _messages.length,
+                itemBuilder: (_, i) => _messages[i],
+                reverse: true,
+              )),
+              Divider(height: 1),
+              Container(
+                color: Colors.white,
+                child: _inputChat(),
+              )
+            ],
+          ),
         ),
       ),
     );

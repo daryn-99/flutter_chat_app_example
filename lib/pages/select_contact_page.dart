@@ -34,68 +34,73 @@ class _SelectContactState extends State<SelectContact> {
     final cantidad = usuarios.length;
 
     return Container(
-        child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, 'nav_screen');
-          },
-        ),
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Selecciona un contacto',
-              style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            Text(cantidad.toString(),
-                style: TextStyle(fontSize: 18, color: Colors.black)),
+        child: WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'nav_screen');
+            },
+          ),
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Selecciona un contacto',
+                style: TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              Text(cantidad.toString(),
+                  style: TextStyle(fontSize: 18, color: Colors.black)),
+            ],
+          ),
+          actions: [
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Icon(
+            //     Icons.search,
+            //     color: Colors.black,
+            //     size: 26,
+            //   ),
+            // ),
+            // PopupMenuButton<String>(
+            //   padding: EdgeInsets.all(0),
+            //   icon: Icon(
+            //     Icons.more_vert,
+            //     color: Colors.black,
+            //   ),
+            //   onSelected: (value) {
+            //     print(value);
+            //   },
+            //   itemBuilder: (BuildContext contesxt) {
+            //     return [
+            //       PopupMenuItem(
+            //         child: Text("Ayuda"),
+            //         value: "Ayuda",
+            //       ),
+            //     ];
+            //   },
+            // ),
           ],
         ),
-        actions: [
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: Icon(
-          //     Icons.search,
-          //     color: Colors.black,
-          //     size: 26,
-          //   ),
-          // ),
-          // PopupMenuButton<String>(
-          //   padding: EdgeInsets.all(0),
-          //   icon: Icon(
-          //     Icons.more_vert,
-          //     color: Colors.black,
-          //   ),
-          //   onSelected: (value) {
-          //     print(value);
-          //   },
-          //   itemBuilder: (BuildContext contesxt) {
-          //     return [
-          //       PopupMenuItem(
-          //         child: Text("Ayuda"),
-          //         value: "Ayuda",
-          //       ),
-          //     ];
-          //   },
-          // ),
-        ],
-      ),
-      body: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        onRefresh: _cargarUsuarios,
-        header: WaterDropHeader(
-          complete: Icon(Icons.check, color: Colors.blue[400]),
-          waterDropColor: Colors.blue[400],
+        body: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          onRefresh: _cargarUsuarios,
+          header: WaterDropHeader(
+            complete: Icon(Icons.check, color: Colors.blue[400]),
+            waterDropColor: Colors.blue[400],
+          ),
+          child: _listViewUsuarios(),
         ),
-        child: _listViewUsuarios(),
       ),
     ));
   }

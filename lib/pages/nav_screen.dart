@@ -49,33 +49,43 @@ class _NavScreenState extends State<NavScreen> {
     final Size screenSize = MediaQuery.of(context).size;
     return DefaultTabController(
       length: _icons.length,
-      child: Scaffold(
-        appBar: Responsive.isDesktop(context)
-            ? PreferredSize(
-                preferredSize: Size(screenSize.width, 100.0),
-                child: CustomAppBar(
-                  currentUser: currentUser,
-                  icons: _icons,
-                  selectedIndex: _selectedIndex,
-                  onTap: (index) => setState(() => _selectedIndex = index),
-                ),
-              )
-            : null,
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: _screens,
+      child: WillPopScope(
+        onWillPop: () async {
+          return false;
+          // () async {
+          //   print('Back Button pressed!');
+
+          //   final shouldPop = await showWarning(context);
+          //   return shouldPop;
+        },
+        child: Scaffold(
+          appBar: Responsive.isDesktop(context)
+              ? PreferredSize(
+                  preferredSize: Size(screenSize.width, 100.0),
+                  child: CustomAppBar(
+                    currentUser: currentUser,
+                    icons: _icons,
+                    selectedIndex: _selectedIndex,
+                    onTap: (index) => setState(() => _selectedIndex = index),
+                  ),
+                )
+              : null,
+          body: IndexedStack(
+            index: _selectedIndex,
+            children: _screens,
+          ),
+          bottomNavigationBar: !Responsive.isDesktop(context)
+              ? Container(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  color: Colors.white,
+                  child: CustomTabBar(
+                    icons: _icons,
+                    selectedIndex: _selectedIndex,
+                    onTap: (index) => setState(() => _selectedIndex = index),
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
-        bottomNavigationBar: !Responsive.isDesktop(context)
-            ? Container(
-                padding: const EdgeInsets.only(top: 0.0),
-                color: Colors.white,
-                child: CustomTabBar(
-                  icons: _icons,
-                  selectedIndex: _selectedIndex,
-                  onTap: (index) => setState(() => _selectedIndex = index),
-                ),
-              )
-            : const SizedBox.shrink(),
       ),
     );
   }

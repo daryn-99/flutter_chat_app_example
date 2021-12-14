@@ -83,45 +83,55 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text("Registro",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40,
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: -1.2,
-                  color: Colors.blue[900])),
-          leading: IconButton(
-            onPressed: () {
-              Future.delayed(Duration.zero, () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => MenuPage()),
-                    (route) => false);
-              });
-              //Navigator.pushReplacementNamed(context, 'menu_page');
-            },
-            icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
-          ),
-        ),
-        backgroundColor: Color(0xffF2F2F2),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              height: MediaQuery.of(context).size.height + 560,
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  imgProfile(context),
-                  form(context),
-                ],
-              ),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+        // () async {
+        //   print('Back Button pressed!');
+
+        //   final shouldPop = await showWarning(context);
+        //   return shouldPop;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            title: Text("Registro",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: -1.2,
+                    color: Colors.blue[900])),
+            leading: IconButton(
+              onPressed: () {
+                Future.delayed(Duration.zero, () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => MenuPage()),
+                      (route) => false);
+                });
+                //Navigator.pushReplacementNamed(context, 'menu_page');
+              },
+              icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
             ),
           ),
-        ));
+          backgroundColor: Color(0xffF2F2F2),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Container(
+                height: MediaQuery.of(context).size.height + 560,
+                child: Column(
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    imgProfile(context),
+                    form(context),
+                  ],
+                ),
+              ),
+            ),
+          )),
+    );
   }
 
   Widget imgProfile(BuildContext context) {
@@ -431,168 +441,171 @@ class _RegisterPageState extends State<RegisterPage> {
     final authService = Provider.of<AuthService>(context);
     final socketService = Provider.of<SocketService>(context);
 
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.symmetric(horizontal: 50),
-      child: Column(
-        children: <Widget>[
-          CustomInput(
-            icon: Icons.person_pin_rounded,
-            keyboardType: TextInputType.text,
-            textController: usernameCtrl,
-            labelT: 'Nombre de usuario',
-            icontwo: IconButton(
-                onPressed: () {
-                  mostrarAlerta(context, 'Ayuda',
-                      'Utiliza la primer letra del nombre y el primer apellido');
-                },
-                icon: Icon(Icons.error_outline_sharp)),
-          ),
-          CustomInput(
-              icon: Icons.perm_identity,
-              labelT: 'Nombre',
+    return SingleChildScrollView(
+      reverse: true,
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        child: Column(
+          children: <Widget>[
+            CustomInput(
+              icon: Icons.person_pin_rounded,
               keyboardType: TextInputType.text,
-              textController: nameCtrl,
-              icontwo: null),
-          CustomInput(
-              icon: Icons.account_circle,
-              labelT: 'Apellido',
+              textController: usernameCtrl,
+              labelT: 'Nombre de usuario',
+              icontwo: IconButton(
+                  onPressed: () {
+                    mostrarAlerta(context, 'Ayuda',
+                        'Utiliza la primer letra del nombre y el primer apellido');
+                  },
+                  icon: Icon(Icons.error_outline_sharp)),
+            ),
+            CustomInput(
+                icon: Icons.perm_identity,
+                labelT: 'Nombre',
+                keyboardType: TextInputType.text,
+                textController: nameCtrl,
+                icontwo: null),
+            CustomInput(
+                icon: Icons.account_circle,
+                labelT: 'Apellido',
+                keyboardType: TextInputType.text,
+                textController: apellidoCtrl,
+                icontwo: null),
+            CustomInput(
+              icon: Icons.phone,
+              labelT: 'Numero de celular',
+              keyboardType: TextInputType.phone,
+              textController: numerotelCtrl,
+              icontwo: IconButton(
+                  onPressed: () {
+                    mostrarAlerta(
+                        context, 'Ayuda', 'No agregar guiones, solo números');
+                  },
+                  icon: Icon(Icons.error_outline_sharp)),
+            ),
+            CustomInput(
+              icon: Icons.cake,
+              labelT: 'Fecha de nacimiento',
               keyboardType: TextInputType.text,
-              textController: apellidoCtrl,
-              icontwo: null),
-          CustomInput(
-            icon: Icons.phone,
-            labelT: 'Numero de celular',
-            keyboardType: TextInputType.phone,
-            textController: numerotelCtrl,
-            icontwo: IconButton(
-                onPressed: () {
-                  mostrarAlerta(
-                      context, 'Ayuda', 'No agregar guiones, solo números');
-                },
-                icon: Icon(Icons.error_outline_sharp)),
-          ),
-          CustomInput(
-            icon: Icons.cake,
-            labelT: 'Fecha de nacimiento',
-            keyboardType: TextInputType.text,
-            textController: birthCtrl,
-            icontwo: IconButton(
-                onPressed: () {
-                  mostrarAlerta(
-                      context, 'Ayuda', 'Utilizar el formato Año/Mes/Dia');
-                },
-                icon: Icon(Icons.error_outline_sharp)),
-          ),
-          txtRolePicker(context),
-          CustomInput(
-            icon: Icons.engineering,
-            labelT: 'Cargo en la empresa',
-            keyboardType: TextInputType.text,
-            textController: cargoCtrl,
-            icontwo: null,
-          ),
-          txtAreaPicker(context),
-          // CustomInput(
-          //   icon: Icons.place,
-          //   labelT: 'Area de su cargo',
-          //   keyboardType: TextInputType.text,
-          //   textController: areaCtrl,
-          //   icontwo: IconButton(
-          //       onPressed: () {
-          //         mostrarAlerta(context, 'Ayuda',
-          //             'Ejemplos de areas de trabajo: CSA, Medición, Trade Winds, etc');
-          //       },
-          //       icon: Icon(Icons.error_outline_sharp)),
-          // ),
-          CustomInput(
-              icon: Icons.mail_outline,
-              labelT: 'Correo',
-              keyboardType: TextInputType.emailAddress,
-              textController: emailCtrl,
-              icontwo: null),
-          txtForm(context),
-          BotonAzul(
-            text: 'Crear cuenta',
-            onPressed: authService.autenticando
-                ? null
-                : () async {
-                    Map<String, String> addUserModel = {
-                      'username': usernameCtrl.text.trim(),
-                      'nombre': nameCtrl.text.trim(),
-                      'apellido': apellidoCtrl.text.trim(),
-                      'numerotel': numerotelCtrl.text.trim(),
-                      'birth': birthCtrl.text.trim(),
-                      'role': roleCtrl.text.toLowerCase().trim(),
-                      'cargo': cargoCtrl.text.trim(),
-                      'area': areaCtrl.text.trim(),
-                      'email': emailCtrl.text.trim(),
-                      'password': passCtrl.text.trim(),
-                    };
-                    //print(_imageFile.path);
-                    print(usernameCtrl);
-                    print(nameCtrl);
-                    print(apellidoCtrl);
-                    print(numerotelCtrl);
-                    print(birthCtrl);
-                    print(roleCtrl);
-                    print(cargoCtrl);
-                    print(areaCtrl);
-                    print(emailCtrl);
-                    print(passCtrl);
-                    final registroOk =
-                        await authService.post1('/login/new', addUserModel);
-                    print(registroOk.body);
-                    print(registroOk.statusCode);
-                    if (registroOk.statusCode == 403) {
-                      mostrarAlerta(context, 'Permiso denegado',
-                          'Requiere permisos de Gerente o Administrador');
-                    }
-                    if (registroOk.statusCode == 400 ||
-                        registroOk.statusCode == 404) {
-                      mostrarAlerta(context, 'Advertencia',
-                          'Correo o usuario ya registrado');
-                    }
-                    if (registroOk.statusCode == 200 ||
-                        registroOk.statusCode == 201) {
-                      final _id = json.decode(registroOk.body)["data"];
-                      mostrarAlerta(context, 'Bienvenido',
-                          'Usuario ingresado exitosamente');
+              textController: birthCtrl,
+              icontwo: IconButton(
+                  onPressed: () {
+                    mostrarAlerta(
+                        context, 'Ayuda', 'Utilizar el formato Año/Mes/Dia');
+                  },
+                  icon: Icon(Icons.error_outline_sharp)),
+            ),
+            txtRolePicker(context),
+            CustomInput(
+              icon: Icons.engineering,
+              labelT: 'Cargo en la empresa',
+              keyboardType: TextInputType.text,
+              textController: cargoCtrl,
+              icontwo: null,
+            ),
+            txtAreaPicker(context),
+            // CustomInput(
+            //   icon: Icons.place,
+            //   labelT: 'Area de su cargo',
+            //   keyboardType: TextInputType.text,
+            //   textController: areaCtrl,
+            //   icontwo: IconButton(
+            //       onPressed: () {
+            //         mostrarAlerta(context, 'Ayuda',
+            //             'Ejemplos de areas de trabajo: CSA, Medición, Trade Winds, etc');
+            //       },
+            //       icon: Icon(Icons.error_outline_sharp)),
+            // ),
+            CustomInput(
+                icon: Icons.mail_outline,
+                labelT: 'Correo',
+                keyboardType: TextInputType.emailAddress,
+                textController: emailCtrl,
+                icontwo: null),
+            txtForm(context),
+            BotonAzul(
+              text: 'Crear cuenta',
+              onPressed: authService.autenticando
+                  ? null
+                  : () async {
+                      Map<String, String> addUserModel = {
+                        'username': usernameCtrl.text.trim(),
+                        'nombre': nameCtrl.text.trim(),
+                        'apellido': apellidoCtrl.text.trim(),
+                        'numerotel': numerotelCtrl.text.trim(),
+                        'birth': birthCtrl.text.trim(),
+                        'role': roleCtrl.text.toLowerCase().trim(),
+                        'cargo': cargoCtrl.text.trim(),
+                        'area': areaCtrl.text.trim(),
+                        'email': emailCtrl.text.trim(),
+                        'password': passCtrl.text.trim(),
+                      };
+                      //print(_imageFile.path);
+                      print(usernameCtrl);
+                      print(nameCtrl);
+                      print(apellidoCtrl);
+                      print(numerotelCtrl);
+                      print(birthCtrl);
+                      print(roleCtrl);
+                      print(cargoCtrl);
+                      print(areaCtrl);
+                      print(emailCtrl);
+                      print(passCtrl);
+                      final registroOk =
+                          await authService.post1('/login/new', addUserModel);
                       print(registroOk.body);
-                      print(_id);
-                      var imageResponse = await authService.patchImage2(
-                          '/login/photoProfile/$_id', _imageFile.path);
-                      print(_imageFile.path);
-                      print(imageResponse.statusCode);
-                      if (imageResponse.statusCode == 200 ||
-                          imageResponse.statusCode == 201) {
+                      print(registroOk.statusCode);
+                      if (registroOk.statusCode == 403) {
+                        mostrarAlerta(context, 'Permiso denegado',
+                            'Requiere permisos de Gerente o Administrador');
+                      }
+                      if (registroOk.statusCode == 400 ||
+                          registroOk.statusCode == 404) {
+                        mostrarAlerta(context, 'Advertencia',
+                            'Correo o usuario ya registrado');
+                      }
+                      if (registroOk.statusCode == 200 ||
+                          registroOk.statusCode == 201) {
+                        final _id = json.decode(registroOk.body)["data"];
                         mostrarAlerta(context, 'Bienvenido',
                             'Usuario ingresado exitosamente');
+                        print(registroOk.body);
+                        print(_id);
+                        var imageResponse = await authService.patchImage2(
+                            '/login/photoProfile/$_id', _imageFile.path);
+                        print(_imageFile.path);
+                        print(imageResponse.statusCode);
+                        if (imageResponse.statusCode == 200 ||
+                            imageResponse.statusCode == 201) {
+                          mostrarAlerta(context, 'Bienvenido',
+                              'Usuario ingresado exitosamente');
+                        }
+                        socketService.connect();
+                        usernameCtrl.clear();
+                        nameCtrl.clear();
+                        apellidoCtrl.clear();
+                        numerotelCtrl.clear();
+                        birthCtrl.clear();
+                        roleCtrl.clear();
+                        cargoCtrl.clear();
+                        areaCtrl.clear();
+                        emailCtrl.clear();
+                        passCtrl.clear();
+                      } else {
+                        mostrarAlerta(
+                            context, 'Registro incorrecto', 'Rellenar campos');
                       }
-                      socketService.connect();
-                      usernameCtrl.clear();
-                      nameCtrl.clear();
-                      apellidoCtrl.clear();
-                      numerotelCtrl.clear();
-                      birthCtrl.clear();
-                      roleCtrl.clear();
-                      cargoCtrl.clear();
-                      areaCtrl.clear();
-                      emailCtrl.clear();
-                      passCtrl.clear();
-                    } else {
-                      mostrarAlerta(
-                          context, 'Registro incorrecto', 'Rellenar campos');
-                    }
 
-                    //}
-                    // catch (e) {
-                    //   return mostrarAlerta(context, 'Campos requeridos',
-                    //       'Se deben de rellenar todos los campos');
-                    // }
-                  },
-          )
-        ],
+                      //}
+                      // catch (e) {
+                      //   return mostrarAlerta(context, 'Campos requeridos',
+                      //       'Se deben de rellenar todos los campos');
+                      // }
+                    },
+            )
+          ],
+        ),
       ),
     );
   }

@@ -52,46 +52,56 @@ class _UsuariosPageState extends State<UsuariosPage> {
 
     final usuario = authService.usuario;
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Palette.scaffold,
-        onPressed: () => {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (builder) => SelectContact()))
-        },
-        child: Icon(Icons.chat),
-      ),
-      appBar: AppBar(
-        title: Text(
-          usuario.nombre,
-          style: TextStyle(color: Colors.black87),
-        ),
-        elevation: 1,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, 'nav_screen');
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+        // () async {
+        //   print('Back Button pressed!');
+
+        //   final shouldPop = await showWarning(context);
+        //   return shouldPop;
+      },
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Palette.scaffold,
+          onPressed: () => {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (builder) => SelectContact()))
           },
+          child: Icon(Icons.chat),
         ),
-        actions: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: (socketService.serverStatus == ServerStatus.Online)
-                ? Icon(Icons.check_circle, color: Palette.colorBlue)
-                : Icon(Icons.offline_bolt, color: Colors.red),
-          )
-        ],
-      ),
-      body: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        onRefresh: _cargarUsuarios,
-        header: WaterDropHeader(
-          complete: Icon(Icons.check, color: Palette.colorBlue),
-          waterDropColor: Palette.colorBlue,
+        appBar: AppBar(
+          title: Text(
+            usuario.nombre,
+            style: TextStyle(color: Colors.black87),
+          ),
+          elevation: 1,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'nav_screen');
+            },
+          ),
+          actions: <Widget>[
+            Container(
+              margin: EdgeInsets.only(right: 10),
+              child: (socketService.serverStatus == ServerStatus.Online)
+                  ? Icon(Icons.check_circle, color: Palette.colorBlue)
+                  : Icon(Icons.offline_bolt, color: Colors.red),
+            )
+          ],
         ),
-        child: _listViewUsuarios(),
+        body: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          onRefresh: _cargarUsuarios,
+          header: WaterDropHeader(
+            complete: Icon(Icons.check, color: Palette.colorBlue),
+            waterDropColor: Palette.colorBlue,
+          ),
+          child: _listViewUsuarios(),
+        ),
       ),
     );
   }

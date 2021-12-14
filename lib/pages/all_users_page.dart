@@ -45,40 +45,50 @@ class _AllUsersState extends State<AllUsers> {
 
     final usuarios = authService.usuario;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Lista de usuarios',
-          style: TextStyle(color: Colors.black87),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+        // () async {
+        //   print('Back Button pressed!');
+
+        //   final shouldPop = await showWarning(context);
+        //   return shouldPop;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Lista de usuarios',
+            style: TextStyle(color: Colors.black87),
+          ),
+          elevation: 1,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
+            onPressed: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (_) => MenuPage()));
+              });
+              //Navigator.pushReplacementNamed(context, 'menu_page');
+            },
+          ),
+          // actions: [
+          //   CircleButton(
+          //       icon: Icons.search,
+          //       iconSize: 30.0,
+          //       onPressed: () => print('Buscar'))
+          // ],
         ),
-        elevation: 1,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_sharp, color: Colors.black87),
-          onPressed: () {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (_) => MenuPage()));
-            });
-            //Navigator.pushReplacementNamed(context, 'menu_page');
-          },
+        body: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          onRefresh: _cargarUsuarios,
+          header: WaterDropHeader(
+            complete: Icon(Icons.check, color: Palette.scaffold),
+            waterDropColor: Palette.colorBlue,
+          ),
+          child: _listViewUsuarios(),
         ),
-        // actions: [
-        //   CircleButton(
-        //       icon: Icons.search,
-        //       iconSize: 30.0,
-        //       onPressed: () => print('Buscar'))
-        // ],
-      ),
-      body: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        onRefresh: _cargarUsuarios,
-        header: WaterDropHeader(
-          complete: Icon(Icons.check, color: Palette.scaffold),
-          waterDropColor: Palette.colorBlue,
-        ),
-        child: _listViewUsuarios(),
       ),
     );
   }

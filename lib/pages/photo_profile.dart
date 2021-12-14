@@ -32,22 +32,27 @@ class _PhotoProfileState extends State<PhotoProfile> {
 
     final usuario = authService.usuario;
 
-    return Scaffold(
-        body: CustomScrollView(
-      slivers: <Widget>[
-        SliverList(
-          delegate: SliverChildListDelegate([
-            SizedBox(height: 10.0),
-            _getAppBar(),
-            SizedBox(height: 40.0),
-            imgProfile(context, usuario),
-            SizedBox(height: 40.0),
-            //_crearAbout(),
-            SizedBox(height: 40.0),
-          ]),
-        )
-      ],
-    ));
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+          body: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SizedBox(height: 10.0),
+              _getAppBar(),
+              SizedBox(height: 40.0),
+              imgProfile(context, usuario),
+              SizedBox(height: 40.0),
+              //_crearAbout(),
+              SizedBox(height: 40.0),
+            ]),
+          )
+        ],
+      )),
+    );
   }
 
   Widget _getAppBar() {

@@ -19,6 +19,19 @@ class AddBlog extends StatefulWidget {
 }
 
 class _AddBlogState extends State<AddBlog> {
+  Future<bool> showWarning(BuildContext context) async => showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text('Quieres salir de la aplicación?'),
+            actions: [
+              ElevatedButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text('No')),
+              ElevatedButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text('Yes')),
+            ],
+          ));
   bool isActive = true;
   final _globalkey = GlobalKey<FormState>();
   AuthService networkHandler = AuthService();
@@ -35,57 +48,64 @@ class _AddBlogState extends State<AddBlog> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final postService = PostService();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white54,
-        elevation: 0,
-        leading: IconButton(
-            icon: Icon(
-              Icons.clear,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, 'nav_screen');
-              //Navigator.pop(context);
-            }),
-        actions: <Widget>[
-          TextButton(
-            //TODO: Poner un await
-            onPressed: () {
-              try {
-                if (_imageFile.path != null &&
-                    _globalkey.currentState.validate()) {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: ((builder) => OverlayCard(
-                        imagefile: _imageFile, title: titleCtrl.text)),
-                  );
-                } else {
-                  mostrarAlerta(context, 'Para tener una previsualización',
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white54,
+          elevation: 0,
+          leading: IconButton(
+              icon: Icon(
+                Icons.clear,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, 'nav_screen');
+                //Navigator.pop(context);
+              }),
+          actions: <Widget>[
+            TextButton(
+              //TODO: Poner un await
+              onPressed: () {
+                try {
+                  if (_imageFile.path != null &&
+                      _globalkey.currentState.validate()) {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: ((builder) => OverlayCard(
+                          imagefile: _imageFile, title: titleCtrl.text)),
+                    );
+                  } else {
+                    mostrarAlerta(context, 'Para tener una previsualización',
+                        'Primero adjunte una imagen');
+                  }
+                } catch (e) {
+                  return mostrarAlerta(
+                      context,
+                      'Para tener una previsualización',
                       'Primero adjunte una imagen');
                 }
-              } catch (e) {
-                return mostrarAlerta(context, 'Para tener una previsualización',
-                    'Primero adjunte una imagen');
-              }
-            },
-            child: Text(
-              "Preview",
-              style: TextStyle(fontSize: 18, color: Colors.black),
-            ),
-          )
-        ],
-      ),
-      body: Form(
-        key: _globalkey,
-        child: ListView(
-          children: <Widget>[
-            titleTextField(),
-            SizedBox(
-              height: 20,
-            ),
-            addButton(postService),
+              },
+              child: Text(
+                "Preview",
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
+            )
           ],
+        ),
+        body: Form(
+          key: _globalkey,
+          child: ListView(
+            children: <Widget>[
+              titleTextField(),
+              SizedBox(
+                height: 20,
+              ),
+              addButton(postService),
+            ],
+          ),
         ),
       ),
     );
